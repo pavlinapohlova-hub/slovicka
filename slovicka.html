@@ -133,65 +133,37 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .map-title{text-align:center;font-size:28px;color:var(--gold);margin-bottom:4px}
 .map-subtitle{text-align:center;color:var(--text-dim);margin-bottom:20px;font-size:14px}
 @keyframes pulse{0%,100%{box-shadow:0 0 12px rgba(255,215,0,0.4)}50%{box-shadow:0 0 28px rgba(255,215,0,0.9)}}
-@keyframes stampIn{0%{transform:rotate(var(--rot)) scale(1.4);opacity:0}100%{transform:rotate(var(--rot)) scale(1);opacity:1}}
-
-.passport-book{background:linear-gradient(160deg,#1a2e5a,#0f1e3a);border-radius:18px;padding:20px 20px 24px;margin-bottom:24px;border:1px solid rgba(255,215,0,0.15);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
-.passport-header{display:flex;align-items:center;justify-content:center;gap:10px;border-bottom:1px solid rgba(255,215,0,0.2);padding-bottom:12px;margin-bottom:16px}
-.passport-header span{font-family:'Fredoka One',cursive;font-size:17px;color:var(--gold);letter-spacing:1px}
-.passport-cont-section{margin-bottom:18px}
-.passport-cont-label{font-size:11px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.passport-cont-label.done-cont{color:#4CAF50}
-.stamps-row{display:flex;flex-wrap:wrap;gap:10px}
-.stamps-row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
-.stamp-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;transform:rotate(var(--rot,0deg))}
-.stamp{
-  width:72px;height:72px;border-radius:50%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  position:relative;
-  transition:box-shadow .3s;
-}
-.stamp.stamp-done{
-  background:radial-gradient(circle at 35% 35%,rgba(80,200,120,0.25),rgba(30,100,60,0.15));
-  border:3px solid #4CAF50;
-  box-shadow:0 0 0 5px rgba(76,175,80,0.15),0 4px 14px rgba(0,0,0,0.4);
-}
-.stamp.stamp-current{
-  background:radial-gradient(circle at 35% 35%,rgba(255,220,60,0.25),rgba(180,120,0,0.1));
-  border:3px solid var(--gold);
-  box-shadow:0 0 0 5px rgba(255,215,0,0.2),0 0 24px rgba(255,215,0,0.5);
-  animation:pulse 2s ease-in-out infinite;
-}
-.stamp.stamp-mystery{
-  background:rgba(255,255,255,0.04);
-  border:3px dashed rgba(255,255,255,0.2);
-  box-shadow:none;
-  cursor:default;
-}
-/* Kruhový nápis "NAVŠTÍVENO" kolem dokončených */
-.stamp.stamp-done::before{
-  content:'';
-  position:absolute;inset:-5px;
-  border-radius:50%;
-  border:1.5px solid rgba(76,175,80,0.35);
-}
-.stamp.stamp-done::after{
-  content:'✓ NAVŠTÍVENO ✓';
-  position:absolute;
-  width:100%;height:100%;
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:0;
-  /* SVG circular text via background */
-  background:transparent;
-}
-.stamp-flag{font-size:30px;line-height:1;z-index:1}
-.stamp-done-check{position:absolute;bottom:6px;right:6px;width:16px;height:16px;background:#4CAF50;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:900;z-index:2}
-.stamp-name{font-size:10px;font-weight:800;color:rgba(255,255,255,0.85);text-align:center;line-height:1.2;max-width:80px}
-.stamp-wrap.mystery-wrap .stamp-name{color:var(--text-dim)}
-.stamp-stars{font-size:9px;color:rgba(255,215,0,0.75);text-align:center}
-.stamp-progress-ring{position:absolute;inset:0;border-radius:50%;overflow:visible}
-.stamp-arc{fill:none;stroke:var(--gold);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s}
-.cont-trophy{display:inline-flex;align-items:center;gap:4px;background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:2px 8px;font-size:11px;color:var(--gold);font-weight:700;margin-left:8px}
+.road-chapter-done{background:rgba(255,255,255,0.05);border-radius:12px;padding:10px 14px;border:1px solid rgba(255,255,255,0.08);margin-bottom:10px}
+.road-chapter-done-label{font-size:11px;color:#4CAF50;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.done-pins{display:flex;flex-wrap:wrap;gap:6px}
+.done-pin{width:32px;height:32px;border-radius:50%;background:rgba(76,175,80,0.2);border:2px solid #4CAF50;display:flex;align-items:center;justify-content:center;font-size:15px}
+.road-chapter-sky{background:linear-gradient(180deg,#a8d8ea 0%,#a8d8ea 44%,#c5e8b0 44%,#7ec87e 100%);border-radius:14px;padding:16px 16px 14px;margin-bottom:10px}
+.road-chapter-label-sky{font-size:12px;font-weight:700;color:#1e4010;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.stops-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4px}
+.stop{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.stop-pin{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:3px solid #fff;position:relative}
+.stop-pin.done{background:#7ec87e;box-shadow:0 2px 6px rgba(0,0,0,0.15)}
+.stop-pin.curr{background:#ffd96a;box-shadow:0 0 0 4px rgba(255,217,106,0.5);animation:pulse 2s ease-in-out infinite}
+.stop-pin.locked{background:#bbb;opacity:0.4}
+.stop-pin.mystery{background:#ccc;border:3px dashed rgba(255,255,255,0.5);opacity:0.5}
+.stop-chk{position:absolute;bottom:0;right:0;width:15px;height:15px;background:#2e8b2e;border-radius:50%;font-size:8px;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.stop-name{font-size:9px;font-weight:700;color:#1e4010;text-align:center;max-width:64px;line-height:1.2;min-height:20px}
+.stop-name.dim{color:rgba(0,0,0,0.3)}
+.stop-stars{font-size:8px;color:#6b4a00;text-align:center}
+.road-track{height:52px;background:#7a7a7a;border-radius:8px;position:relative;overflow:hidden}
+.road-track::before{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:repeating-linear-gradient(90deg,#ffe066 0,#ffe066 24px,transparent 24px,transparent 44px);transform:translateY(-50%);z-index:1}
+.road-done-overlay{position:absolute;left:0;top:0;bottom:0;background:rgba(100,180,100,0.28);transition:width .6s}
+.bike-wrap{position:absolute;bottom:6px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:2;transition:left .6s}
+.bike-emoji{font-size:28px;line-height:1;display:block;transform:scaleX(-1);filter:drop-shadow(0 2px 2px rgba(0,0,0,0.25))}
+.bike-shadow{width:22px;height:4px;background:rgba(0,0,0,0.2);border-radius:50%;margin-top:-1px}
+.road-teaser{background:rgba(255,255,255,0.04);border:2px dashed rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;text-align:center;margin-bottom:10px}
+.road-teaser-label{font-size:12px;color:var(--text-dim);font-weight:700}
+.road-teaser-hint{font-size:11px;color:rgba(255,215,0,0.6);margin-top:4px}
+.chapter-stars-bar{display:flex;align-items:center;gap:8px;margin-top:10px;background:rgba(255,255,255,0.5);border-radius:16px;padding:6px 12px}
+.chapter-stars-label{font-size:11px;color:#2d5a1b;font-weight:700}
+.chapter-stars-track{flex:1;height:7px;background:rgba(0,0,0,0.1);border-radius:4px;overflow:hidden}
+.chapter-stars-fill{height:100%;background:#ffd96a;border-radius:4px}
+.chapter-stars-count{font-size:11px;font-weight:700;color:#6b4a00}
 
 .practice-section{background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin-bottom:24px}
 .practice-section h3{color:var(--gold);margin-bottom:14px;font-size:18px}
@@ -322,7 +294,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 <div id="childScreen" class="screen active">
   <div class="child-header">
     <h1 class="game-font">🌍 Výprava za slovíčky</h1>
-    <div class="profile-name-badge" id="profileNameBadge">Terézka</div>
+    <div class="profile-name-badge" id="profileNameBadge" onclick="cycleProfile()" style="cursor:pointer" title="Klikni pro přepnutí profilu">Terézka</div>
     <div class="header-right">
       <button id="muteBtn" onclick="toggleMute()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:7px 14px;border-radius:10px;cursor:pointer;font-size:18px;transition:all .2s">🔊</button>
       <div class="streak-display" id="streakDisplay">🔥 1</div>
@@ -335,19 +307,19 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
   </div>
 
   <div id="mapScreen">
-    <div class="map-title">🛂 Tvůj cestovní pas</div>
-    <div class="map-subtitle">Sbírej hvězdičky a odemykej nová razítka!</div>
+    <div class="map-title">🚲 Tvoje výprava</div>
+    <div class="map-subtitle">Sbírej hvězdičky a jeď dál po pohádkové cestě!</div>
     <div id="worldMap"></div>
-    <div class="practice-section">
-      <h3>📚 Co chceš procvičovat?</h3>
-      <div class="set-selector" id="setSelector"></div>
-    </div>
     <div id="noWordsMsg" style="display:none" class="empty-words">
       <div class="empty-icon">📚</div>
       <p>Zatím tu nejsou žádná slovíčka.</p>
       <p style="font-size:14px;color:var(--text-dim)">Popros rodiče, aby přidal slovíčka v rodičovském režimu.</p>
     </div>
-    <button class="start-btn" id="startBtn" onclick="startSession()">🚀 Vyrazit na výpravu!</button>
+    <button class="start-btn" id="startBtn" onclick="startSession()">🚲 Vyrazit na výpravu!</button>
+    <div class="practice-section">
+      <h3>📚 Co chceš procvičovat?</h3>
+      <div class="set-selector" id="setSelector"></div>
+    </div>
   </div>
 
   <div id="exerciseScreen" style="display:none">
@@ -553,7 +525,7 @@ const DEFAULT_VOCAB = [
   {en:"chicken",cs:"slepice",cs_acc:"slepici",emoji:"🐔",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
   {en:"cat",cs:"kočka",cs_acc:"kočku",emoji:"🐱",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
   {en:"cow",cs:"kráva",cs_acc:"krávu",emoji:"🐮",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
-  {en:"horse",cs:"kůň",emoji:"🐴",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"horse",cs:"kůň",cs_acc:"koně",emoji:"🐴",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
   {en:"goat",cs:"koza",cs_acc:"kozu",emoji:"🐐",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
   {en:"sheep",cs:"ovce",cs_acc:"ovci",emoji:"🐑",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
   {en:"farm",cs:"statek",emoji:"🏡",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
@@ -650,60 +622,60 @@ const PROFILE_COLORS = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc
 // Pro přidání nového kontinentu stačí přidat nový objekt na konec pole.
 const WORLD_MAP = [
   {
-    name:"Evropa", emoji:"🌍",
+    name:"Pohádkové království", emoji:"🏰",
     countries:[
-      {name:"Česká republika",emoji:"🇨🇿",unlockAt:0},
-      {name:"Slovensko",       emoji:"🇸🇰",unlockAt:35},
-      {name:"Německo",         emoji:"🇩🇪",unlockAt:80},
-      {name:"Francie",         emoji:"🇫🇷",unlockAt:140},
-      {name:"Španělsko",       emoji:"🇪🇸",unlockAt:210},
-      {name:"Itálie",          emoji:"🇮🇹",unlockAt:290},
-      {name:"Velká Británie",  emoji:"🇬🇧",unlockAt:380},
+      {name:"Kouzelný hrad",   emoji:"🏰",unlockAt:0},
+      {name:"Modrý záliv",     emoji:"🌊",unlockAt:35},
+      {name:"Kouzelný les",    emoji:"🌲",unlockAt:80},
+      {name:"Dračí hora",      emoji:"🐉",unlockAt:140},
+      {name:"Podmořský palác", emoji:"🐠",unlockAt:210},
+      {name:"Oblačné město",   emoji:"☁️",unlockAt:290},
+      {name:"Zakletý zámek",   emoji:"🔮",unlockAt:380},
     ]
   },
   {
-    name:"Afrika", emoji:"🌍",
+    name:"Divoká příroda", emoji:"🦁",
     countries:[
-      {name:"Maroko",              emoji:"🇲🇦",unlockAt:440},
-      {name:"Egypt",               emoji:"🇪🇬",unlockAt:510},
-      {name:"Keňa",                emoji:"🇰🇪",unlockAt:590},
-      {name:"Jihoafrická republika",emoji:"🇿🇦",unlockAt:680},
-      {name:"Madagaskar",          emoji:"🇲🇬",unlockAt:780},
+      {name:"Lví savana",        emoji:"🦁",unlockAt:440},
+      {name:"Staré pyramidy",    emoji:"🏛️",unlockAt:510},
+      {name:"Džungle opic",      emoji:"🐒",unlockAt:590},
+      {name:"Obří vodopád",      emoji:"💧",unlockAt:680},
+      {name:"Pirátský poklad",   emoji:"💎",unlockAt:780},
     ]
   },
   {
-    name:"Asie", emoji:"🌏",
+    name:"Tajemný východ", emoji:"🌸",
     countries:[
-      {name:"Japonsko", emoji:"🇯🇵",unlockAt:860},
-      {name:"Čína",     emoji:"🇨🇳",unlockAt:960},
-      {name:"Indie",    emoji:"🇮🇳",unlockAt:1080},
-      {name:"Thajsko",  emoji:"🇹🇭",unlockAt:1220},
-      {name:"Rusko",    emoji:"🇷🇺",unlockAt:1380},
+      {name:"Sakurový sad",  emoji:"🌸",unlockAt:860},
+      {name:"Velká zeď",     emoji:"🧱",unlockAt:960},
+      {name:"Sloní chrám",   emoji:"🐘",unlockAt:1080},
+      {name:"Bambusový les", emoji:"🎋",unlockAt:1220},
+      {name:"Zlatá pagoda",  emoji:"⛩️",unlockAt:1380},
     ]
   },
   {
-    name:"Amerika", emoji:"🌎",
+    name:"Dobrodružný západ", emoji:"🌵",
     countries:[
-      {name:"USA",       emoji:"🇺🇸",unlockAt:1500},
-      {name:"Kanada",    emoji:"🇨🇦",unlockAt:1660},
-      {name:"Mexiko",    emoji:"🇲🇽",unlockAt:1840},
-      {name:"Brazílie",  emoji:"🇧🇷",unlockAt:2040},
-      {name:"Argentina", emoji:"🇦🇷",unlockAt:2260},
+      {name:"Divoký západ",     emoji:"🌵",unlockAt:1500},
+      {name:"Ledové fjordy",    emoji:"🧊",unlockAt:1660},
+      {name:"Aztécký chrám",    emoji:"🦅",unlockAt:1840},
+      {name:"Amazonský prales", emoji:"🌴",unlockAt:2040},
+      {name:"Konec světa",      emoji:"🌋",unlockAt:2260},
     ]
   },
   {
-    name:"Oceánie", emoji:"🌏",
+    name:"Oceánské dobrodružství", emoji:"🐡",
     countries:[
-      {name:"Austrálie",    emoji:"🇦🇺",unlockAt:2420},
-      {name:"Nový Zéland",  emoji:"🇳🇿",unlockAt:2620},
-      {name:"Fidži",        emoji:"🇫🇯",unlockAt:2840},
+      {name:"Korálový útes", emoji:"🐡",unlockAt:2420},
+      {name:"Ostrov sopky",  emoji:"🌋",unlockAt:2620},
+      {name:"Ostrov pokladů",emoji:"🏝️",unlockAt:2840},
     ]
   },
   {
-    name:"Antarktida", emoji:"🧊",
+    name:"Ledová výprava", emoji:"❄️",
     countries:[
-      {name:"Výzkumná stanice",emoji:"🔬",unlockAt:3000},
-      {name:"Jižní pól",       emoji:"🧭",unlockAt:3200},
+      {name:"Ledový palác", emoji:"❄️",unlockAt:3000},
+      {name:"Tajemný pól",  emoji:"🧭",unlockAt:3200},
     ]
   },
 ];
@@ -1061,6 +1033,17 @@ function switchToProfile(id){
   renderProfilesTab(document.getElementById('parentContent'));
   renderChildUI();
   showToast('Profil přepnut','success');
+}
+
+function cycleProfile(){
+  const profiles=getProfiles()||[];
+  if(profiles.length<=1) return;
+  const currentId=getActiveProfileId();
+  const idx=profiles.findIndex(p=>p.id===currentId);
+  const next=profiles[(idx+1)%profiles.length];
+  switchProfile(next.id);
+  renderChildUI();
+  showToast('Profil: '+next.name,'success');
 }
 
 function deleteProfileUI(id,name){
@@ -1434,100 +1417,97 @@ function getCurrentContIdx(stars){
 function renderWorldMap(){
   const stars=getStars();
   const map=document.getElementById('worldMap');
-  const allC=getAllCountries();
   const contIdx=getCurrentContIdx(stars);
 
-  // Rotace razítka - malá náhodná ale pevná (podle indexu)
-  const rot=(i)=>{ const r=[-3,-1.5,0,1.5,2.5,-2,1,-1.5,2];return r[i%r.length]; };
-
-  let html=`<div class="passport-book">`;
-  html+=`<div class="passport-header"><span>🛂 CESTOVNÍ PAS &nbsp;·&nbsp; VÝPRAVA ZA SLOVÍČKY</span></div>`;
+  let html='';
 
   WORLD_MAP.forEach((cont,ci)=>{
     const contDone=isContComplete(ci,stars);
     const contStarted=cont.countries.some(c=>stars>=c.unlockAt);
     const isCurrentCont=ci===contIdx;
 
-    // Zamčené kontinenty zobrazíme jen jako jedno záhadné razítko (pokud je to hned ten další)
+    // Kapitoly za aktuální - zobraz jen teaser pro tu hned další
     if(!contStarted){
       if(ci===contIdx+1){
-        const firstC=cont.countries[0];
-        const starsLeft=firstC.unlockAt-stars;
-        html+=`<div class="passport-cont-section">`;
-        html+=`<div class="passport-cont-label">🔒 ???</div>`;
-        html+=`<div class="stamps-row">`;
-        html+=`<div class="stamp stamp-mystery" style="--rot:${rot(0)}deg">
-          <div class="stamp-flag">❓</div>
-          <div class="stamp-name">???</div>
-          <div class="stamp-stars">⭐ ještě ${starsLeft}</div>
+        const starsLeft=cont.countries[0].unlockAt-stars;
+        html+=`<div class="road-teaser">
+          <div class="road-teaser-label">🔒 Další kapitola: ???</div>
+          <div class="road-teaser-hint">⭐ ještě ${starsLeft} hvězdiček</div>
         </div>`;
-        html+=`</div></div>`;
       }
       return;
     }
 
-    html+=`<div class="passport-cont-section">`;
-    html+=`<div class="passport-cont-label${contDone?' done-cont':''}">
-      ${cont.emoji} ${cont.name}
-      ${contDone?`<span class="cont-trophy">🏆 dokončeno</span>`:''}
-    </div>`;
-    html+=`<div class="stamps-row">`;
+    // Dokončené kapitoly - kompaktní proužek
+    if(contDone&&!isCurrentCont){
+      html+=`<div class="road-chapter-done">
+        <div class="road-chapter-done-label">✅ ${cont.emoji} ${cont.name}</div>
+        <div class="done-pins">${cont.countries.map(c=>`<div class="done-pin">${c.emoji}</div>`).join('')}</div>
+      </div>`;
+      return;
+    }
+
+    // Aktuální kapitola - plná cesta s kolem
+    const N=cont.countries.length;
+    // Index aktuální zastávky (poslední odemčená)
+    let currIdx=0;
+    cont.countries.forEach((c,i)=>{ if(stars>=c.unlockAt) currIdx=i; });
+    const bikePct=(N>1?currIdx/(N-1):0)*100;
+
+    // Progres k další zastávce
+    const nextStop=cont.countries[currIdx+1];
+    const prevStop=cont.countries[currIdx];
+    let fillPct=100;
+    if(nextStop){
+      fillPct=Math.min(100,Math.round((stars-prevStop.unlockAt)/(nextStop.unlockAt-prevStop.unlockAt)*100));
+    }
+
+    html+=`<div class="road-chapter-sky">`;
+    html+=`<div class="road-chapter-label-sky">${cont.emoji} ${cont.name}</div>`;
+    html+=`<div class="stops-row">`;
 
     cont.countries.forEach((c,idx)=>{
-      const flatIdx=allC.findIndex(x=>x.name===c.name);
       const unlocked=stars>=c.unlockAt;
-      const nextC=allC[flatIdx+1];
-      const done=unlocked&&(!nextC||stars>=nextC.unlockAt);
-      const isCurrent=unlocked&&!done;
-      const isLocked=!unlocked;
-
-      // V aktuálním kontinentu ukáž jen odemčené + 1 záhadnou
-      if(isCurrentCont&&isLocked){
-        const alreadyShown=cont.countries.slice(0,idx).some(x=>stars<x.unlockAt);
-        if(alreadyShown) return;
-        const starsLeft=c.unlockAt-stars;
-        const prevC=allC[flatIdx-1];
-        const pct=prevC?Math.min(100,Math.round((stars-prevC.unlockAt)/(c.unlockAt-prevC.unlockAt)*100)):0;
-        const circ=Math.PI*2*33; const offset=circ*(1-pct/100);
-        html+=`<div class="stamp-wrap mystery-wrap" style="--rot:${rot(idx)}deg">
-          <div class="stamp stamp-mystery">
-            <svg class="stamp-progress-ring" viewBox="0 0 72 72">
-              <circle cx="36" cy="36" r="33" fill="none" stroke="rgba(255,215,0,0.15)" stroke-width="3"/>
-              <circle class="stamp-arc" cx="36" cy="36" r="33" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" transform="rotate(-90 36 36)"/>
-            </svg>
-            <div class="stamp-flag">❓</div>
-          </div>
-          <div class="stamp-name">???</div>
-          <div class="stamp-stars">⭐ ještě ${starsLeft}</div>
-        </div>`;
+      const isDone=unlocked&&(idx<N-1?stars>=cont.countries[idx+1].unlockAt:true);
+      const isCurr=unlocked&&!isDone;
+      const pinClass=isDone?'done':isCurr?'curr':unlocked?'done':'locked';
+      const showPin=unlocked||(idx===currIdx+1);
+      if(!showPin&&idx>currIdx+1){
+        html+=`<div class="stop"><div class="stop-pin mystery"></div><div class="stop-name dim">???</div></div>`;
         return;
       }
-      if(!unlocked) return;
-
-      const circ=Math.PI*2*33;
-      let progressSvg='';
-      if(isCurrent&&nextC){
-        const pct=Math.min(100,Math.round((stars-c.unlockAt)/(nextC.unlockAt-c.unlockAt)*100));
-        const offset=circ*(1-pct/100);
-        progressSvg=`<svg class="stamp-progress-ring" viewBox="0 0 72 72">
-          <circle cx="36" cy="36" r="33" fill="none" stroke="rgba(255,215,0,0.15)" stroke-width="3"/>
-          <circle class="stamp-arc" cx="36" cy="36" r="33" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" transform="rotate(-90 36 36)"/>
-        </svg>`;
+      if(!unlocked){
+        const starsLeft=c.unlockAt-stars;
+        html+=`<div class="stop"><div class="stop-pin mystery"></div><div class="stop-name dim">???</div><div class="stop-stars">⭐ ${starsLeft}</div></div>`;
+        return;
       }
-      html+=`<div class="stamp-wrap" style="--rot:${rot(idx)}deg">
-        <div class="stamp ${done?'stamp-done':isCurrent?'stamp-current':''}">
-          ${progressSvg}
-          <div class="stamp-flag">${c.emoji}</div>
-          ${done?'<div class="stamp-done-check">✓</div>':''}
+      html+=`<div class="stop">
+        <div class="stop-pin ${pinClass}">${c.emoji}${isDone?'<div class="stop-chk">✓</div>':''}
         </div>
-        <div class="stamp-name">${c.name}</div>
+        <div class="stop-name">${c.name}</div>
       </div>`;
     });
 
-    html+=`</div></div>`;
+    html+=`</div>`;
+    html+=`<div class="road-track">
+      <div class="road-done-overlay" style="width:${bikePct}%"></div>
+      <div class="bike-wrap" style="left:calc(${bikePct}% * 0.9 + 5%)">
+        <div class="bike-emoji">🚲</div>
+        <div class="bike-shadow"></div>
+      </div>
+    </div>`;
+
+    if(nextStop){
+      html+=`<div class="chapter-stars-bar">
+        <div class="chapter-stars-label">⭐ ${stars}</div>
+        <div class="chapter-stars-track"><div class="chapter-stars-fill" style="width:${fillPct}%"></div></div>
+        <div class="chapter-stars-count">do ${nextStop.name}: ${nextStop.unlockAt-stars}</div>
+      </div>`;
+    }
+
+    html+=`</div>`;
   });
 
-  html+=`</div>`;
   map.innerHTML=html;
 }
 
