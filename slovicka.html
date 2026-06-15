@@ -561,21 +561,21 @@ const DEFAULT_VOCAB = [
   // Unit 3 - Sports and hobbies
   {en:"play football",cs:"hrát fotbal",emoji:"⚽",unit:"L3 Unit 3",category:"Sports",type:"verb"},
   {en:"play tennis",cs:"hrát tenis",emoji:"🎾",unit:"L3 Unit 3",category:"Sports",type:"verb"},
-  {en:"go swimming",cs:"jít plavat",emoji:"🏊",unit:"L3 Unit 3",category:"Sports",type:"verb"},
-  {en:"go cycling",cs:"jezdit na kole",emoji:"🚴",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"go swimming",cs:"jít plavat",cs_verb:"plavat",emoji:"🏊",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"go cycling",cs:"jezdit na kole",cs_verb:"jezdit na kole",emoji:"🚴",unit:"L3 Unit 3",category:"Sports",type:"verb"},
   {en:"do gymnastics",cs:"dělat gymnastiku",emoji:"🤸",unit:"L3 Unit 3",category:"Sports",type:"verb"},
   {en:"paint pictures",cs:"malovat obrázky",emoji:"🎨",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
   {en:"read books",cs:"číst knihy",emoji:"📚",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
   {en:"play computer games",cs:"hrát počítačové hry",emoji:"🎮",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
-  // Unit 4 - Daily routine
-  {en:"wake up",cs:"vzbudit se",emoji:"⏰",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"get up",cs:"vstát",emoji:"🛏️",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"have breakfast",cs:"snídat",emoji:"🥣",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"go to school",cs:"jít do školy",emoji:"🎒",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"have lunch",cs:"obědvat",emoji:"🍱",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"do homework",cs:"dělat domácí úkoly",emoji:"📝",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"have dinner",cs:"večeřet",emoji:"🍽️",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
-  {en:"go to bed",cs:"jít spát",emoji:"🌙",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  // Unit 4 - Daily routine (noSentence: true - "I can wake up" nedává smysl)
+  {en:"wake up",cs:"vzbudit se",emoji:"⏰",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"get up",cs:"vstát",emoji:"🛏️",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"have breakfast",cs:"snídat",emoji:"🥣",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"go to school",cs:"jít do školy",emoji:"🎒",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"have lunch",cs:"obědvat",emoji:"🍱",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"do homework",cs:"dělat domácí úkoly",emoji:"📝",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"have dinner",cs:"večeřet",emoji:"🍽️",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"go to bed",cs:"jít spát",emoji:"🌙",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
   // Unit 5 - Town and places
   {en:"park",cs:"park",emoji:"🌳",unit:"L3 Unit 5",category:"Town",type:"noun"},
   {en:"hospital",cs:"nemocnice",cs_acc:"nemocnici",emoji:"🏥",unit:"L3 Unit 5",category:"Town",type:"noun"},
@@ -709,6 +709,8 @@ function initData(){
       let upd = w;
       if(def.cs_acc && w.cs_acc !== def.cs_acc){ upd={...upd,cs_acc:def.cs_acc}; changed=true; }
       if(def.plural && !w.plural){ upd={...upd,plural:true}; changed=true; }
+      if(def.cs_verb && w.cs_verb !== def.cs_verb){ upd={...upd,cs_verb:def.cs_verb}; changed=true; }
+      if(def.noSentence && !w.noSentence){ upd={...upd,noSentence:true}; changed=true; }
       return upd;
     });
     // Add missing L3 words
@@ -1382,7 +1384,7 @@ function pickExerciseType(word){
   const types=[1,2,3,5,4,4,7,7,8,8];
   const sentenceTypes=[4,7,8];
   const validTypes=types.filter(t=>{
-    if(sentenceTypes.includes(t)) return word.type==='noun'||word.type==='verb';
+    if(sentenceTypes.includes(t)) return (word.type==='noun'||word.type==='verb')&&!word.noSentence;
     if(t===3&&muted) return false;
     return true;
   });
@@ -1497,8 +1499,6 @@ const SENTENCE_TEMPLATES=[
   {tiles:(a,w)=>a?["I","can't","see",`${a} ${w}.`]:["I","can't","see",`${w}.`], cs:(cs)=>`Nevidím ${cs}.`, acc:true},
   {tiles:(a,w)=>a?["I've","got",`${a} ${w}.`]:["I've","got",`${w}.`], cs:(cs)=>`Mám ${cs}.`, acc:true},
   {tiles:(a,w)=>a?["I","haven't","got",`${a} ${w}.`]:["I","haven't","got",`${w}.`], cs:(cs)=>`Nemám ${cs}.`, acc:true},
-  {tiles:(a,w)=>a?["I'm",`${a} ${w}.`]:["I'm",`${w}.`], cs:(cs)=>`Jsem ${cs}.`},
-  {tiles:(a,w)=>a?["I'm","not",`${a} ${w}.`]:["I'm","not",`${w}.`], cs:(cs)=>`Nejsem ${cs}.`},
 ];
 const VERB_TEMPLATES=[
   {tiles:(w)=>["I","can",`${w}.`], cs:(cs)=>`Umím ${cs}.`},
@@ -1511,7 +1511,7 @@ function renderExType4(c,word){
   if(isVerb){
     tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
     correctTiles=tpl.tiles(word.en);
-    czHint=tpl.cs(word.cs);
+    czHint=tpl.cs(word.cs_verb||word.cs);
   } else {
     tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
     const article=getArticle(word.en,word.plural);
@@ -1541,7 +1541,7 @@ function makeSentencePair(word){
   const templates=isVerb?VERB_TEMPLATES:SENTENCE_TEMPLATES;
   const tpl=templates[Math.floor(Math.random()*templates.length)];
   if(isVerb){
-    return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs)};
+    return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs_verb||word.cs)};
   } else {
     const a=getArticle(word.en);
     return {en:tpl.tiles(a,word.en).join(' '), cs:tpl.cs(tpl.acc?csAcc(word):word.cs)};
