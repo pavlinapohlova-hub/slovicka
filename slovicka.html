@@ -15,16 +15,12 @@
 }
 body{font-family:'Nunito',sans-serif;background:var(--blue-dark);color:var(--text-light);min-height:100vh;overflow-x:hidden}
 h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
-
-/* SCREENS */
 .screen{display:none;min-height:100vh}
 .screen.active{display:block}
 
-/* MODE TOGGLE BUTTON */
 #modeBtn{position:fixed;top:14px;right:14px;z-index:1000;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);color:#fff;padding:8px 16px;border-radius:20px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
 #modeBtn:hover{background:rgba(255,255,255,0.22)}
 
-/* PIN SCREEN */
 #pinScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--blue-dark)}
 .pin-box{background:var(--blue-mid);border:1px solid var(--card-border);border-radius:20px;padding:40px;text-align:center;max-width:360px;width:100%}
 .pin-box h2{font-size:28px;margin-bottom:8px}
@@ -35,19 +31,16 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto}
 .pin-key{background:var(--card-bg);border:1.5px solid var(--card-border);color:#fff;font-size:24px;font-family:'Fredoka One',cursive;padding:16px;border-radius:12px;cursor:pointer;transition:all .15s}
 .pin-key:hover{background:rgba(255,255,255,0.15);transform:scale(1.05)}
-.pin-key.wide{grid-column:span 2}
 .pin-error{color:var(--red);font-size:14px;margin-top:10px;min-height:20px}
 
-/* PARENT MODE */
 #parentScreen{background:#f5f7fa;color:#222;min-height:100vh}
-.parent-header{background:#1a2744;color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px}
+.parent-header{background:#1a2744;color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .parent-header h1{font-size:22px;flex:1}
-.parent-tabs{display:flex;gap:4px;background:#e8edf5;padding:4px;border-radius:10px;margin:16px 24px 0}
-.parent-tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700;font-size:14px;border:none;background:transparent;transition:all .2s}
+.parent-tabs{display:flex;gap:4px;background:#e8edf5;padding:4px;border-radius:10px;margin:16px 24px 0;flex-wrap:wrap}
+.parent-tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700;font-size:14px;border:none;background:transparent;transition:all .2s;white-space:nowrap}
 .parent-tab.active{background:#fff;color:#1a2744;box-shadow:0 1px 4px rgba(0,0,0,0.12)}
 .parent-content{padding:20px 24px}
 
-/* WORD FORM */
 .form-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
 .form-card h3{margin-bottom:16px;color:#1a2744;font-size:18px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
@@ -65,10 +58,8 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm{padding:6px 14px;font-size:13px}
 
-/* WORD LIST */
 .word-list{display:flex;flex-direction:column;gap:8px}
 .word-item{background:#fff;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
-.word-emoji{font-size:28px;width:40px;text-align:center}
 .word-fallback{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;flex-shrink:0}
 .word-info{flex:1}
 .word-en{font-weight:700;font-size:16px;color:#1a2744}
@@ -79,19 +70,16 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .word-stat-badge.good{background:#e8f5e9;color:#2e7d32}
 .word-stat-badge.bad{background:#ffebee;color:#c62828}
 
-/* FILTER BAR */
 .filter-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar select{padding:8px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:'Nunito',sans-serif}
 .filter-bar input{flex:1;min-width:180px;padding:8px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:'Nunito',sans-serif}
 
-/* PHOTO UPLOAD */
 .upload-zone{border:2.5px dashed #ccc;border-radius:14px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc}
 .upload-zone:hover,.upload-zone.drag{border-color:#2e4a8a;background:#f0f4ff}
 .upload-zone input{display:none}
 .upload-icon{font-size:48px;margin-bottom:12px}
-.upload-zone p{color:#666;font-size:15px}
 .extracted-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
-.extracted-item{display:flex;align-items:center;gap:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #eee}
+.extracted-item{display:flex;align-items:center;gap:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #eee;flex-wrap:wrap}
 .extracted-item input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#1a2744}
 .extracted-item .ext-en{font-weight:700;color:#1a2744}
 .extracted-item .ext-cs{color:#666;font-size:14px}
@@ -100,7 +88,6 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .api-loading .spinner{font-size:32px;animation:spin 1s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* PROGRESS DASHBOARD */
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .stat-card{background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
 .stat-number{font-size:36px;font-weight:800;color:#1a2744;font-family:'Fredoka One',cursive}
@@ -118,28 +105,35 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .mini-bar-fill.medium{background:#FF9800}
 .mini-bar-fill.low{background:#e74c3c}
 
-/* SETTINGS */
 .settings-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
 .settings-card h3{margin-bottom:14px;color:#1a2744}
+.api-key-note{font-size:12px;color:#888;margin-top:6px}
 
-/* CHILD MODE */
+/* PROFILES */
+.profile-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.profile-card{background:#fff;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:2.5px solid transparent;transition:all .2s}
+.profile-card.active-profile{border-color:#1a2744;background:#f0f4ff}
+.profile-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;flex-shrink:0}
+.profile-name{font-size:18px;font-weight:800;color:#1a2744;flex:1}
+.profile-meta{font-size:13px;color:#888}
+.profile-active-badge{background:#1a2744;color:#fff;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:700}
+.profile-actions{display:flex;gap:8px}
+
 #childScreen{background:var(--blue-dark);min-height:100vh;padding-bottom:40px}
-
-/* CHILD HEADER */
-.child-header{background:rgba(0,0,0,0.25);padding:14px 24px;display:flex;align-items:center;gap:20px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.child-header h1{font-size:22px;color:var(--gold);flex:1}
+.child-header{background:rgba(0,0,0,0.25);padding:14px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap}
+.child-header h1{font-size:20px;color:var(--gold)}
+.profile-name-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:16px;font-size:14px;font-weight:700;color:var(--text-light)}
+.header-right{display:flex;align-items:center;gap:12px;margin-left:auto}
 .stars-display{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);padding:8px 16px;border-radius:20px}
-.stars-display .star-icon{font-size:20px}
 .stars-count{font-family:'Fredoka One',cursive;font-size:22px;color:var(--gold)}
 .level-badge{background:linear-gradient(135deg,#2e4a8a,#4a3a8a);padding:8px 14px;border-radius:16px;font-size:13px;font-weight:700;color:#d4b4ff}
 .streak-display{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;color:#ff7043}
 
-/* MAP SCREEN */
 #mapScreen{padding:20px 24px}
 .map-title{text-align:center;font-size:32px;color:var(--gold);margin-bottom:8px}
 .map-subtitle{text-align:center;color:var(--text-dim);margin-bottom:28px;font-size:16px}
 .world-map{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px;flex-wrap:nowrap;overflow-x:auto;padding:20px 0}
-.map-stage{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+.map-stage{display:flex;flex-direction:column;align-items:center;gap:8px}
 .map-connector{width:40px;height:4px;background:rgba(255,255,255,0.15);margin-top:-24px;flex-shrink:0}
 .map-connector.done{background:var(--gold)}
 .stage-circle{width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:28px;border:3px solid rgba(255,255,255,0.2);cursor:pointer;transition:all .3s;position:relative}
@@ -158,11 +152,13 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .set-btn{padding:10px 18px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.2);background:transparent;color:var(--text-light);cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
 .set-btn:hover,.set-btn.active{background:var(--blue-light);border-color:rgba(255,255,255,0.5);color:#fff}
 .set-btn.active{border-color:var(--gold);color:var(--gold)}
+.empty-words{text-align:center;padding:40px 20px;color:var(--text-dim)}
+.empty-words .empty-icon{font-size:56px;margin-bottom:16px}
+.empty-words p{font-size:16px;margin-bottom:8px}
 
 .start-btn{display:block;margin:20px auto 0;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#1a2744;font-family:'Fredoka One',cursive;font-size:24px;padding:18px 48px;border-radius:16px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(255,215,0,0.4);transition:all .2s;letter-spacing:.5px}
 .start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,215,0,0.5)}
 
-/* EXERCISE SCREEN */
 #exerciseScreen{padding:20px 24px;max-width:760px;margin:0 auto}
 .exercise-progress{display:flex;align-items:center;gap:12px;margin-bottom:20px}
 .exercise-progress-bar{flex:1;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden}
@@ -174,7 +170,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .exercise-type-label{font-size:13px;color:var(--text-dim);margin-bottom:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 .exercise-word{font-family:'Fredoka One',cursive;font-size:48px;color:#fff;margin-bottom:8px;line-height:1.1}
 .exercise-emoji{font-size:80px;margin-bottom:12px;display:block}
-.exercise-instruction{font-size:16px;color:var(--text-dim);margin-bottom:0}
+.exercise-instruction{font-size:16px;color:var(--text-dim)}
 
 .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .answer-btn{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.15);color:#fff;font-family:'Nunito',sans-serif;font-size:18px;font-weight:700;padding:18px 16px;border-radius:14px;cursor:pointer;transition:all .2s;min-height:60px}
@@ -185,7 +181,6 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .answer-btn:disabled{cursor:default}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-/* EMOJI GRID (exercise type 2) */
 .emoji-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
 .emoji-choice{background:rgba(255,255,255,0.07);border:2.5px solid rgba(255,255,255,0.15);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:120px;justify-content:center}
 .emoji-choice:hover:not(:disabled){background:rgba(255,255,255,0.14);transform:scale(1.03)}
@@ -195,14 +190,11 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .emoji-choice.wrong{background:rgba(231,76,60,0.25);border-color:#e74c3c;animation:shake .4s}
 .emoji-choice.reveal{background:rgba(76,175,80,0.2);border-color:#4CAF50}
 
-/* LISTEN EXERCISE */
 .listen-area{text-align:center;padding:16px 0}
 .listen-btn{background:linear-gradient(135deg,#2e4a8a,#4a6ac8);border:none;border-radius:50%;width:90px;height:90px;font-size:40px;cursor:pointer;margin:0 auto;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 4px 20px rgba(46,74,138,0.4)}
 .listen-btn:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(46,74,138,0.6)}
 .listen-hint{font-size:14px;color:var(--text-dim);margin-top:10px}
 
-/* SENTENCE BUILDER */
-.sentence-target{font-size:14px;color:var(--text-dim);text-align:center;margin-bottom:16px}
 .answer-area{min-height:64px;background:rgba(0,0,0,0.2);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;transition:border .2s}
 .answer-area.correct-border{border-color:#4CAF50}
 .answer-area.wrong-border{border-color:#e74c3c;animation:shake .4s}
@@ -215,22 +207,16 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .check-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,215,0,0.4)}
 .check-btn:disabled{opacity:.5;cursor:default;transform:none}
 
-/* FEEDBACK OVERLAY */
 .feedback-flash{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
 .feedback-flash.show{opacity:1}
 .feedback-flash.correct-flash{background:radial-gradient(ellipse at center,rgba(76,175,80,0.25) 0%,transparent 70%)}
 .feedback-flash.wrong-flash{background:radial-gradient(ellipse at center,rgba(231,76,60,0.25) 0%,transparent 70%)}
 .feedback-text{font-family:'Fredoka One',cursive;font-size:64px;text-shadow:0 2px 12px rgba(0,0,0,0.5)}
 
-/* CONFETTI */
 .confetti-container{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:600;overflow:hidden}
 .confetti-piece{position:absolute;width:10px;height:10px;opacity:0;animation:confettiFall 1.2s ease-out forwards}
-@keyframes confettiFall{
-  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
-  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
-}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-/* RESULTS SCREEN */
 #resultsScreen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 70px);padding:24px}
 .results-card{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:24px;padding:40px;text-align:center;max-width:500px;width:100%}
 .results-title{font-size:38px;color:var(--gold);margin-bottom:8px}
@@ -239,45 +225,30 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .results-label{color:var(--text-dim);margin-bottom:24px;font-size:16px}
 .results-score{font-size:18px;margin-bottom:28px;color:var(--text-light)}
 .results-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.results-actions .btn{font-size:18px;padding:14px 28px}
 
-/* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:12px 22px;border-radius:10px;font-size:15px;z-index:2000;opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.error{background:#c62828}
 .toast.success{background:#2e7d32}
 
-/* HOME BTN */
 .home-btn{background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:8px 16px;border-radius:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
 .home-btn:hover{background:rgba(255,255,255,0.18)}
 
-/* EDIT MODAL */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.hidden{display:none}
 .modal-box{background:#fff;border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
 .modal-box h3{color:#1a2744;margin-bottom:16px;font-size:20px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
 
-/* UNIT FILTER PILLS */
-.unit-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.unit-pill{padding:5px 12px;border-radius:12px;border:1.5px solid #ddd;background:transparent;font-size:13px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;transition:all .2s}
-.unit-pill:hover{border-color:#2e4a8a}
-.unit-pill.active{background:#1a2744;color:#fff;border-color:#1a2744}
-
-.api-key-note{font-size:12px;color:#888;margin-top:6px}
-
-/* LEVEL UP BANNER */
 .levelup-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%) scale(0.8);background:linear-gradient(135deg,#c8900a,#ffd700);color:#1a2744;padding:16px 32px;border-radius:16px;font-family:'Fredoka One',cursive;font-size:26px;z-index:700;opacity:0;pointer-events:none;transition:all .4s;box-shadow:0 8px 32px rgba(255,215,0,0.5);white-space:nowrap}
 .levelup-banner.show{opacity:1;transform:translateX(-50%) scale(1)}
 
-/* RESPONSIVE */
 @media(max-width:640px){
   .form-row,.form-row.three{grid-template-columns:1fr}
   .answers,.emoji-grid{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr}
   .exercise-word{font-size:36px}
   .exercise-emoji{font-size:60px}
-  .world-map{gap:0}
   .stage-circle{width:60px;height:60px;font-size:22px}
   .map-connector{width:24px}
 }
@@ -291,29 +262,33 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 <div id="childScreen" class="screen active">
   <div class="child-header">
     <h1 class="game-font">🌍 Výprava za slovíčky</h1>
-    <div class="streak-display" id="streakDisplay">🔥 1</div>
-    <div class="stars-display">
-      <span class="star-icon">⭐</span>
-      <span class="stars-count" id="starsCount">0</span>
+    <div class="profile-name-badge" id="profileNameBadge">Terézka</div>
+    <div class="header-right">
+      <div class="streak-display" id="streakDisplay">🔥 1</div>
+      <div class="stars-display">
+        <span style="font-size:20px">⭐</span>
+        <span class="stars-count" id="starsCount">0</span>
+      </div>
+      <div class="level-badge" id="levelBadge">Začátečník průzkumník</div>
     </div>
-    <div class="level-badge" id="levelBadge">Začátečník průzkumník</div>
   </div>
 
-  <!-- MAP -->
   <div id="mapScreen">
     <div class="map-title">Tvoje dobrodružná mapa</div>
     <div class="map-subtitle">Sbírej hvězdičky a cestuj po světě!</div>
     <div class="world-map" id="worldMap"></div>
-
     <div class="practice-section">
       <h3>📚 Co chceš procvičovat?</h3>
       <div class="set-selector" id="setSelector"></div>
     </div>
-
-    <button class="start-btn" onclick="startSession()">🚀 Vyrazit na výpravu!</button>
+    <div id="noWordsMsg" style="display:none" class="empty-words">
+      <div class="empty-icon">📚</div>
+      <p>Zatím tu nejsou žádná slovíčka.</p>
+      <p style="font-size:14px;color:var(--text-dim)">Popros rodiče, aby přidal slovíčka v rodičovském režimu.</p>
+    </div>
+    <button class="start-btn" id="startBtn" onclick="startSession()">🚀 Vyrazit na výpravu!</button>
   </div>
 
-  <!-- EXERCISE -->
   <div id="exerciseScreen" style="display:none">
     <div class="exercise-progress">
       <button class="home-btn" onclick="goHome()">🏠 Domů</button>
@@ -326,7 +301,6 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
     <div id="exerciseContent"></div>
   </div>
 
-  <!-- RESULTS -->
   <div id="resultsScreen" style="display:none">
     <div class="results-card">
       <div class="results-title game-font">🎉 Výprava dokončena!</div>
@@ -377,10 +351,12 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 <div id="parentScreen" class="screen" style="display:none">
   <div class="parent-header">
     <h1>🔐 Rodičovský režim</h1>
+    <span id="parentActiveProfile" style="background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:12px;font-size:14px;font-weight:700"></span>
     <button class="btn btn-secondary btn-sm" onclick="lockParent()">Zamknout</button>
   </div>
   <div class="parent-tabs">
-    <button class="parent-tab active" onclick="showParentTab('words')" id="tab-words">📚 Slovíčka</button>
+    <button class="parent-tab active" onclick="showParentTab('profiles')" id="tab-profiles">👤 Profily</button>
+    <button class="parent-tab" onclick="showParentTab('words')" id="tab-words">📚 Slovíčka</button>
     <button class="parent-tab" onclick="showParentTab('progress')" id="tab-progress">📊 Pokrok</button>
     <button class="parent-tab" onclick="showParentTab('settings')" id="tab-settings">⚙️ Nastavení</button>
   </div>
@@ -391,30 +367,14 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 <div class="modal-overlay hidden" id="editModal">
   <div class="modal-box">
     <h3>✏️ Upravit slovíčko</h3>
-    <div class="form-group" style="margin-bottom:10px">
-      <label>Anglicky</label>
-      <input type="text" id="editEn">
-    </div>
-    <div class="form-group" style="margin-bottom:10px">
-      <label>Česky</label>
-      <input type="text" id="editCs">
-    </div>
-    <div class="form-group" style="margin-bottom:10px">
-      <label>Emoji</label>
-      <input type="text" id="editEmoji" style="width:80px">
-    </div>
+    <div class="form-group" style="margin-bottom:10px"><label>Anglicky</label><input type="text" id="editEn"></div>
+    <div class="form-group" style="margin-bottom:10px"><label>Česky</label><input type="text" id="editCs"></div>
+    <div class="form-group" style="margin-bottom:10px"><label>Emoji</label><input type="text" id="editEmoji" style="width:80px"></div>
     <div class="form-row" style="margin-bottom:10px">
-      <div class="form-group">
-        <label>Lekce</label>
-        <input type="text" id="editUnit">
-      </div>
-      <div class="form-group">
-        <label>Kategorie</label>
-        <input type="text" id="editCategory">
-      </div>
+      <div class="form-group"><label>Lekce</label><input type="text" id="editUnit"></div>
+      <div class="form-group"><label>Kategorie</label><input type="text" id="editCategory"></div>
     </div>
-    <div class="form-group" style="margin-bottom:10px">
-      <label>Typ slova</label>
+    <div class="form-group" style="margin-bottom:10px"><label>Typ slova</label>
       <select id="editType">
         <option value="noun">Podstatné jméno</option>
         <option value="verb">Sloveso</option>
@@ -429,17 +389,14 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
   </div>
 </div>
 
-<!-- FEEDBACK -->
-<div class="feedback-flash" id="feedbackFlash">
-  <div class="feedback-text" id="feedbackText"></div>
-</div>
+<div class="feedback-flash" id="feedbackFlash"><div class="feedback-text" id="feedbackText"></div></div>
 <div class="confetti-container" id="confettiContainer"></div>
 <div class="toast" id="toast"></div>
 <div class="levelup-banner" id="levelupBanner"></div>
 
 <script>
 // ============================================================
-// DATA
+// DEFAULT VOCAB
 // ============================================================
 const DEFAULT_VOCAB = [
   {en:"eleven",cs:"jedenáct",emoji:"1️⃣1️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
@@ -564,6 +521,7 @@ const DEFAULT_VOCAB = [
   {en:"oranges",cs:"pomeranče",emoji:"🍊",unit:"L1 Unit 5",category:"Food",type:"noun"},
 ];
 
+const PROFILE_COLORS = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e91e63'];
 const MAP_STAGES = [
   {name:"Evropa",emoji:"🏰",unlockAt:0},
   {name:"Afrika",emoji:"🦁",unlockAt:20},
@@ -585,26 +543,110 @@ const FALLBACK_COLORS = ["#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7","#DDA
 const LS = {
   get(k,def){try{const v=localStorage.getItem(k);return v===null?def:JSON.parse(v)}catch{return def}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
+  remove(k){try{localStorage.removeItem(k)}catch{}},
 };
 
-function getWords(){return LS.get('vocab_words',null)}
-function saveWords(w){LS.set('vocab_words',w)}
-function getStats(){return LS.get('vocab_stats',{})}
-function saveStats(s){LS.set('vocab_stats',s)}
-function getStars(){return LS.get('vocab_stars',0)}
-function saveStars(n){LS.set('vocab_stars',n)}
-function getStreak(){return LS.get('vocab_streak',{count:0,lastDate:''})}
-function saveStreak(s){LS.set('vocab_streak',s)}
+// ============================================================
+// PROFILE SYSTEM
+// ============================================================
+function getProfiles(){return LS.get('vocab_profiles',null)}
+function saveProfiles(p){LS.set('vocab_profiles',p)}
+function getActiveProfileId(){return LS.get('vocab_active_profile',null)}
+function saveActiveProfileId(id){LS.set('vocab_active_profile',id)}
+
+function getActiveProfile(){
+  const profiles=getProfiles()||[];
+  const id=getActiveProfileId();
+  return profiles.find(p=>p.id===id)||profiles[0]||null;
+}
+
+function pk(key){
+  const id=getActiveProfileId()||'default';
+  return `vocab_${key}_${id}`;
+}
+
+function getWords(){return LS.get(pk('words'),null)}
+function saveWords(w){LS.set(pk('words'),w)}
+function getStats(){return LS.get(pk('stats'),{})}
+function saveStats(s){LS.set(pk('stats'),s)}
+function getStars(){return LS.get(pk('stars'),0)}
+function saveStars(n){LS.set(pk('stars'),n)}
+function getStreak(){return LS.get(pk('streak'),{count:0,lastDate:''})}
+function saveStreak(s){LS.set(pk('streak'),s)}
+function getSelectedSet(){return LS.get(pk('set'),'all')}
+function saveSelectedSet(s){LS.set(pk('set'),s)}
 function getPin(){return LS.get('vocab_pin','1234')}
 function getApiKey(){return LS.get('vocab_api_key','')}
-function getSelectedSet(){return LS.get('vocab_set','all')}
-function saveSelectedSet(s){LS.set('vocab_set',s)}
 
 function initData(){
+  let profiles = getProfiles();
+  if(!profiles){
+    // First run - create Terézka profile and migrate any existing data
+    const terezkaid = 'profile_terezka_'+Date.now();
+    profiles = [{id:terezkaid,name:'Terezka',color:PROFILE_COLORS[0],createdAt:Date.now()}];
+    saveProfiles(profiles);
+    saveActiveProfileId(terezkaid);
+
+    // Migrate existing data to Terézka profile
+    const existingWords = LS.get('vocab_words',null);
+    const existingStats = LS.get('vocab_stats',null);
+    const existingStars = LS.get('vocab_stars',null);
+    const existingStreak = LS.get('vocab_streak',null);
+    const existingSet = LS.get('vocab_set',null);
+
+    if(existingWords!==null){
+      LS.set(`vocab_words_${terezkaid}`,existingWords);
+    } else {
+      const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
+      LS.set(`vocab_words_${terezkaid}`,words);
+    }
+    if(existingStats!==null) LS.set(`vocab_stats_${terezkaid}`,existingStats);
+    if(existingStars!==null) LS.set(`vocab_stars_${terezkaid}`,existingStars);
+    if(existingStreak!==null) LS.set(`vocab_streak_${terezkaid}`,existingStreak);
+    if(existingSet!==null) LS.set(`vocab_set_${terezkaid}`,existingSet);
+  } else {
+    if(!getActiveProfileId()||!profiles.find(p=>p.id===getActiveProfileId())){
+      saveActiveProfileId(profiles[0].id);
+    }
+  }
+
   if(getWords()===null){
     const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
     saveWords(words);
   }
+
+  updateStreak();
+}
+
+function createProfile(name){
+  const profiles = getProfiles()||[];
+  const id = 'profile_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  const color = PROFILE_COLORS[profiles.length%PROFILE_COLORS.length];
+  profiles.push({id,name,color,createdAt:Date.now()});
+  saveProfiles(profiles);
+  // New profile: empty words
+  LS.set(`vocab_words_${id}`,[]);
+  LS.set(`vocab_stats_${id}`,{});
+  LS.set(`vocab_stars_${id}`,0);
+  LS.set(`vocab_streak_${id}`,{count:0,lastDate:''});
+  return id;
+}
+
+function deleteProfile(id){
+  let profiles = getProfiles()||[];
+  if(profiles.length<=1){showToast('Nelze smazat poslední profil','error');return;}
+  profiles = profiles.filter(p=>p.id!==id);
+  saveProfiles(profiles);
+  LS.remove(`vocab_words_${id}`);
+  LS.remove(`vocab_stats_${id}`);
+  LS.remove(`vocab_stars_${id}`);
+  LS.remove(`vocab_streak_${id}`);
+  LS.remove(`vocab_set_${id}`);
+  if(getActiveProfileId()===id) saveActiveProfileId(profiles[0].id);
+}
+
+function switchProfile(id){
+  saveActiveProfileId(id);
   updateStreak();
 }
 
@@ -613,63 +655,41 @@ function updateStreak(){
   const s = getStreak();
   if(s.lastDate===today) return;
   const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
-  if(s.lastDate===yesterday){
-    saveStreak({count:s.count+1,lastDate:today});
-  } else {
-    saveStreak({count:1,lastDate:today});
-  }
+  if(s.lastDate===yesterday) saveStreak({count:s.count+1,lastDate:today});
+  else saveStreak({count:1,lastDate:today});
 }
 
-function recordAnswer(wordId, correct){
-  const stats = getStats();
+function recordAnswer(wordId,correct){
+  const stats=getStats();
   if(!stats[wordId]) stats[wordId]={correct:0,incorrect:0,lastPracticed:null};
   if(correct) stats[wordId].correct++; else stats[wordId].incorrect++;
-  stats[wordId].lastPracticed = new Date().toISOString().slice(0,10);
+  stats[wordId].lastPracticed=new Date().toISOString().slice(0,10);
   saveStats(stats);
 }
 
 function getAccuracy(wordId){
-  const s = getStats()[wordId];
+  const s=getStats()[wordId];
   if(!s||s.correct+s.incorrect===0) return -1;
   return s.correct/(s.correct+s.incorrect);
 }
 
-function getWordEmoji(word){
-  if(word.emoji) return word.emoji;
-  const color = FALLBACK_COLORS[word.en.charCodeAt(0)%FALLBACK_COLORS.length];
-  return null;
-}
-
-function renderEmojiOrFallback(word, size=40){
-  if(word.emoji){
-    return `<span style="font-size:${size}px">${word.emoji}</span>`;
-  }
-  const color = FALLBACK_COLORS[word.en.charCodeAt(0)%FALLBACK_COLORS.length];
-  const letter = word.en[0].toUpperCase();
-  return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:50%;background:${color};color:#fff;font-size:${Math.round(size*0.45)}px;font-weight:700">${letter}</span>`;
-}
-
 function getArticle(word){
-  const vowels=['a','e','i','o','u'];
-  return vowels.includes(word[0].toLowerCase()) ? 'an' : 'a';
+  return ['a','e','i','o','u'].includes(word[0].toLowerCase())?'an':'a';
 }
 
 // ============================================================
 // MODE SWITCHING
 // ============================================================
-let inParent = false;
-let pinBuffer = '';
+let inParent=false;
+let pinBuffer='';
 
 function toggleMode(){
-  if(inParent){
-    lockParent();
-  } else {
-    showPinScreen();
-  }
+  if(inParent) lockParent();
+  else showPinScreen();
 }
 
 function showPinScreen(){
-  pinBuffer = '';
+  pinBuffer='';
   updatePinDots();
   document.getElementById('pinError').textContent='';
   document.getElementById('childScreen').style.display='none';
@@ -686,20 +706,15 @@ function cancelPin(){
 
 function pinPress(d){
   if(pinBuffer.length>=4) return;
-  pinBuffer += d;
+  pinBuffer+=d;
   updatePinDots();
   if(pinBuffer.length===4) setTimeout(pinSubmit,150);
 }
 
-function pinClear(){
-  pinBuffer = pinBuffer.slice(0,-1);
-  updatePinDots();
-}
+function pinClear(){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();}
 
 function updatePinDots(){
-  for(let i=0;i<4;i++){
-    document.getElementById('dot'+i).classList.toggle('filled',i<pinBuffer.length);
-  }
+  for(let i=0;i<4;i++) document.getElementById('dot'+i).classList.toggle('filled',i<pinBuffer.length);
 }
 
 function pinSubmit(){
@@ -720,7 +735,8 @@ function enterParent(){
   document.getElementById('modeBtn').style.display='block';
   document.getElementById('childScreen').style.display='none';
   document.getElementById('parentScreen').style.display='block';
-  showParentTab('words');
+  updateParentProfileHeader();
+  showParentTab('profiles');
 }
 
 function lockParent(){
@@ -731,31 +747,128 @@ function lockParent(){
   renderChildUI();
 }
 
+function updateParentProfileHeader(){
+  const p=getActiveProfile();
+  if(p) document.getElementById('parentActiveProfile').textContent='Aktivní profil: '+p.name;
+}
+
 // ============================================================
 // PARENT MODE
 // ============================================================
+let wordFilterUnit='all';
+let wordFilterSearch='';
+
 function showParentTab(tab){
   document.querySelectorAll('.parent-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
-  const c = document.getElementById('parentContent');
-  if(tab==='words') renderWordsTab(c);
+  const c=document.getElementById('parentContent');
+  if(tab==='profiles') renderProfilesTab(c);
+  else if(tab==='words') renderWordsTab(c);
   else if(tab==='progress') renderProgressTab(c);
   else renderSettingsTab(c);
 }
 
-let wordFilterUnit = 'all';
-let wordFilterSearch = '';
+// PROFILES TAB
+function renderProfilesTab(c){
+  const profiles=getProfiles()||[];
+  const activeId=getActiveProfileId();
+  c.innerHTML=`
+  <div class="form-card">
+    <h3>👥 Profily dětí</h3>
+    <div class="profile-list">
+      ${profiles.map(p=>{
+        const words=(LS.get(`vocab_words_${p.id}`)||[]).length;
+        const stars=LS.get(`vocab_stars_${p.id}`)||0;
+        const isActive=p.id===activeId;
+        return `<div class="profile-card${isActive?' active-profile':''}">
+          <div class="profile-avatar" style="background:${p.color}">${p.name[0].toUpperCase()}</div>
+          <div style="flex:1">
+            <div class="profile-name">${esc(p.name)}</div>
+            <div class="profile-meta">${words} slovíček · ${stars} hvězdiček</div>
+          </div>
+          ${isActive?'<span class="profile-active-badge">✓ Aktivní</span>':''}
+          <div class="profile-actions">
+            <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️ Přejmenovat</button>
+            ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
+            ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
 
+  <div class="form-card">
+    <h3>➕ Přidat nový profil</h3>
+    <div class="form-row" style="max-width:400px">
+      <div class="form-group">
+        <label>Jméno dítěte</label>
+        <input type="text" id="newProfileName" placeholder="např. Matyáš" maxlength="20">
+      </div>
+    </div>
+    <button class="btn btn-success" onclick="addProfileUI()">✅ Vytvořit profil</button>
+    <p style="color:#888;font-size:13px;margin-top:10px">Nový profil začne s prázdnou sadou slovíček.</p>
+  </div>`;
+}
+
+function renameProfileUI(id,currentName){
+  const name=prompt('Nové jméno profilu:',currentName);
+  if(!name||!name.trim()) return;
+  const profiles=getProfiles()||[];
+  const p=profiles.find(x=>x.id===id);
+  if(!p) return;
+  p.name=name.trim();
+  saveProfiles(profiles);
+  updateParentProfileHeader();
+  renderProfilesTab(document.getElementById('parentContent'));
+  renderChildUI();
+  showToast('Profil přejmenován','success');
+}
+
+function switchToProfile(id){
+  switchProfile(id);
+  updateParentProfileHeader();
+  wordFilterUnit='all';
+  wordFilterSearch='';
+  renderProfilesTab(document.getElementById('parentContent'));
+  renderChildUI();
+  showToast('Profil přepnut','success');
+}
+
+function deleteProfileUI(id,name){
+  if(!confirm(`Opravdu smazat profil "${name}" a všechna jeho data?`)) return;
+  deleteProfile(id);
+  updateParentProfileHeader();
+  renderProfilesTab(document.getElementById('parentContent'));
+  renderChildUI();
+  showToast(`Profil "${name}" smazán`,'success');
+}
+
+function addProfileUI(){
+  const name=document.getElementById('newProfileName').value.trim();
+  if(!name){showToast('Zadej jméno dítěte','error');return;}
+  const profiles=getProfiles()||[];
+  if(profiles.length>=4){showToast('Maximálně 4 profily','error');return;}
+  createProfile(name);
+  document.getElementById('newProfileName').value='';
+  renderProfilesTab(document.getElementById('parentContent'));
+  showToast(`Profil "${name}" vytvořen`,'success');
+}
+
+// WORDS TAB
 function renderWordsTab(c){
-  const words = getWords()||[];
-  const units = [...new Set(words.map(w=>w.unit))].sort();
-  const filtered = words.filter(w=>{
-    const unitOk = wordFilterUnit==='all'||w.unit===wordFilterUnit;
-    const searchOk = !wordFilterSearch||w.en.toLowerCase().includes(wordFilterSearch.toLowerCase())||w.cs.toLowerCase().includes(wordFilterSearch.toLowerCase());
+  const words=getWords()||[];
+  const units=[...new Set(words.map(w=>w.unit))].sort();
+  const filtered=words.filter(w=>{
+    const unitOk=wordFilterUnit==='all'||w.unit===wordFilterUnit;
+    const searchOk=!wordFilterSearch||w.en.toLowerCase().includes(wordFilterSearch.toLowerCase())||w.cs.toLowerCase().includes(wordFilterSearch.toLowerCase());
     return unitOk&&searchOk;
   });
-
+  const ap=getActiveProfile();
   c.innerHTML=`
+  <div class="form-card" style="border-left:4px solid ${ap?ap.color:'#1a2744'}">
+    <h3>Upravuješ slovíčka pro: <strong>${ap?esc(ap.name):''}</strong></h3>
+  </div>
+
   <div class="form-card">
     <h3>➕ Přidat slovíčko ručně</h3>
     <div class="form-row">
@@ -792,10 +905,10 @@ function renderWordsTab(c){
     <div id="extractedResults"></div>
   </div>
 
-  <div class="form-card" style="margin-bottom:8px">
+  <div class="form-card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <h3 style="margin:0">📚 Všechna slovíčka (${words.length})</h3>
-      <button class="btn btn-danger btn-sm" onclick="resetAllWords()" style="font-size:12px">Resetovat na výchozí</button>
+      <h3 style="margin:0">📚 Slovíčka (${words.length})</h3>
+      <button class="btn btn-danger btn-sm" onclick="deleteAllWords()">Smazat vše</button>
     </div>
     <div class="filter-bar">
       <input type="text" placeholder="Hledat..." value="${wordFilterSearch}" oninput="wordFilterSearch=this.value;renderWordsTab(document.getElementById('parentContent'))">
@@ -805,24 +918,24 @@ function renderWordsTab(c){
       </select>
     </div>
     <div class="word-list">
-      ${filtered.length===0?'<p style="color:#999;text-align:center;padding:20px">Žádná slovíčka nenalezena</p>':
+      ${filtered.length===0?`<p style="color:#999;text-align:center;padding:20px">${words.length===0?'Žádná slovíčka. Přidej první slovíčko výše.':'Žádná slovíčka nenalezena'}</p>`:
         filtered.map(w=>renderWordItem(w)).join('')}
     </div>
   </div>`;
 
-  const z = document.getElementById('uploadZone');
+  const z=document.getElementById('uploadZone');
   z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag')});
   z.addEventListener('dragleave',()=>z.classList.remove('drag'));
   z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)handlePhotoFile(f)});
 }
 
 function renderWordItem(w){
-  const stats = getStats()[w.id]||{correct:0,incorrect:0,lastPracticed:null};
-  const total = stats.correct+stats.incorrect;
-  const acc = total>0?Math.round(stats.correct/total*100):null;
-  const badgeClass = acc===null?'':acc>=80?'good':acc>=50?'':' bad';
-  const accLabel = acc===null?'neprocvičeno':`${acc}% (${stats.correct}/${total})`;
-  const emojiHtml = w.emoji?`<span style="font-size:28px">${w.emoji}</span>`:`<span class="word-fallback" style="background:${FALLBACK_COLORS[w.en.charCodeAt(0)%FALLBACK_COLORS.length]}">${w.en[0].toUpperCase()}</span>`;
+  const stats=getStats()[w.id]||{correct:0,incorrect:0,lastPracticed:null};
+  const total=stats.correct+stats.incorrect;
+  const acc=total>0?Math.round(stats.correct/total*100):null;
+  const badgeClass=acc===null?'':acc>=80?' good':acc>=50?'':' bad';
+  const accLabel=acc===null?'neprocvičeno':`${acc}% (${stats.correct}/${total})`;
+  const emojiHtml=w.emoji?`<span style="font-size:28px">${w.emoji}</span>`:`<span class="word-fallback" style="background:${FALLBACK_COLORS[w.en.charCodeAt(0)%FALLBACK_COLORS.length]}">${w.en[0].toUpperCase()}</span>`;
   return `<div class="word-item">
     ${emojiHtml}
     <div class="word-info">
@@ -838,60 +951,52 @@ function renderWordItem(w){
   </div>`;
 }
 
-function esc(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function addWordManually(){
-  const en = document.getElementById('addEn').value.trim();
-  const cs = document.getElementById('addCs').value.trim();
-  const emoji = document.getElementById('addEmoji').value.trim();
-  const unit = document.getElementById('addUnit').value.trim()||'Vlastní';
-  const category = document.getElementById('addCategory').value.trim()||'Vlastní';
-  const type = document.getElementById('addType').value;
+  const en=document.getElementById('addEn').value.trim();
+  const cs=document.getElementById('addCs').value.trim();
+  const emoji=document.getElementById('addEmoji').value.trim();
+  const unit=document.getElementById('addUnit').value.trim()||'Vlastní';
+  const category=document.getElementById('addCategory').value.trim()||'Vlastní';
+  const type=document.getElementById('addType').value;
   if(!en||!cs){showToast('Vyplň anglické i české slovo','error');return;}
-  const words = getWords()||[];
-  const newWord = {
-    id:'w_custom_'+Date.now()+'_'+Math.random().toString(36).slice(2),
-    en,cs,emoji:emoji||findEmojiForWord(en),unit,category,type,custom:true
-  };
-  words.push(newWord);
+  const words=getWords()||[];
+  words.push({id:'w_custom_'+Date.now()+'_'+Math.random().toString(36).slice(2),en,cs,emoji:emoji||findEmojiForWord(en),unit,category,type,custom:true});
   saveWords(words);
   showToast(`Slovíčko "${en}" přidáno!`,'success');
   renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
 }
 
 function findEmojiForWord(en){
-  const lower = en.toLowerCase();
-  const match = DEFAULT_VOCAB.find(w=>w.en.toLowerCase()===lower);
-  return match?match.emoji:'';
+  const m=DEFAULT_VOCAB.find(w=>w.en.toLowerCase()===en.toLowerCase());
+  return m?m.emoji:'';
 }
 
 function deleteWord(id){
   if(!confirm('Opravdu smazat toto slovíčko?')) return;
-  const words = (getWords()||[]).filter(w=>w.id!==id);
+  const words=(getWords()||[]).filter(w=>w.id!==id);
   saveWords(words);
-  const stats = getStats();
-  delete stats[id];
-  saveStats(stats);
+  const stats=getStats();delete stats[id];saveStats(stats);
   renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
 }
 
-function resetAllWords(){
-  if(!confirm('Resetovat všechna slovíčka na výchozí nastavení? Ztratíš vlastní slovíčka.')) return;
-  const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
-  saveWords(words);
-  saveStats({});
-  showToast('Slovíčka resetována','success');
+function deleteAllWords(){
+  if(!confirm('Smazat všechna slovíčka tohoto profilu?')) return;
+  saveWords([]);saveStats({});
+  showToast('Slovíčka smazána','success');
   renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
 }
 
 // EDIT MODAL
-let editingId = null;
+let editingId=null;
 function openEditModal(id){
-  const w = (getWords()||[]).find(x=>x.id===id);
+  const w=(getWords()||[]).find(x=>x.id===id);
   if(!w) return;
-  editingId = id;
+  editingId=id;
   document.getElementById('editEn').value=w.en;
   document.getElementById('editCs').value=w.cs;
   document.getElementById('editEmoji').value=w.emoji||'';
@@ -900,230 +1005,140 @@ function openEditModal(id){
   document.getElementById('editType').value=w.type;
   document.getElementById('editModal').classList.remove('hidden');
 }
-function closeEditModal(){
-  document.getElementById('editModal').classList.add('hidden');
-  editingId=null;
-}
+function closeEditModal(){document.getElementById('editModal').classList.add('hidden');editingId=null;}
 function saveEditModal(){
   if(!editingId) return;
-  const words = getWords()||[];
-  const idx = words.findIndex(w=>w.id===editingId);
+  const words=getWords()||[];
+  const idx=words.findIndex(w=>w.id===editingId);
   if(idx<0) return;
-  words[idx]={
-    ...words[idx],
-    en:document.getElementById('editEn').value.trim(),
-    cs:document.getElementById('editCs').value.trim(),
-    emoji:document.getElementById('editEmoji').value.trim(),
-    unit:document.getElementById('editUnit').value.trim(),
-    category:document.getElementById('editCategory').value.trim(),
-    type:document.getElementById('editType').value,
-  };
+  words[idx]={...words[idx],en:document.getElementById('editEn').value.trim(),cs:document.getElementById('editCs').value.trim(),emoji:document.getElementById('editEmoji').value.trim(),unit:document.getElementById('editUnit').value.trim(),category:document.getElementById('editCategory').value.trim(),type:document.getElementById('editType').value};
   saveWords(words);
   closeEditModal();
   showToast('Uloženo','success');
   renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
 }
 
 // PHOTO UPLOAD
-async function handlePhotoUpload(e){
-  const f = e.target.files[0];
-  if(f) handlePhotoFile(f);
-}
+async function handlePhotoUpload(e){const f=e.target.files[0];if(f)handlePhotoFile(f);}
 async function handlePhotoFile(file){
-  const res = document.getElementById('extractedResults');
+  const res=document.getElementById('extractedResults');
   res.innerHTML=`<div class="api-loading"><div class="spinner">⚙️</div><p>AI analyzuje fotku učebnice...</p></div>`;
   try{
-    const b64 = await fileToBase64(file);
-    const data = b64.split(',')[1];
-    const mtype = file.type||'image/jpeg';
-    const apiKey = getApiKey();
-    const headers = {'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
+    const b64=await fileToBase64(file);
+    const data=b64.split(',')[1];
+    const mtype=file.type||'image/jpeg';
+    const apiKey=getApiKey();
+    const headers={'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
     if(apiKey) headers['x-api-key']=apiKey;
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers,
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:2048,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:mtype,data}},
-          {type:'text',text:'Toto je stránka z anglické učebnice pro děti. Extrahuj všechna anglická slovíčka která vidíš, spolu s jejich českými překlady. Vrať JSON pole objektů ve formátu: [{"en":"word","cs":"překlad","type":"noun|verb|adjective|number"}]. Vrať pouze JSON, bez dalšího textu.'}
-        ]}]
-      })
-    });
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers,body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2048,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data}},{type:'text',text:'Toto je stránka z anglické učebnice pro děti. Extrahuj všechna anglická slovíčka která vidíš, spolu s jejich českými překlady. Vrať JSON pole objektů ve formátu: [{"en":"word","cs":"překlad","type":"noun|verb|adjective|number"}]. Vrať pouze JSON, bez dalšího textu.'}]}]})});
     if(!resp.ok) throw new Error(`API chyba: ${resp.status}`);
-    const json = await resp.json();
-    const text = json.content[0].text;
+    const json=await resp.json();
+    const text=json.content[0].text;
     let extracted;
-    try{
-      const m = text.match(/\[[\s\S]*\]/);
-      extracted = JSON.parse(m?m[0]:text);
-    }catch{throw new Error('Nepodařilo se zpracovat odpověď AI')}
-    renderExtractedWords(extracted, res);
+    try{const m=text.match(/\[[\s\S]*\]/);extracted=JSON.parse(m?m[0]:text);}catch{throw new Error('Nepodařilo se zpracovat odpověď AI');}
+    renderExtractedWords(extracted,res);
   }catch(err){
-    res.innerHTML=`<div style="color:#c62828;background:#ffebee;padding:14px;border-radius:8px;margin-top:12px">
-      ⚠️ Chyba: ${esc(err.message)}<br><small>Zkontroluj API klíč v nastavení nebo zkus znovu.</small></div>`;
+    res.innerHTML=`<div style="color:#c62828;background:#ffebee;padding:14px;border-radius:8px;margin-top:12px">⚠️ Chyba: ${esc(err.message)}<br><small>Zkontroluj API klíč v nastavení nebo zkus znovu.</small></div>`;
   }
 }
-function fileToBase64(file){
-  return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file)});
-}
-function renderExtractedWords(words, container){
+function fileToBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file);});}
+function renderExtractedWords(words,container){
   if(!words||!words.length){container.innerHTML='<p style="color:#888;margin-top:12px">Nebyla nalezena žádná slovíčka.</p>';return;}
-  let html=`<div style="margin-top:16px"><p style="font-weight:700;margin-bottom:10px">Nalezeno ${words.length} slovíček. Zaškrtni která chceš přidat:</p>
-  <div class="extracted-list">`;
+  let html=`<div style="margin-top:16px"><p style="font-weight:700;margin-bottom:10px">Nalezeno ${words.length} slovíček. Zaškrtni která chceš přidat:</p><div class="extracted-list">`;
   words.forEach((w,i)=>{
-    const emoji = findEmojiForWord(w.en)||'';
-    html+=`<div class="extracted-item">
-      <input type="checkbox" id="ext_${i}" checked>
-      <span class="ext-en">${esc(w.en)}</span>
-      <span class="ext-cs">${esc(w.cs)}</span>
-      <input class="extracted-emoji-input" id="extEmoji_${i}" value="${esc(emoji)}" title="Emoji">
-      <select id="extType_${i}" style="padding:6px;border:1px solid #ddd;border-radius:6px;font-size:13px">
-        <option value="noun"${w.type==='noun'?' selected':''}>podst.</option>
-        <option value="verb"${w.type==='verb'?' selected':''}>sl.</option>
-        <option value="adjective"${w.type==='adjective'?' selected':''}>příd.</option>
-      </select>
-    </div>`;
+    const emoji=findEmojiForWord(w.en)||'';
+    html+=`<div class="extracted-item"><input type="checkbox" id="ext_${i}" checked><span class="ext-en">${esc(w.en)}</span><span class="ext-cs">${esc(w.cs)}</span><input class="extracted-emoji-input" id="extEmoji_${i}" value="${esc(emoji)}" title="Emoji"><select id="extType_${i}" style="padding:6px;border:1px solid #ddd;border-radius:6px;font-size:13px"><option value="noun"${w.type==='noun'?' selected':''}>podst.</option><option value="verb"${w.type==='verb'?' selected':''}>sl.</option><option value="adjective"${w.type==='adjective'?' selected':''}>příd.</option></select></div>`;
   });
-  html+=`</div><div style="margin-top:14px;display:flex;gap:10px">
-    <button class="btn btn-primary" onclick="confirmExtracted(${words.length})">✅ Přidat vybraná</button>
-    <button class="btn btn-secondary" onclick="document.getElementById('extractedResults').innerHTML=''">Zrušit</button>
-  </div></div>`;
+  html+=`</div><div style="margin-top:14px;display:flex;gap:10px"><button class="btn btn-primary" onclick="confirmExtracted(${words.length})">✅ Přidat vybraná</button><button class="btn btn-secondary" onclick="document.getElementById('extractedResults').innerHTML=''">Zrušit</button></div></div>`;
   container.innerHTML=html;
   window._extractedWords=words;
 }
 function confirmExtracted(count){
-  const allWords = getWords()||[];
+  const allWords=getWords()||[];
   let added=0;
   for(let i=0;i<count;i++){
-    const cb = document.getElementById('ext_'+i);
+    const cb=document.getElementById('ext_'+i);
     if(!cb||!cb.checked) continue;
-    const w = window._extractedWords[i];
-    const emoji = document.getElementById('extEmoji_'+i).value.trim();
-    const type = document.getElementById('extType_'+i).value;
-    allWords.push({
-      id:'w_photo_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2),
-      en:w.en,cs:w.cs,emoji,unit:'Z fotky',category:'Extrahováno',type,custom:true
-    });
+    const w=window._extractedWords[i];
+    allWords.push({id:'w_photo_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2),en:w.en,cs:w.cs,emoji:document.getElementById('extEmoji_'+i).value.trim(),unit:'Z fotky',category:'Extrahováno',type:document.getElementById('extType_'+i).value,custom:true});
     added++;
   }
   saveWords(allWords);
   document.getElementById('extractedResults').innerHTML=`<p style="color:#2e7d32;font-weight:700;margin-top:12px">✅ Přidáno ${added} slovíček!</p>`;
-  setTimeout(()=>renderWordsTab(document.getElementById('parentContent')),1500);
+  setTimeout(()=>{renderWordsTab(document.getElementById('parentContent'));renderChildUI();},1500);
 }
 
 // PROGRESS TAB
 function renderProgressTab(c){
-  const words = getWords()||[];
-  const stats = getStats();
+  const words=getWords()||[];
+  const stats=getStats();
   let mastered=0,practicing=0,untouched=0;
-  words.forEach(w=>{
-    const s=stats[w.id];
-    if(!s||s.correct+s.incorrect===0){untouched++;return;}
-    const acc=s.correct/(s.correct+s.incorrect);
-    if(acc>=0.8) mastered++; else practicing++;
-  });
+  words.forEach(w=>{const s=stats[w.id];if(!s||s.correct+s.incorrect===0){untouched++;return;}const acc=s.correct/(s.correct+s.incorrect);if(acc>=0.8)mastered++;else practicing++;});
+  const ap=getActiveProfile();
   c.innerHTML=`
+  <div class="form-card" style="border-left:4px solid ${ap?ap.color:'#1a2744'}"><h3>Pokrok: <strong>${ap?esc(ap.name):''}</strong></h3></div>
   <div class="stats-grid">
     <div class="stat-card green"><div class="stat-number">${mastered}</div><div class="stat-label">✅ Zvládnutých (>80%)</div></div>
     <div class="stat-card orange"><div class="stat-number">${practicing}</div><div class="stat-label">🔄 V tréninku</div></div>
     <div class="stat-card grey"><div class="stat-number">${untouched}</div><div class="stat-label">💤 Neprocvičených</div></div>
   </div>
-  <div class="progress-table">
-    <table>
-      <thead><tr><th>Slovíčko</th><th>Správně</th><th>Špatně</th><th>Úspěšnost</th><th>Poslední procvičení</th></tr></thead>
-      <tbody>
-        ${words.map(w=>{
-          const s=stats[w.id]||{correct:0,incorrect:0,lastPracticed:null};
-          const total=s.correct+s.incorrect;
-          const acc=total>0?Math.round(s.correct/total*100):null;
-          const barClass=acc===null?'':acc>=80?'':acc>=50?' medium':' low';
-          return `<tr>
-            <td><strong>${esc(w.en)}</strong><br><small style="color:#888">${esc(w.cs)}</small></td>
-            <td style="color:#2e7d32;font-weight:700">${s.correct}</td>
-            <td style="color:#c62828;font-weight:700">${s.incorrect}</td>
-            <td>${acc===null?'<span style="color:#bbb">-</span>':`<div style="display:flex;align-items:center;gap:8px"><div class="mini-bar"><div class="mini-bar-fill${barClass}" style="width:${acc}%"></div></div><span>${acc}%</span></div>`}</td>
-            <td style="color:#888;font-size:13px">${s.lastPracticed||'-'}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-  </div>`;
+  ${words.length===0?'<p style="text-align:center;color:#999;padding:20px">Žádná slovíčka</p>':`
+  <div class="progress-table"><table>
+    <thead><tr><th>Slovíčko</th><th>Správně</th><th>Špatně</th><th>Úspěšnost</th><th>Poslední procvičení</th></tr></thead>
+    <tbody>${words.map(w=>{const s=stats[w.id]||{correct:0,incorrect:0,lastPracticed:null};const total=s.correct+s.incorrect;const acc=total>0?Math.round(s.correct/total*100):null;const barClass=acc===null?'':acc>=80?'':acc>=50?' medium':' low';return `<tr><td><strong>${esc(w.en)}</strong><br><small style="color:#888">${esc(w.cs)}</small></td><td style="color:#2e7d32;font-weight:700">${s.correct}</td><td style="color:#c62828;font-weight:700">${s.incorrect}</td><td>${acc===null?'<span style="color:#bbb">-</span>':`<div style="display:flex;align-items:center;gap:8px"><div class="mini-bar"><div class="mini-bar-fill${barClass}" style="width:${acc}%"></div></div><span>${acc}%</span></div>`}</td><td style="color:#888;font-size:13px">${s.lastPracticed||'-'}</td></tr>`;}).join('')}</tbody>
+  </table></div>`}`;
 }
 
 // SETTINGS TAB
 function renderSettingsTab(c){
-  const pin = getPin();
-  const apiKey = getApiKey();
-  const stars = getStars();
+  const apiKey=getApiKey();
   c.innerHTML=`
   <div class="settings-card">
     <h3>🔐 PIN kód</h3>
     <div class="form-row" style="max-width:360px">
-      <div class="form-group">
-        <label>Nový PIN (4 číslice)</label>
-        <input type="password" id="newPin" maxlength="4" placeholder="****" style="letter-spacing:8px;font-size:20px">
-      </div>
-      <div class="form-group">
-        <label>Potvrdit PIN</label>
-        <input type="password" id="newPin2" maxlength="4" placeholder="****" style="letter-spacing:8px;font-size:20px">
-      </div>
+      <div class="form-group"><label>Nový PIN (4 číslice)</label><input type="password" id="newPin" maxlength="4" placeholder="****" style="letter-spacing:8px;font-size:20px"></div>
+      <div class="form-group"><label>Potvrdit PIN</label><input type="password" id="newPin2" maxlength="4" placeholder="****" style="letter-spacing:8px;font-size:20px"></div>
     </div>
     <button class="btn btn-primary" onclick="changePin()">Uložit PIN</button>
   </div>
-
   <div class="settings-card">
     <h3>🤖 Anthropic API klíč</h3>
     <p style="color:#666;font-size:14px;margin-bottom:10px">Potřebný pro rozpoznávání slovíček z fotek učebnice. Pokud používáš proxy, nech prázdné.</p>
-    <div class="form-group" style="max-width:500px">
-      <label>API klíč</label>
-      <input type="password" id="apiKeyInput" value="${esc(apiKey)}" placeholder="sk-ant-...">
-      <span class="api-key-note">Klíč se ukládá pouze lokálně v prohlížeči</span>
-    </div>
+    <div class="form-group" style="max-width:500px"><label>API klíč</label><input type="password" id="apiKeyInput" value="${esc(apiKey)}" placeholder="sk-ant-..."><span class="api-key-note">Klíč se ukládá pouze lokálně v prohlížeči</span></div>
     <button class="btn btn-primary" onclick="saveApiKey()">Uložit</button>
-  </div>
-
-  <div class="settings-card">
-    <h3>🎮 Herní statistiky</h3>
-    <p>Celkem hvězdiček: <strong>${stars}</strong></p>
-    <p style="margin-top:8px">Streak: <strong>${getStreak().count} dní</strong></p>
-    <button class="btn btn-danger" style="margin-top:14px" onclick="resetGameStats()">Resetovat herní postup</button>
   </div>`;
 }
 
 function changePin(){
-  const p1 = document.getElementById('newPin').value;
-  const p2 = document.getElementById('newPin2').value;
+  const p1=document.getElementById('newPin').value;
+  const p2=document.getElementById('newPin2').value;
   if(!/^\d{4}$/.test(p1)){showToast('PIN musí mít přesně 4 číslice','error');return;}
   if(p1!==p2){showToast('PINy se neshodují','error');return;}
   LS.set('vocab_pin',p1);
   showToast('PIN byl změněn','success');
 }
-function saveApiKey(){
-  const k = document.getElementById('apiKeyInput').value.trim();
-  LS.set('vocab_api_key',k);
-  showToast('API klíč uložen','success');
-}
-function resetGameStats(){
-  if(!confirm('Resetovat hvězdičky, levely a streak?')) return;
-  saveStars(0);
-  saveStreak({count:1,lastDate:new Date().toISOString().slice(0,10)});
-  showToast('Herní postup resetován','success');
-  renderChildUI();
-}
+function saveApiKey(){LS.set('vocab_api_key',document.getElementById('apiKeyInput').value.trim());showToast('API klíč uložen','success');}
 
 // ============================================================
 // CHILD MODE
 // ============================================================
 function renderChildUI(){
-  const stars = getStars();
-  const streak = getStreak();
+  const ap=getActiveProfile();
+  const stars=getStars();
+  const streak=getStreak();
+  if(ap){
+    document.getElementById('profileNameBadge').textContent=ap.name;
+    document.getElementById('profileNameBadge').style.borderColor=ap.color;
+  }
   document.getElementById('starsCount').textContent=stars;
   document.getElementById('levelBadge').textContent=getLevelName(stars);
   document.getElementById('streakDisplay').textContent=`🔥 ${streak.count}`;
   renderWorldMap();
   renderSetSelector();
+  const words=getWords()||[];
+  document.getElementById('noWordsMsg').style.display=words.length===0?'block':'none';
+  document.getElementById('startBtn').style.display=words.length<4?'none':'block';
   showChildSection('map');
 }
 
@@ -1133,51 +1148,43 @@ function getLevelName(stars){
 }
 
 function renderWorldMap(){
-  const stars = getStars();
-  const map = document.getElementById('worldMap');
+  const stars=getStars();
+  const map=document.getElementById('worldMap');
   let html='';
   MAP_STAGES.forEach((s,i)=>{
-    const unlocked = stars>=s.unlockAt;
-    const current = stars>=s.unlockAt&&(i===MAP_STAGES.length-1||stars<MAP_STAGES[i+1].unlockAt);
-    const done = i<MAP_STAGES.length-1&&stars>=MAP_STAGES[i+1].unlockAt;
+    const unlocked=stars>=s.unlockAt;
+    const done=i<MAP_STAGES.length-1&&stars>=MAP_STAGES[i+1].unlockAt;
+    const current=unlocked&&!done;
     let cls='stage-circle';
     if(!unlocked) cls+=' locked';
     else if(done) cls+=' done';
     else if(current) cls+=' current';
     else cls+=' unlocked';
-    if(i>0){
-      const connDone = stars>=s.unlockAt;
-      html+=`<div class="map-connector${connDone?' done':''}"></div>`;
-    }
-    html+=`<div class="map-stage">
-      <div class="${cls}">
-        ${s.emoji}
-        ${!unlocked?`<span class="stage-lock">🔒</span>`:''}
-      </div>
-      <div class="stage-name">${s.name}</div>
-      <div class="stage-req">${s.unlockAt===0?'Start':'⭐'+s.unlockAt}</div>
-    </div>`;
+    if(i>0) html+=`<div class="map-connector${stars>=s.unlockAt?' done':''}"></div>`;
+    html+=`<div class="map-stage"><div class="${cls}">${s.emoji}${!unlocked?'<span class="stage-lock">🔒</span>':''}</div><div class="stage-name">${s.name}</div><div class="stage-req">${s.unlockAt===0?'Start':'⭐'+s.unlockAt}</div></div>`;
   });
   map.innerHTML=html;
 }
 
 function renderSetSelector(){
-  const words = getWords()||[];
-  const units = [...new Set(words.map(w=>w.unit))].sort();
-  const selected = getSelectedSet();
-  const sel = document.getElementById('setSelector');
-  let html=`<button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna slovíčka (${words.length})</button>`;
+  const words=getWords()||[];
+  const units=[...new Set(words.map(w=>w.unit))].sort();
+  const selected=getSelectedSet();
+  const sel=document.getElementById('setSelector');
+  let html=`<button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna (${words.length})</button>`;
   units.forEach(u=>{
-    const count = words.filter(w=>w.unit===u).length;
-    html+=`<button class="set-btn${selected===u?' active':''}" onclick="selectSet('${u.replace(/'/g,"\\'")}')">📖 ${esc(u)} (${count})</button>`;
+    const count=words.filter(w=>w.unit===u).length;
+    html+=`<button class="set-btn${selected===u?' active':''}" onclick="selectSet(this,'${u.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">${esc(u)} (${count})</button>`;
   });
   sel.innerHTML=html;
 }
 
-function selectSet(s){
-  saveSelectedSet(s);
+function selectSet(elOrName, name){
+  if(typeof elOrName==='string'){saveSelectedSet(elOrName);}
+  else{saveSelectedSet(name);}
   document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
+  if(typeof elOrName!=='string') elOrName.classList.add('active');
+  else document.querySelectorAll('.set-btn')[0].classList.add('active');
 }
 
 function showChildSection(sec){
@@ -1186,294 +1193,184 @@ function showChildSection(sec){
   document.getElementById('resultsScreen').style.display=sec==='results'?'flex':'none';
 }
 
-function goHome(){
-  showChildSection('map');
-  renderChildUI();
-}
+function goHome(){showChildSection('map');renderChildUI();}
 
 // ============================================================
 // SESSION / EXERCISES
 // ============================================================
-let session = null;
+let session=null;
 
 function buildWordPool(){
-  const all = getWords()||[];
-  const sel = getSelectedSet();
-  const pool = sel==='all'?all:all.filter(w=>w.unit===sel);
+  const all=getWords()||[];
+  const sel=getSelectedSet();
+  const pool=sel==='all'?all:all.filter(w=>w.unit===sel);
   return pool.length>=4?pool:all;
 }
 
 function weightedRandom(pool){
   const weighted=[];
-  pool.forEach(w=>{
-    const acc = getAccuracy(w.id);
-    const weight = (acc>=0&&acc<0.6)?3:1;
-    for(let i=0;i<weight;i++) weighted.push(w);
-  });
+  pool.forEach(w=>{const acc=getAccuracy(w.id);const weight=(acc>=0&&acc<0.6)?3:1;for(let i=0;i<weight;i++)weighted.push(w);});
   return weighted[Math.floor(Math.random()*weighted.length)];
 }
 
-function shuffle(arr){
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
-  return a;
-}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 function pickExerciseType(word){
   const types=[1,1,1,2,2,3,3,4];
-  const nouns = (getWords()||[]).filter(w=>w.type==='noun');
-  const validTypes = types.filter(t=>t!==4||word.type==='noun'||nouns.length>=4);
+  const nouns=(getWords()||[]).filter(w=>w.type==='noun');
+  const validTypes=types.filter(t=>t!==4||word.type==='noun'||nouns.length>=1);
   return validTypes[Math.floor(Math.random()*validTypes.length)];
 }
 
 function startSession(){
-  const pool = buildWordPool();
-  if(pool.length<4){showToast('Potřebuješ alespoň 4 slovíčka pro procvičování','error');return;}
-  session={
-    pool, round:0, total:10,
-    correct:0, starsEarned:0,
-    consecutiveCorrect:0, currentWord:null
-  };
+  const pool=buildWordPool();
+  if(pool.length<4){showToast('Potřebuješ alespoň 4 slovíčka','error');return;}
+  session={pool,round:0,total:10,correct:0,starsEarned:0,consecutiveCorrect:0,currentWord:null};
   showChildSection('exercise');
   nextRound();
 }
 
 function nextRound(){
-  if(session.round>=session.total){
-    finishSession();return;
-  }
+  if(session.round>=session.total){finishSession();return;}
   session.round++;
   document.getElementById('progressFill').style.width=((session.round-1)/session.total*100)+'%';
   document.getElementById('exerciseCounter').textContent=`${session.round} / ${session.total}`;
   document.getElementById('sessionStreak').textContent=session.consecutiveCorrect>=2?`🔥${session.consecutiveCorrect}`:'';
-
-  const word = weightedRandom(session.pool);
-  session.currentWord = word;
-  const exType = pickExerciseType(word);
-  renderExercise(exType, word);
+  const word=weightedRandom(session.pool);
+  session.currentWord=word;
+  renderExercise(pickExerciseType(word),word);
 }
 
-function renderExercise(type, word){
-  const c = document.getElementById('exerciseContent');
-  if(type===1) renderExType1(c, word);
-  else if(type===2) renderExType2(c, word);
-  else if(type===3) renderExType3(c, word);
-  else renderExType4(c, word);
+function renderExercise(type,word){
+  const c=document.getElementById('exerciseContent');
+  if(type===1) renderExType1(c,word);
+  else if(type===2) renderExType2(c,word);
+  else if(type===3) renderExType3(c,word);
+  else renderExType4(c,word);
 }
 
-function getWrongOptions(correct, pool, count=3){
-  const others = shuffle(pool.filter(w=>w.id!==correct.id));
+function getWrongOptions(correct,pool,count=3){
+  const others=shuffle(pool.filter(w=>w.id!==correct.id));
   const chosen=[];
-  for(const w of others){
-    if(chosen.length>=count) break;
-    if(!chosen.find(x=>x.cs===w.cs)) chosen.push(w);
-  }
-  while(chosen.length<count){
-    const fallback=DEFAULT_VOCAB[Math.floor(Math.random()*DEFAULT_VOCAB.length)];
-    if(!chosen.find(x=>x.cs===fallback.cs)&&fallback.cs!==correct.cs) chosen.push(fallback);
-  }
+  for(const w of others){if(chosen.length>=count)break;if(!chosen.find(x=>x.cs===w.cs))chosen.push(w);}
+  while(chosen.length<count){const f=DEFAULT_VOCAB[Math.floor(Math.random()*DEFAULT_VOCAB.length)];if(!chosen.find(x=>x.cs===f.cs)&&f.cs!==correct.cs)chosen.push(f);}
   return chosen.slice(0,count);
 }
 
-// TYPE 1: Přelož slovo
-function renderExType1(c, word){
-  const wrongs = getWrongOptions(word, session.pool);
-  const options = shuffle([word,...wrongs]);
-  c.innerHTML=`
-  <div class="exercise-card">
-    <div class="exercise-type-label">🔤 Přelož slovíčko</div>
-    <div class="exercise-emoji">${word.emoji||renderFallbackEmoji(word,72)}</div>
-    <div class="exercise-word">${esc(word.en)}</div>
-  </div>
-  <div class="answers">
-    ${options.map(o=>`<button class="answer-btn" onclick="answerType1(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}
-  </div>`;
+function renderExType1(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🔤 Přelož slovíčko</div><div class="exercise-emoji">${word.emoji||mkFallback(word,80)}</div><div class="exercise-word">${esc(word.en)}</div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType1(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
 }
-function renderFallbackEmoji(word,size){
-  const color=FALLBACK_COLORS[word.en.charCodeAt(0)%FALLBACK_COLORS.length];
-  return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:50%;background:${color};color:#fff;font-size:${Math.round(size*.5)}px;font-weight:700">${word.en[0].toUpperCase()}</span>`;
-}
-function answerType1(btn, answerId, correctId){
-  const btns = document.querySelectorAll('.answer-btn');
-  btns.forEach(b=>b.disabled=true);
-  const correct = answerId===correctId;
+function mkFallback(word,size){const color=FALLBACK_COLORS[word.en.charCodeAt(0)%FALLBACK_COLORS.length];return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:50%;background:${color};color:#fff;font-size:${Math.round(size*.5)}px;font-weight:700">${word.en[0].toUpperCase()}</span>`;}
+function answerType1(btn,answerId,correctId){
+  document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+  const correct=answerId===correctId;
   btn.classList.add(correct?'correct':'wrong');
-  if(!correct){
-    btns.forEach(b=>{if(b.getAttribute('onclick').includes(`'${correctId}'`)) b.classList.add('reveal');});
-  }
-  handleAnswer(correct, ()=>nextRound());
+  if(!correct) document.querySelectorAll('.answer-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`))b.classList.add('reveal');});
+  handleAnswer(correct,()=>nextRound());
 }
 
-// TYPE 2: Spoj obrázek se slovem
-function renderExType2(c, word){
-  const wrongs = getWrongOptions(word, session.pool, 3);
-  const options = shuffle([word,...wrongs]);
-  c.innerHTML=`
-  <div class="exercise-card">
-    <div class="exercise-type-label">🖼️ Klikni na správný obrázek</div>
-    <div class="exercise-word" style="font-size:36px">${esc(word.en)}</div>
-    <div class="exercise-instruction">Které obrázek odpovídá tomuto slovu?</div>
-  </div>
-  <div class="emoji-grid">
-    ${options.map(o=>`
-    <div class="emoji-choice" onclick="answerType2(this,'${esc(o.id)}','${esc(word.id)}','${esc(o.cs)}')">
-      <span class="big-emoji">${o.emoji||'<span style="font-size:40px;color:#aaa">'+o.en[0].toUpperCase()+'</span>'}</span>
-      <span class="choice-word">${esc(o.cs)}</span>
-    </div>`).join('')}
-  </div>`;
+function renderExType2(c,word){
+  const wrongs=getWrongOptions(word,session.pool,3);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🖼️ Klikni na správný obrázek</div><div class="exercise-word" style="font-size:36px">${esc(word.en)}</div><div class="exercise-instruction">Které obrázek odpovídá tomuto slovu?</div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType2(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${o.emoji||mkFallback(o,48)}</span><span class="choice-word">${esc(o.cs)}</span></div>`).join('')}</div>`;
 }
-function answerType2(el, answerId, correctId){
+function answerType2(el,answerId,correctId){
   document.querySelectorAll('.emoji-choice').forEach(e=>e.onclick=null);
   const correct=answerId===correctId;
   el.classList.add(correct?'correct':'wrong');
-  if(!correct){
-    document.querySelectorAll('.emoji-choice').forEach(e=>{
-      if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`)) e.classList.add('reveal');
-    });
-  }
+  if(!correct) document.querySelectorAll('.emoji-choice').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`))e.classList.add('reveal');});
   handleAnswer(correct,()=>nextRound());
 }
 
-// TYPE 3: Poslechni a vyber
-function renderExType3(c, word){
-  const wrongs = getWrongOptions(word, session.pool);
-  const options = shuffle([word,...wrongs]);
-  c.innerHTML=`
-  <div class="exercise-card">
-    <div class="exercise-type-label">🎧 Poslechni a přelož</div>
-    <div class="listen-area">
-      <button class="listen-btn" id="listenBtn" onclick="speakWord('${esc(word.en)}')">🔊</button>
-      <div class="listen-hint">Klikni pro přehrání</div>
-    </div>
-  </div>
-  <div class="answers">
-    ${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}
-  </div>`;
+function renderExType3(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🎧 Poslechni a přelož</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">Klikni pro přehrání</div></div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
   setTimeout(()=>speakWord(word.en),400);
 }
-function speakWord(text){
-  if(!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US';u.rate=0.85;
-  speechSynthesis.speak(u);
-}
-function answerType3(btn, answerId, correctId){
-  const btns=document.querySelectorAll('.answer-btn');
-  btns.forEach(b=>b.disabled=true);
+function speakWord(text){if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);}
+function answerType3(btn,answerId,correctId){
+  document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
   const correct=answerId===correctId;
   btn.classList.add(correct?'correct':'wrong');
-  if(!correct) btns.forEach(b=>{if(b.getAttribute('onclick').includes(`'${correctId}'`)) b.classList.add('reveal');});
+  if(!correct) document.querySelectorAll('.answer-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`))b.classList.add('reveal');});
   handleAnswer(correct,()=>nextRound());
 }
 
-// TYPE 4: Poskladej větu
-const SENTENCE_TEMPLATES = [
-  {id:'cansee', tiles:(a,w)=>["I","can","see",`${a} ${w}.`]},
-  {id:'cantsee', tiles:(a,w)=>["I","can't","see",`${a} ${w}.`]},
-  {id:'ivegot', tiles:(a,w)=>["I've","got",`${a} ${w}.`]},
-  {id:'haventgot', tiles:(a,w)=>["I","haven't","got",`${a} ${w}.`]},
-  {id:'ima', tiles:(a,w)=>["I'm",`${a} ${w}.`]},
-  {id:'imnota', tiles:(a,w)=>["I'm","not",`${a} ${w}.`]},
+const SENTENCE_TEMPLATES=[
+  {tiles:(a,w)=>["I","can","see",`${a} ${w}.`]},
+  {tiles:(a,w)=>["I","can't","see",`${a} ${w}.`]},
+  {tiles:(a,w)=>["I've","got",`${a} ${w}.`]},
+  {tiles:(a,w)=>["I","haven't","got",`${a} ${w}.`]},
+  {tiles:(a,w)=>["I'm",`${a} ${w}.`]},
+  {tiles:(a,w)=>["I'm","not",`${a} ${w}.`]},
 ];
 
-function renderExType4(c, word){
-  const article = getArticle(word.en);
-  const tpl = SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
-  const correctTiles = tpl.tiles(article, word.en);
-  const shuffled = shuffle([...correctTiles]);
-  session.sentenceTiles={correct:correctTiles, placed:[], available:[...shuffled]};
-
-  c.innerHTML=`
-  <div class="exercise-card" style="text-align:left">
-    <div class="exercise-type-label">🧩 Poskladej větu</div>
-    <div style="text-align:center;margin:12px 0">
-      <span class="exercise-emoji" style="font-size:56px">${word.emoji||word.en[0].toUpperCase()}</span>
-    </div>
-    <div class="sentence-target">Slovíčko: <strong>${esc(word.en)}</strong> = <em>${esc(word.cs)}</em></div>
-    <p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Klikni na dílky a poskladej větu:</p>
-    <div class="answer-area" id="answerArea">
-      <span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span>
-    </div>
-    <div class="tile-area" id="tileArea"></div>
-  </div>
-  <button class="check-btn" id="checkBtn" onclick="checkSentence('${esc(word.id)}','${esc(JSON.stringify(correctTiles).replace(/'/g,"&#39;").replace(/"/g,"&quot;"))}')">Zkontrolovat ✓</button>`;
-
+function renderExType4(c,word){
+  const article=getArticle(word.en);
+  const tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
+  const correctTiles=tpl.tiles(article,word.en);
+  session.sentenceTiles={correct:correctTiles,placed:[],available:shuffle([...correctTiles])};
+  c.innerHTML=`<div class="exercise-card" style="text-align:left"><div class="exercise-type-label">🧩 Poskladej větu</div><div style="text-align:center;margin:12px 0"><span style="font-size:56px">${word.emoji||word.en[0].toUpperCase()}</span></div><div style="text-align:center;color:var(--text-dim);font-size:14px;margin-bottom:10px">Slovíčko: <strong>${esc(word.en)}</strong> = <em>${esc(word.cs)}</em></div><p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Klikni na dílky a poskladej větu:</p><div class="answer-area" id="answerArea"><span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span></div><div class="tile-area" id="tileArea"></div></div><button class="check-btn" id="checkBtn" onclick="checkSentence()">Zkontrolovat ✓</button>`;
   renderTiles();
 }
 
 function renderTiles(){
-  const st = session.sentenceTiles;
-  const ta = document.getElementById('tileArea');
-  const aa = document.getElementById('answerArea');
-  const ph = document.getElementById('answerPlaceholder');
+  const st=session.sentenceTiles;
+  const ta=document.getElementById('tileArea');
+  const aa=document.getElementById('answerArea');
+  const ph=document.getElementById('answerPlaceholder');
+  if(!ta||!aa) return;
   ta.innerHTML='';
   st.available.forEach((t,i)=>{
     const el=document.createElement('button');
-    el.className='tile';
-    el.textContent=t;
+    el.className='tile';el.textContent=t;
     el.onclick=()=>{st.placed.push(t);st.available.splice(i,1);renderTiles();};
     ta.appendChild(el);
   });
   if(ph) ph.style.display=st.placed.length?'none':'block';
-  const existing=[...aa.querySelectorAll('.tile')];
-  existing.forEach(e=>aa.removeChild(e));
+  [...aa.querySelectorAll('.tile')].forEach(e=>aa.removeChild(e));
   st.placed.forEach((t,i)=>{
     const el=document.createElement('button');
-    el.className='tile in-answer';
-    el.textContent=t;
+    el.className='tile in-answer';el.textContent=t;
     el.onclick=()=>{st.available.push(t);st.placed.splice(i,1);renderTiles();};
     aa.appendChild(el);
   });
 }
 
-function checkSentence(wordId, correctJson){
-  const correct = JSON.parse(decodeHTMLEntities(correctJson));
-  const placed = session.sentenceTiles.placed;
-  if(placed.length===0){showToast('Nejdříve poskladej větu!','error');return;}
-  const isCorrect = placed.length===correct.length&&placed.every((t,i)=>t===correct[i]);
+function checkSentence(){
+  const st=session.sentenceTiles;
+  if(!st||st.placed.length===0){showToast('Nejdříve poskladej větu!','error');return;}
+  const isCorrect=st.placed.length===st.correct.length&&st.placed.every((t,i)=>t===st.correct[i]);
   const aa=document.getElementById('answerArea');
-  const btn=document.getElementById('checkBtn');
-  btn.disabled=true;
+  document.getElementById('checkBtn').disabled=true;
   document.querySelectorAll('#tileArea .tile').forEach(t=>t.disabled=true);
   document.querySelectorAll('#answerArea .tile').forEach(t=>t.onclick=null);
   aa.classList.add(isCorrect?'correct-border':'wrong-border');
   if(!isCorrect){
-    const ph=document.getElementById('answerPlaceholder')||document.createElement('span');
-    ph.style.display='block';
-    ph.style.color='rgba(255,255,255,0.6)';
-    ph.style.fontSize='15px';
-    ph.style.marginTop='8px';
-    ph.textContent='Správná věta: '+correct.join(' ');
-    aa.appendChild(ph);
+    const hint=document.createElement('span');
+    hint.style.cssText='display:block;color:rgba(255,255,255,0.6);font-size:15px;margin-top:8px;width:100%';
+    hint.textContent='Správná věta: '+st.correct.join(' ');
+    aa.appendChild(hint);
   }
   handleAnswer(isCorrect,()=>nextRound());
 }
 
-function decodeHTMLEntities(s){
-  return s.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-}
-
-// ANSWER HANDLING
-function handleAnswer(correct, next){
-  recordAnswer(session.currentWord.id, correct);
+function handleAnswer(correct,next){
+  recordAnswer(session.currentWord.id,correct);
   if(correct){
-    session.correct++;
-    session.consecutiveCorrect++;
+    session.correct++;session.consecutiveCorrect++;
     let earned=1;
     if(session.consecutiveCorrect>=3&&session.consecutiveCorrect%3===0) earned=3;
     session.starsEarned+=earned;
-    const oldStars=getStars();
-    const newStars=oldStars+earned;
+    const oldStars=getStars();const newStars=oldStars+earned;
     saveStars(newStars);
     checkLevelUp(oldStars,newStars);
-    playCorrectSound();
-    showFeedback(true, earned>1?`+${earned} ⭐`:'✓');
-    spawnConfetti();
+    playCorrectSound();showFeedback(true,earned>1?`+${earned} ⭐`:'✓');spawnConfetti();
   } else {
-    session.consecutiveCorrect=0;
-    playWrongSound();
-    showFeedback(false,'✗');
+    session.consecutiveCorrect=0;playWrongSound();showFeedback(false,'✗');
   }
   document.getElementById('starsCount').textContent=getStars();
   document.getElementById('levelBadge').textContent=getLevelName(getStars());
@@ -1481,12 +1378,10 @@ function handleAnswer(correct, next){
   setTimeout(()=>{hideFeedback();next();},correct?600:2000);
 }
 
-function checkLevelUp(oldStars, newStars){
-  const oldLevel=getLevelName(oldStars);
-  const newLevel=getLevelName(newStars);
-  if(oldLevel!==newLevel){
+function checkLevelUp(oldStars,newStars){
+  if(getLevelName(oldStars)!==getLevelName(newStars)){
     const banner=document.getElementById('levelupBanner');
-    banner.textContent=`🎉 Nový level: ${newLevel}!`;
+    banner.textContent=`🎉 Nový level: ${getLevelName(newStars)}!`;
     banner.classList.add('show');
     setTimeout(()=>banner.classList.remove('show'),3000);
   }
@@ -1507,59 +1402,28 @@ function finishSession(){
 // ============================================================
 // AUDIO
 // ============================================================
-let audioCtx = null;
-function getAudioCtx(){
-  if(!audioCtx) try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch{}
-  return audioCtx;
-}
-function playTone(freq,dur,type='sine',vol=0.3){
-  const ctx=getAudioCtx();if(!ctx)return;
-  const o=ctx.createOscillator();const g=ctx.createGain();
-  o.connect(g);g.connect(ctx.destination);
-  o.type=type;o.frequency.value=freq;
-  g.gain.setValueAtTime(vol,ctx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
-  o.start();o.stop(ctx.currentTime+dur);
-}
-function playCorrectSound(){
-  playTone(523.25,.1);
-  setTimeout(()=>playTone(659.25,.1),80);
-  setTimeout(()=>playTone(783.99,.2),160);
-}
-function playWrongSound(){
-  playTone(311.13,.15,'sawtooth',.2);
-  setTimeout(()=>playTone(233.08,.25,'sawtooth',.2),120);
-}
+let audioCtx=null;
+function getAudioCtx(){if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch{}return audioCtx;}
+function playTone(freq,dur,type='sine',vol=0.3){const ctx=getAudioCtx();if(!ctx)return;const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}
+function playCorrectSound(){playTone(523.25,.1);setTimeout(()=>playTone(659.25,.1),80);setTimeout(()=>playTone(783.99,.2),160);}
+function playWrongSound(){playTone(311.13,.15,'sawtooth',.2);setTimeout(()=>playTone(233.08,.25,'sawtooth',.2),120);}
 
 // ============================================================
 // VISUAL EFFECTS
 // ============================================================
-function showFeedback(correct, text){
-  const f=document.getElementById('feedbackFlash');
-  const t=document.getElementById('feedbackText');
-  t.textContent=text;
-  t.style.color=correct?'#FFD700':'#ff6b6b';
-  f.className='feedback-flash show '+(correct?'correct-flash':'wrong-flash');
-}
-function hideFeedback(){
-  document.getElementById('feedbackFlash').className='feedback-flash';
-}
-
+function showFeedback(correct,text){const f=document.getElementById('feedbackFlash');const t=document.getElementById('feedbackText');t.textContent=text;t.style.color=correct?'#FFD700':'#ff6b6b';f.className='feedback-flash show '+(correct?'correct-flash':'wrong-flash');}
+function hideFeedback(){document.getElementById('feedbackFlash').className='feedback-flash';}
 function spawnConfetti(){
   const container=document.getElementById('confettiContainer');
   const colors=['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD'];
   for(let i=0;i<24;i++){
-    const el=document.createElement('div');
-    el.className='confetti-piece';
-    el.style.left=Math.random()*100+'vw';
-    el.style.top=Math.random()*30+'vh';
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';el.style.top=Math.random()*30+'vh';
     el.style.background=colors[Math.floor(Math.random()*colors.length)];
     el.style.borderRadius=Math.random()>.5?'50%':'2px';
     el.style.width=el.style.height=(6+Math.random()*8)+'px';
-    el.style.animationDelay=Math.random()*.4+'s';
-    el.style.animationDuration=(.8+Math.random()*.6)+'s';
-    container.appendChild(el);
-    setTimeout(()=>el.remove(),1400);
+    el.style.animationDelay=Math.random()*.4+'s';el.style.animationDuration=(.8+Math.random()*.6)+'s';
+    container.appendChild(el);setTimeout(()=>el.remove(),1400);
   }
 }
 
@@ -1568,11 +1432,8 @@ function spawnConfetti(){
 // ============================================================
 let toastTimer=null;
 function showToast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast show'+(type?' '+type:'');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.className='toast',3000);
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='toast',3000);
 }
 
 // ============================================================
@@ -1580,10 +1441,7 @@ function showToast(msg,type=''){
 // ============================================================
 initData();
 renderChildUI();
-
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&document.getElementById('pinScreen').style.display!=='none') pinSubmit();
-});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('pinScreen').style.display!=='none')pinSubmit();});
 </script>
 </body>
 </html>
