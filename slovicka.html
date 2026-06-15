@@ -1260,7 +1260,7 @@ function getWrongOptions(correct,pool,count=3){
 function renderExType1(c,word){
   const wrongs=getWrongOptions(word,session.pool);
   const options=shuffle([word,...wrongs]);
-  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🔤 Přelož slovíčko</div><div class="exercise-emoji">${word.emoji||mkFallback(word,80)}</div><div class="exercise-word">${esc(word.en)}</div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType1(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🔤 Přelož slovíčko</div><div class="exercise-word" style="margin-top:16px">${esc(word.en)}</div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType1(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
 }
 function mkFallback(word,size){const color=FALLBACK_COLORS[word.en.charCodeAt(0)%FALLBACK_COLORS.length];return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:50%;background:${color};color:#fff;font-size:${Math.round(size*.5)}px;font-weight:700">${word.en[0].toUpperCase()}</span>`;}
 function answerType1(btn,answerId,correctId){
