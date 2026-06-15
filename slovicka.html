@@ -240,6 +240,19 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .modal-box h3{color:#1a2744;margin-bottom:16px;font-size:20px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
 
+#childScreen.beginner-mode .exercise-word,
+#childScreen.beginner-mode .answer-btn,
+#childScreen.beginner-mode .exercise-type-label,
+#childScreen.beginner-mode .exercise-instruction,
+#childScreen.beginner-mode .set-btn,
+#childScreen.beginner-mode .map-title,
+#childScreen.beginner-mode .map-subtitle,
+#childScreen.beginner-mode .stage-name,
+#childScreen.beginner-mode .profile-name-badge,
+#childScreen.beginner-mode .level-badge{text-transform:uppercase;letter-spacing:.5px}
+#childScreen.beginner-mode .exercise-word{font-size:52px}
+#childScreen.beginner-mode .answer-btn{font-size:20px}
+#childScreen.beginner-mode .big-emoji{font-size:72px}
 .levelup-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%) scale(0.8);background:linear-gradient(135deg,#c8900a,#ffd700);color:#1a2744;padding:16px 32px;border-radius:16px;font-family:'Fredoka One',cursive;font-size:26px;z-index:700;opacity:0;pointer-events:none;transition:all .4s;box-shadow:0 8px 32px rgba(255,215,0,0.5);white-space:nowrap}
 .levelup-banner.show{opacity:1;transform:translateX(-50%) scale(1)}
 
@@ -264,6 +277,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
     <h1 class="game-font">🌍 Výprava za slovíčky</h1>
     <div class="profile-name-badge" id="profileNameBadge">Terézka</div>
     <div class="header-right">
+      <button id="muteBtn" onclick="toggleMute()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:7px 14px;border-radius:10px;cursor:pointer;font-size:18px;transition:all .2s">🔊</button>
       <div class="streak-display" id="streakDisplay">🔥 1</div>
       <div class="stars-display">
         <span style="font-size:20px">⭐</span>
@@ -519,6 +533,68 @@ const DEFAULT_VOCAB = [
   {en:"melons",cs:"melouny",emoji:"🍈",unit:"L1 Unit 5",category:"Food",type:"noun"},
   {en:"olives",cs:"olivy",emoji:"🫒",unit:"L1 Unit 5",category:"Food",type:"noun"},
   {en:"oranges",cs:"pomeranče",emoji:"🍊",unit:"L1 Unit 5",category:"Food",type:"noun"},
+  // Let's Explore 3
+  // Unit 1 - Clothes
+  {en:"coat",cs:"kabát",emoji:"🧥",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"trousers",cs:"kalhoty",emoji:"👖",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"skirt",cs:"sukně",emoji:"👗",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"shirt",cs:"košile",emoji:"👔",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"shoes",cs:"boty",emoji:"👟",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"socks",cs:"ponožky",emoji:"🧦",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"hat",cs:"klobouk",emoji:"🎩",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"jacket",cs:"bunda",emoji:"🧥",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"dress",cs:"šaty",emoji:"👗",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"boots",cs:"holínky",emoji:"👢",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"scarf",cs:"šála",emoji:"🧣",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"gloves",cs:"rukavice",emoji:"🧤",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  // Unit 2 - Wild animals
+  {en:"elephant",cs:"slon",emoji:"🐘",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"giraffe",cs:"žirafa",emoji:"🦒",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"tiger",cs:"tygr",emoji:"🐯",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"lion",cs:"lev",emoji:"🦁",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"monkey",cs:"opice",emoji:"🐒",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"zebra",cs:"zebra",emoji:"🦓",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"crocodile",cs:"krokodýl",emoji:"🐊",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"parrot",cs:"papoušek",emoji:"🦜",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"penguin",cs:"tučňák",emoji:"🐧",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"hippo",cs:"hroch",emoji:"🦛",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  // Unit 3 - Sports and hobbies
+  {en:"play football",cs:"hrát fotbal",emoji:"⚽",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"play tennis",cs:"hrát tenis",emoji:"🎾",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"go swimming",cs:"jít plavat",emoji:"🏊",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"go cycling",cs:"jezdit na kole",emoji:"🚴",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"do gymnastics",cs:"dělat gymnastiku",emoji:"🤸",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"paint pictures",cs:"malovat obrázky",emoji:"🎨",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
+  {en:"read books",cs:"číst knihy",emoji:"📚",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
+  {en:"play computer games",cs:"hrát počítačové hry",emoji:"🎮",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
+  // Unit 4 - Daily routine
+  {en:"wake up",cs:"vzbudit se",emoji:"⏰",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"get up",cs:"vstát",emoji:"🛏️",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"have breakfast",cs:"snídat",emoji:"🥣",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"go to school",cs:"jít do školy",emoji:"🎒",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"have lunch",cs:"obědvat",emoji:"🍱",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"do homework",cs:"dělat domácí úkoly",emoji:"📝",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"have dinner",cs:"večeřet",emoji:"🍽️",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  {en:"go to bed",cs:"jít spát",emoji:"🌙",unit:"L3 Unit 4",category:"Daily routine",type:"verb"},
+  // Unit 5 - Town and places
+  {en:"park",cs:"park",emoji:"🌳",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"hospital",cs:"nemocnice",emoji:"🏥",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"library",cs:"knihovna",emoji:"📖",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"cinema",cs:"kino",emoji:"🎬",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"supermarket",cs:"supermarket",emoji:"🛒",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"restaurant",cs:"restaurace",emoji:"🍴",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"swimming pool",cs:"bazén",emoji:"🏊",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"street",cs:"ulice",emoji:"🛣️",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  // Unit 6 - Weather and seasons
+  {en:"sunny",cs:"slunečno",emoji:"☀️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"cloudy",cs:"oblačno",emoji:"☁️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"rainy",cs:"deštivo",emoji:"🌧️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"windy",cs:"větrno",emoji:"💨",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"snowy",cs:"sněživo",emoji:"❄️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"spring",cs:"jaro",emoji:"🌸",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"summer",cs:"léto",emoji:"🌞",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"autumn",cs:"podzim",emoji:"🍂",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"winter",cs:"zima",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
 ];
 
 const PROFILE_COLORS = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e91e63'];
@@ -575,6 +651,8 @@ function getStreak(){return LS.get(pk('streak'),{count:0,lastDate:''})}
 function saveStreak(s){LS.set(pk('streak'),s)}
 function getSelectedSet(){return LS.get(pk('set'),'all')}
 function saveSelectedSet(s){LS.set(pk('set'),s)}
+function getMute(){return LS.get('vocab_mute',false)}
+function saveMute(v){LS.set('vocab_mute',v)}
 function getPin(){return LS.get('vocab_pin','1234')}
 function getApiKey(){return LS.get('vocab_api_key','')}
 
@@ -614,6 +692,20 @@ function initData(){
     const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
     saveWords(words);
   }
+
+  // Migration: add any new DEFAULT_VOCAB words (e.g. L3) to all existing profiles that already have words
+  const l3Words = DEFAULT_VOCAB.filter(w=>w.unit&&w.unit.startsWith('L3'));
+  const allProfiles = getProfiles()||[];
+  allProfiles.forEach(p=>{
+    const existing = LS.get(`vocab_words_${p.id}`,null);
+    if(!existing||existing.length===0) return;
+    const existingKeys = new Set(existing.map(w=>w.en.toLowerCase()));
+    const toAdd = l3Words.filter(w=>!existingKeys.has(w.en.toLowerCase()));
+    if(toAdd.length>0){
+      const newWords = toAdd.map((w,i)=>({...w,id:'w_l3_'+i+'_'+p.id}));
+      LS.set(`vocab_words_${p.id}`,[...existing,...newWords]);
+    }
+  });
 
   updateStreak();
 }
@@ -787,10 +879,14 @@ function renderProfilesTab(c){
             <div class="profile-meta">${words} slovíček · ${stars} hvězdiček</div>
           </div>
           ${isActive?'<span class="profile-active-badge">✓ Aktivní</span>':''}
-          <div class="profile-actions">
-            <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️ Přejmenovat</button>
-            ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
-            ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'}</div>
+            <div class="profile-actions">
+              <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️</button>
+              <button class="btn btn-secondary btn-sm" onclick="toggleProfileMode('${p.id}')" title="Přepnout režim">${p.mode==='beginner'?'→ Standardní':'→ Začátečník'}</button>
+              ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
+              ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
+            </div>
           </div>
         </div>`;
       }).join('')}
@@ -808,6 +904,17 @@ function renderProfilesTab(c){
     <button class="btn btn-success" onclick="addProfileUI()">✅ Vytvořit profil</button>
     <p style="color:#888;font-size:13px;margin-top:10px">Nový profil začne s prázdnou sadou slovíček.</p>
   </div>`;
+}
+
+function toggleProfileMode(id){
+  const profiles=getProfiles()||[];
+  const p=profiles.find(x=>x.id===id);
+  if(!p) return;
+  p.mode=p.mode==='beginner'?'standard':'beginner';
+  saveProfiles(profiles);
+  renderProfilesTab(document.getElementById('parentContent'));
+  if(id===getActiveProfileId()) renderChildUI();
+  showToast(`Režim změněn na: ${p.mode==='beginner'?'Začátečník':'Standardní'}`,'success');
 }
 
 function renameProfileUI(id,currentName){
@@ -962,6 +1069,7 @@ function addWordManually(){
   const type=document.getElementById('addType').value;
   if(!en||!cs){showToast('Vyplň anglické i české slovo','error');return;}
   const words=getWords()||[];
+  if(words.find(w=>w.en.toLowerCase()===en.toLowerCase())){showToast(`Slovíčko "${en}" už existuje`,'error');return;}
   words.push({id:'w_custom_'+Date.now()+'_'+Math.random().toString(36).slice(2),en,cs,emoji:emoji||findEmojiForWord(en),unit,category,type,custom:true});
   saveWords(words);
   showToast(`Slovíčko "${en}" přidáno!`,'success');
@@ -1061,6 +1169,7 @@ function confirmExtracted(count){
     const cb=document.getElementById('ext_'+i);
     if(!cb||!cb.checked) continue;
     const w=window._extractedWords[i];
+    if(allWords.find(x=>x.en.toLowerCase()===w.en.toLowerCase())) continue;
     allWords.push({id:'w_photo_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2),en:w.en,cs:w.cs,emoji:document.getElementById('extEmoji_'+i).value.trim(),unit:'Z fotky',category:'Extrahováno',type:document.getElementById('extType_'+i).value,custom:true});
     added++;
   }
@@ -1127,13 +1236,17 @@ function renderChildUI(){
   const ap=getActiveProfile();
   const stars=getStars();
   const streak=getStreak();
+  const screen=document.getElementById('childScreen');
   if(ap){
     document.getElementById('profileNameBadge').textContent=ap.name;
     document.getElementById('profileNameBadge').style.borderColor=ap.color;
+    if(ap.mode==='beginner') screen.classList.add('beginner-mode');
+    else screen.classList.remove('beginner-mode');
   }
   document.getElementById('starsCount').textContent=stars;
   document.getElementById('levelBadge').textContent=getLevelName(stars);
   document.getElementById('streakDisplay').textContent=`🔥 ${streak.count}`;
+  updateMuteBtn();
   renderWorldMap();
   renderSetSelector();
   const words=getWords()||[];
@@ -1216,9 +1329,17 @@ function weightedRandom(pool){
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 function pickExerciseType(word){
-  const types=[1,1,1,2,2,3,3,4];
-  const nouns=(getWords()||[]).filter(w=>w.type==='noun');
-  const validTypes=types.filter(t=>t!==4||word.type==='noun'||nouns.length>=1);
+  const ap=getActiveProfile();
+  if(ap&&ap.mode==='beginner') return 6;
+  const muted=getMute();
+  const types=[1,2,3,5,4,4,7,7,8,8];
+  const sentenceTypes=[4,7,8];
+  const validTypes=types.filter(t=>{
+    if(sentenceTypes.includes(t)) return word.type==='noun'||word.type==='verb';
+    if(t===3&&muted) return false;
+    return true;
+  });
+  if(!validTypes.length) return 1;
   return validTypes[Math.floor(Math.random()*validTypes.length)];
 }
 
@@ -1246,7 +1367,11 @@ function renderExercise(type,word){
   if(type===1) renderExType1(c,word);
   else if(type===2) renderExType2(c,word);
   else if(type===3) renderExType3(c,word);
-  else renderExType4(c,word);
+  else if(type===4) renderExType4(c,word);
+  else if(type===5) renderExType5(c,word);
+  else if(type===6) renderExType6(c,word);
+  else if(type===7) renderExType7(c,word);
+  else renderExType8(c,word);
 }
 
 function getWrongOptions(correct,pool,count=3){
@@ -1290,7 +1415,22 @@ function renderExType3(c,word){
   c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🎧 Poslechni a přelož</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">Klikni pro přehrání</div></div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
   setTimeout(()=>speakWord(word.en),400);
 }
-function speakWord(text){if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);}
+function toggleMute(){
+  const muted=!getMute();
+  saveMute(muted);
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+  document.getElementById('muteBtn').style.opacity=muted?'0.5':'1';
+  showToast(muted?'Zvuk vypnut':'Zvuk zapnut');
+}
+function updateMuteBtn(){
+  const muted=getMute();
+  const btn=document.getElementById('muteBtn');
+  if(btn){btn.textContent=muted?'🔇':'🔊';btn.style.opacity=muted?'0.5':'1';}
+}
+function speakWord(text){
+  if(getMute()||!window.speechSynthesis)return;
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);
+}
 function answerType3(btn,answerId,correctId){
   document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
   const correct=answerId===correctId;
@@ -1300,21 +1440,119 @@ function answerType3(btn,answerId,correctId){
 }
 
 const SENTENCE_TEMPLATES=[
-  {tiles:(a,w)=>["I","can","see",`${a} ${w}.`]},
-  {tiles:(a,w)=>["I","can't","see",`${a} ${w}.`]},
-  {tiles:(a,w)=>["I've","got",`${a} ${w}.`]},
-  {tiles:(a,w)=>["I","haven't","got",`${a} ${w}.`]},
-  {tiles:(a,w)=>["I'm",`${a} ${w}.`]},
-  {tiles:(a,w)=>["I'm","not",`${a} ${w}.`]},
+  {tiles:(a,w)=>["I","can","see",`${a} ${w}.`], cs:(cs)=>`Vidím ${cs}.`},
+  {tiles:(a,w)=>["I","can't","see",`${a} ${w}.`], cs:(cs)=>`Nevidím ${cs}.`},
+  {tiles:(a,w)=>["I've","got",`${a} ${w}.`], cs:(cs)=>`Mám ${cs}.`},
+  {tiles:(a,w)=>["I","haven't","got",`${a} ${w}.`], cs:(cs)=>`Nemám ${cs}.`},
+  {tiles:(a,w)=>["I'm",`${a} ${w}.`], cs:(cs)=>`Jsem ${cs}.`},
+  {tiles:(a,w)=>["I'm","not",`${a} ${w}.`], cs:(cs)=>`Nejsem ${cs}.`},
+];
+const VERB_TEMPLATES=[
+  {tiles:(w)=>["I","can",`${w}.`], cs:(cs)=>`Umím ${cs}.`},
+  {tiles:(w)=>["I","can't",`${w}.`], cs:(cs)=>`Neumím ${cs}.`},
 ];
 
 function renderExType4(c,word){
-  const article=getArticle(word.en);
-  const tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
-  const correctTiles=tpl.tiles(article,word.en);
+  const isVerb=word.type==='verb';
+  let tpl,correctTiles,czHint;
+  if(isVerb){
+    tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
+    correctTiles=tpl.tiles(word.en);
+    czHint=tpl.cs(word.cs);
+  } else {
+    tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
+    const article=getArticle(word.en);
+    correctTiles=tpl.tiles(article,word.en);
+    czHint=tpl.cs(word.cs);
+  }
   session.sentenceTiles={correct:correctTiles,placed:[],available:shuffle([...correctTiles])};
-  c.innerHTML=`<div class="exercise-card" style="text-align:left"><div class="exercise-type-label">🧩 Poskladej větu</div><div style="text-align:center;margin:12px 0"><span style="font-size:56px">${word.emoji||word.en[0].toUpperCase()}</span></div><div style="text-align:center;color:var(--text-dim);font-size:14px;margin-bottom:10px">Slovíčko: <strong>${esc(word.en)}</strong> = <em>${esc(word.cs)}</em></div><p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Klikni na dílky a poskladej větu:</p><div class="answer-area" id="answerArea"><span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span></div><div class="tile-area" id="tileArea"></div></div><button class="check-btn" id="checkBtn" onclick="checkSentence()">Zkontrolovat ✓</button>`;
+  c.innerHTML=`<div class="exercise-card" style="text-align:left"><div class="exercise-type-label">🧩 Poskladej větu</div><div style="text-align:center;margin:8px 0 4px"><span style="font-size:48px">${word.emoji||word.en[0].toUpperCase()}</span></div><div style="text-align:center;background:rgba(255,215,0,0.12);border-radius:10px;padding:10px 16px;margin:8px 0 14px"><span style="color:var(--gold);font-family:'Fredoka One',cursive;font-size:22px">${esc(czHint)}</span></div><p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Poskladej anglicky:</p><div class="answer-area" id="answerArea"><span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span></div><div class="tile-area" id="tileArea"></div></div><button class="check-btn" id="checkBtn" onclick="checkSentence()">Zkontrolovat ✓</button>`;
   renderTiles();
+}
+
+function renderExType5(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🔄 Přelož do angličtiny</div><div class="exercise-word" style="margin-top:16px">${esc(word.cs)}</div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType5(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.en)}</button>`).join('')}</div>`;
+}
+function answerType5(btn,answerId,correctId){
+  document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+  const correct=answerId===correctId;
+  btn.classList.add(correct?'correct':'wrong');
+  if(!correct) document.querySelectorAll('.answer-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`))b.classList.add('reveal');});
+  handleAnswer(correct,()=>nextRound());
+}
+
+function makeSentencePair(word){
+  const isVerb=word.type==='verb';
+  const templates=isVerb?VERB_TEMPLATES:SENTENCE_TEMPLATES;
+  const tpl=templates[Math.floor(Math.random()*templates.length)];
+  if(isVerb){
+    return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs)};
+  } else {
+    const a=getArticle(word.en);
+    return {en:tpl.tiles(a,word.en).join(' '), cs:tpl.cs(word.cs)};
+  }
+}
+
+function getWrongSentences(correctWord, pool, count=3){
+  const candidates=shuffle(pool.filter(w=>w.id!==correctWord.id&&(w.type==='noun'||w.type==='verb')));
+  const chosen=[];
+  for(const w of candidates){
+    if(chosen.length>=count) break;
+    const s=makeSentencePair(w);
+    if(!chosen.find(x=>x.en===s.en)) chosen.push(s);
+  }
+  while(chosen.length<count){
+    const fb=DEFAULT_VOCAB.filter(w=>w.type==='noun'||w.type==='verb');
+    const w=fb[Math.floor(Math.random()*fb.length)];
+    const s=makeSentencePair(w);
+    if(!chosen.find(x=>x.en===s.en)) chosen.push(s);
+  }
+  return chosen.slice(0,count);
+}
+
+function renderExType7(c,word){
+  if(word.type!=='noun'&&word.type!=='verb'){renderExType1(c,word);return;}
+  const correct=makeSentencePair(word);
+  const wrongs=getWrongSentences(word,session.pool);
+  const options=shuffle([{...correct,isCorrect:true},...wrongs.map(s=>({...s,isCorrect:false}))]);
+  const idx=options.findIndex(o=>o.isCorrect);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇬🇧 Jak to říct anglicky?</div><div style="background:rgba(255,215,0,0.12);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:var(--gold);font-family:'Fredoka One',cursive;font-size:26px">${esc(correct.cs)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:16px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.en)}</button>`).join('')}</div>`;
+}
+
+function renderExType8(c,word){
+  if(word.type!=='noun'&&word.type!=='verb'){renderExType1(c,word);return;}
+  const correct=makeSentencePair(word);
+  const wrongs=getWrongSentences(word,session.pool);
+  const options=shuffle([{...correct,isCorrect:true},...wrongs.map(s=>({...s,isCorrect:false}))]);
+  const idx=options.findIndex(o=>o.isCorrect);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇨🇿 Jak to říct česky?</div><div style="background:rgba(46,74,138,0.4);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:#fff;font-family:'Fredoka One',cursive;font-size:26px">${esc(correct.en)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:16px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.cs)}</button>`).join('')}</div>`;
+}
+
+function answerSentence(btn,clickedIdx,correctIdx){
+  const btns=document.querySelectorAll('.answer-btn');
+  btns.forEach(b=>b.disabled=true);
+  const correct=clickedIdx===correctIdx;
+  btn.classList.add(correct?'correct':'wrong');
+  if(!correct) btns[correctIdx].classList.add('reveal');
+  handleAnswer(correct,()=>nextRound());
+}
+
+function renderExType6(c,word){
+  const wrongs=getWrongOptions(word,session.pool,3);
+  const options=shuffle([word,...wrongs]);
+  const ap=getActiveProfile();
+  const big=ap&&ap.mode==='beginner';
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">${big?'🔊 POSLECHNI A VYBER OBRÁZEK':'🎧 Poslechni a vyber obrázek'}</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">${big?'KLIKNI PRO PŘEHRÁNÍ':'Klikni pro přehrání'}</div></div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType6(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${o.emoji||mkFallback(o,56)}</span></div>`).join('')}</div>`;
+  setTimeout(()=>speakWord(word.en),400);
+}
+function answerType6(el,answerId,correctId){
+  document.querySelectorAll('.emoji-choice').forEach(e=>e.onclick=null);
+  const correct=answerId===correctId;
+  el.classList.add(correct?'correct':'wrong');
+  if(!correct) document.querySelectorAll('.emoji-choice').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`))e.classList.add('reveal');});
+  handleAnswer(correct,()=>nextRound());
 }
 
 function renderTiles(){
@@ -1405,8 +1643,8 @@ function finishSession(){
 let audioCtx=null;
 function getAudioCtx(){if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch{}return audioCtx;}
 function playTone(freq,dur,type='sine',vol=0.3){const ctx=getAudioCtx();if(!ctx)return;const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}
-function playCorrectSound(){playTone(523.25,.1);setTimeout(()=>playTone(659.25,.1),80);setTimeout(()=>playTone(783.99,.2),160);}
-function playWrongSound(){playTone(311.13,.15,'sawtooth',.2);setTimeout(()=>playTone(233.08,.25,'sawtooth',.2),120);}
+function playCorrectSound(){if(getMute())return;playTone(523.25,.1);setTimeout(()=>playTone(659.25,.1),80);setTimeout(()=>playTone(783.99,.2),160);}
+function playWrongSound(){if(getMute())return;playTone(311.13,.15,'sawtooth',.2);setTimeout(()=>playTone(233.08,.25,'sawtooth',.2),120);}
 
 // ============================================================
 // VISUAL EFFECTS
