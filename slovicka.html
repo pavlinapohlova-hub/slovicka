@@ -123,10 +123,10 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .child-header{background:rgba(0,0,0,0.25);padding:14px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap}
 .child-header h1{font-size:20px;color:var(--gold)}
 .profile-name-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:16px;font-size:14px;font-weight:700;color:var(--text-light)}
-.header-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.header-right{display:flex;align-items:center;gap:12px;margin-left:auto;padding-right:120px}
 .stars-display{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);padding:8px 16px;border-radius:20px}
 .stars-count{font-family:'Fredoka One',cursive;font-size:22px;color:var(--gold)}
-.level-badge{background:linear-gradient(135deg,#2e4a8a,#4a3a8a);padding:8px 14px;border-radius:16px;font-size:13px;font-weight:700;color:#d4b4ff}
+.level-badge{background:linear-gradient(135deg,#2e4a8a,#4a3a8a);padding:8px 14px;border-radius:16px;font-size:12px;font-weight:700;color:#d4b4ff;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .streak-display{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;color:#ff7043}
 
 #mapScreen{padding:20px 24px}
@@ -977,6 +977,20 @@ function renderWordsTab(c){
   </div>
 
   <div class="form-card">
+    <h3>📋 Zkopírovat slovíčka z jiného profilu</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:14px">Zkopíruje všechna slovíčka z vybraného profilu do <strong>${ap?esc(ap.name):''}</strong>. Duplikáty se přeskočí.</p>
+    <div class="form-row" style="max-width:400px;align-items:flex-end">
+      <div class="form-group">
+        <label>Zdrojový profil</label>
+        <select id="copyFromProfile">
+          ${(getProfiles()||[]).filter(p=>p.id!==ap?.id).map(p=>`<option value="${p.id}">${esc(p.name)} (${(LS.get('vocab_words_'+p.id)||[]).length} slovíček)</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="copyWordsFromProfile()">📋 Zkopírovat</button>
+    </div>
+  </div>
+
+  <div class="form-card">
     <h3>➕ Přidat slovíčko ručně</h3>
     <div class="form-row">
       <div class="form-group"><label>Anglicky *</label><input type="text" id="addEn" placeholder="např. elephant"></div>
@@ -1059,6 +1073,23 @@ function renderWordItem(w){
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function copyWordsFromProfile(){
+  const sel=document.getElementById('copyFromProfile');
+  if(!sel) return;
+  const sourceId=sel.value;
+  if(!sourceId) return;
+  const sourceWords=LS.get(`vocab_words_${sourceId}`)||[];
+  if(sourceWords.length===0){showToast('Zdrojový profil nemá žádná slovíčka','error');return;}
+  const target=getWords()||[];
+  const existingKeys=new Set(target.map(w=>w.en.toLowerCase()));
+  const toAdd=sourceWords.filter(w=>!existingKeys.has(w.en.toLowerCase()));
+  if(toAdd.length===0){showToast('Všechna slovíčka už tu jsou, nic nepřidáno','error');return;}
+  const newWords=toAdd.map((w,i)=>({...w,id:'w_copy_'+Date.now()+'_'+i}));
+  saveWords([...target,...newWords]);
+  showToast(`Přidáno ${newWords.length} slovíček!`,'success');
+  showParentTab('words');
+}
 
 function addWordManually(){
   const en=document.getElementById('addEn').value.trim();
