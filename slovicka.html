@@ -470,7 +470,7 @@ const DEFAULT_VOCAB = [
   {en:"garden",cs:"zahrada",cs_acc:"zahradu",emoji:"🌻",unit:"Unit 3",category:"Rooms",type:"noun"},
   {en:"cupboard",cs:"skříň",emoji:"🗄️",unit:"Unit 3",category:"Furniture",type:"noun"},
   {en:"box",cs:"krabice",cs_acc:"krabici",emoji:"📦",unit:"Unit 3",category:"Furniture",type:"noun"},
-  {en:"table",cs:"stůl",emoji:"🪑",unit:"Unit 3",category:"Furniture",type:"noun"},
+  {en:"table",cs:"stůl",emoji:"🪑",unit:"Unit 3",category:"Furniture",type:"noun",noEmoji:true},
   {en:"bed",cs:"postel",emoji:"🛏️",unit:"Unit 3",category:"Furniture",type:"noun"},
   {en:"snake",cs:"had",cs_acc:"hada",emoji:"🐍",unit:"Unit 4",category:"Animals",type:"noun"},
   {en:"bat",cs:"netopýr",cs_acc:"netopýra",emoji:"🦇",unit:"Unit 4",category:"Animals",type:"noun"},
@@ -558,7 +558,7 @@ const DEFAULT_VOCAB = [
   {en:"city",cs:"město",emoji:"🏙️",unit:"LL Unit 1",category:"Places",type:"noun"},
   {en:"jungle",cs:"džungle",cs_acc:"džungli",emoji:"🌴",unit:"LL Unit 1",category:"Places",type:"noun"},
   {en:"cave",cs:"jeskyně",cs_acc:"jeskyni",emoji:"🪨",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"forest",cs:"les",emoji:"🌲",unit:"LL Unit 1",category:"Places",type:"noun"},
+  {en:"forest",cs:"les",emoji:"🌲🌲🌲",unit:"LL Unit 1",category:"Places",type:"noun"},
   {en:"ocean",cs:"oceán",emoji:"🌊",unit:"LL Unit 1",category:"Places",type:"noun"},
   {en:"house",cs:"dům",emoji:"🏠",unit:"LL Unit 1",category:"Places",type:"noun"},
   {en:"sea",cs:"moře",emoji:"⛵",unit:"LL Unit 1",category:"Places",type:"noun"},
@@ -650,15 +650,15 @@ const DEFAULT_VOCAB = [
   {en:"buy",cs:"nakupovat",emoji:"🛍️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
   {en:"like",cs:"mít rád",emoji:"❤️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
   // LiveLife - Unit 9 - Prepositions
-  {en:"under",cs:"pod",emoji:"⬇️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"on",cs:"na",emoji:"⬆️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"in",cs:"v",emoji:"📦",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"near",cs:"blízko",emoji:"📍",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"next to",cs:"vedle",emoji:"↔️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"behind",cs:"za",emoji:"↩️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"in front of",cs:"před",emoji:"⏩",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"between",cs:"mezi",emoji:"↕️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
-  {en:"opposite",cs:"naproti",emoji:"🔄",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true},
+  {en:"under",cs:"pod",emoji:"⬇️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"on",cs:"na",emoji:"⬆️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"in",cs:"v",emoji:"📦",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"near",cs:"blízko",emoji:"📍",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"next to",cs:"vedle",emoji:"↔️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"behind",cs:"za",emoji:"↩️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"in front of",cs:"před",emoji:"⏩",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"between",cs:"mezi",emoji:"↕️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"opposite",cs:"naproti",emoji:"🔄",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
   // LiveLife - Unit 10 - Mixed vocabulary
   {en:"animal",cs:"zvíře",emoji:"🐾",unit:"LL Unit 10",category:"Animals",type:"noun"},
   {en:"fruit",cs:"ovoce",emoji:"🍎",unit:"LL Unit 10",category:"Food",type:"noun"},
@@ -733,26 +733,26 @@ const DEFAULT_VOCAB = [
   {en:"autumn",cs:"podzim",emoji:"🍂",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"winter",cs:"zima",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   // Months
-  {en:"January",cs:"leden",emoji:"❄️",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"February",cs:"únor",emoji:"💝",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"March",cs:"březen",emoji:"🌱",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"April",cs:"duben",emoji:"🌧️",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"May",cs:"květen",emoji:"🌸",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"June",cs:"červen",emoji:"☀️",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"July",cs:"červenec",emoji:"🏖️",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"August",cs:"srpen",emoji:"🌻",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"September",cs:"září",emoji:"🍂",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"October",cs:"říjen",emoji:"🎃",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"November",cs:"listopad",emoji:"🍁",unit:"Months",category:"Months",type:"noun",noSentence:true},
-  {en:"December",cs:"prosinec",emoji:"🎄",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"January",cs:"leden",emoji:"❄️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"February",cs:"únor",emoji:"💝",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"March",cs:"březen",emoji:"🌱",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"April",cs:"duben",emoji:"🌧️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"May",cs:"květen",emoji:"🌸",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"June",cs:"červen",emoji:"☀️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"July",cs:"červenec",emoji:"🏖️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"August",cs:"srpen",emoji:"🌻",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"September",cs:"září",emoji:"🍂",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"October",cs:"říjen",emoji:"🎃",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"November",cs:"listopad",emoji:"🍁",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
+  {en:"December",cs:"prosinec",emoji:"🎄",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
   // Days of the week
-  {en:"Monday",cs:"pondělí",emoji:"😩",unit:"Days",category:"Days",type:"noun",noSentence:true},
-  {en:"Tuesday",cs:"úterý",emoji:"📅",unit:"Days",category:"Days",type:"noun",noSentence:true},
-  {en:"Wednesday",cs:"středa",emoji:"🐪",unit:"Days",category:"Days",type:"noun",noSentence:true},
-  {en:"Thursday",cs:"čtvrtek",emoji:"⚡",unit:"Days",category:"Days",type:"noun",noSentence:true},
-  {en:"Friday",cs:"pátek",emoji:"🎉",unit:"Days",category:"Days",type:"noun",noSentence:true},
-  {en:"Saturday",cs:"sobota",emoji:"🛋️",unit:"Days",category:"Days",type:"noun",noSentence:true},
-  {en:"Sunday",cs:"neděle",emoji:"☀️",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Monday",cs:"pondělí",emoji:"😩",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Tuesday",cs:"úterý",emoji:"📅",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Wednesday",cs:"středa",emoji:"🐪",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Thursday",cs:"čtvrtek",emoji:"⚡",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Friday",cs:"pátek",emoji:"🎉",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Saturday",cs:"sobota",emoji:"🛋️",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Sunday",cs:"neděle",emoji:"☀️",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
 ];
 
 // Rod podstatných jmen (ma=mužský živý, mi=mužský neživý, f=ženský, n=střední, pl=množné)
@@ -1781,9 +1781,11 @@ let session=null;
 
 function buildWordPool(){
   const all=getWords()||[];
+  const ap=getActiveProfile();
+  const eligible=ap&&ap.mode==='beginner'?all.filter(w=>!w.noEmoji):all;
   const sel=getSelectedSet();
-  const pool=sel==='all'?all:all.filter(w=>w.unit===sel);
-  return pool.length>=4?pool:all;
+  const pool=sel==='all'?eligible:eligible.filter(w=>w.unit===sel);
+  return pool.length>=4?pool:eligible;
 }
 
 function weightedRandom(pool){
@@ -2126,7 +2128,8 @@ function renderExType6(c,word){
   const options=shuffle([word,...wrongs]);
   const ap=getActiveProfile();
   const big=ap&&ap.mode==='beginner';
-  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">${big?'🔊 POSLECHNI A VYBER OBRÁZEK':'🎧 Poslechni a vyber obrázek'}</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">${big?'KLIKNI PRO PŘEHRÁNÍ':'Klikni pro přehrání'}</div></div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType6(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${o.emoji||mkFallback(o,56)}</span></div>`).join('')}</div>`;
+  const showEmoji=(o)=>o.emoji?(o.plural&&o.category!=='Parts of the body'?o.emoji+o.emoji:o.emoji):mkFallback(o,56);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">${big?'🔊 POSLECHNI A VYBER OBRÁZEK':'🎧 Poslechni a vyber obrázek'}</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">${big?'KLIKNI PRO PŘEHRÁNÍ':'Klikni pro přehrání'}</div></div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType6(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${showEmoji(o)}</span></div>`).join('')}</div>`;
   setTimeout(()=>speakWord(word.en),400);
 }
 function answerType6(el,answerId,correctId){
