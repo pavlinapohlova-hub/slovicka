@@ -1868,8 +1868,12 @@ function answerType1(btn,answerId,correctId){
   document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
   const correct=answerId===correctId;
   btn.classList.add(correct?'correct':'wrong');
-  if(!correct) document.querySelectorAll('.answer-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`))b.classList.add('reveal');});
-  handleAnswer(correct,()=>nextRound());
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl));
+  }
 }
 
 function renderExType2(c,word){
@@ -1881,8 +1885,12 @@ function answerType2(el,answerId,correctId){
   document.querySelectorAll('.emoji-choice').forEach(e=>e.onclick=null);
   const correct=answerId===correctId;
   el.classList.add(correct?'correct':'wrong');
-  if(!correct) document.querySelectorAll('.emoji-choice').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`))e.classList.add('reveal');});
-  handleAnswer(correct,()=>nextRound());
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl));
+  }
 }
 
 function renderExType3(c,word){
@@ -1930,8 +1938,12 @@ function answerType3(btn,answerId,correctId){
   document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
   const correct=answerId===correctId;
   btn.classList.add(correct?'correct':'wrong');
-  if(!correct) document.querySelectorAll('.answer-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`))b.classList.add('reveal');});
-  handleAnswer(correct,()=>nextRound());
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl));
+  }
 }
 
 function csAcc(word){
@@ -2022,8 +2034,12 @@ function answerType5(btn,answerId,correctId){
   document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
   const correct=answerId===correctId;
   btn.classList.add(correct?'correct':'wrong');
-  if(!correct) document.querySelectorAll('.answer-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`))b.classList.add('reveal');});
-  handleAnswer(correct,()=>nextRound());
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl));
+  }
 }
 
 function makeSentencePair(word){
@@ -2124,8 +2140,11 @@ function answerSentence(btn,clickedIdx,correctIdx){
   btns.forEach(b=>b.disabled=true);
   const correct=clickedIdx===correctIdx;
   btn.classList.add(correct?'correct':'wrong');
-  if(!correct) btns[correctIdx].classList.add('reveal');
-  handleAnswer(correct,()=>nextRound());
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',btns[correctIdx]));
+  }
 }
 
 function renderExType6(c,word){
@@ -2141,8 +2160,12 @@ function answerType6(el,answerId,correctId){
   document.querySelectorAll('.emoji-choice').forEach(e=>e.onclick=null);
   const correct=answerId===correctId;
   el.classList.add(correct?'correct':'wrong');
-  if(!correct) document.querySelectorAll('.emoji-choice').forEach(e=>{if(e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`))e.classList.add('reveal');});
-  handleAnswer(correct,()=>nextRound());
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl));
+  }
 }
 
 function renderTiles(){
@@ -2186,7 +2209,31 @@ function checkSentence(){
   handleAnswer(isCorrect,()=>nextRound());
 }
 
-function handleAnswer(correct,next){
+function setupRetry(selector,correctEl){
+  if(!correctEl) return;
+  document.querySelectorAll(selector).forEach(el=>{
+    if(el===correctEl){
+      el.classList.add('reveal');
+      el.removeAttribute('disabled');
+      el.style.pointerEvents='';
+      el.onclick=()=>{
+        document.querySelectorAll(selector).forEach(e=>{
+          e.onclick=null;
+          if(e.tagName==='BUTTON') e.disabled=true;
+          else e.style.pointerEvents='none';
+        });
+        el.classList.remove('reveal');el.classList.add('correct');
+        setTimeout(()=>nextRound(),600);
+      };
+    } else {
+      el.onclick=null;
+      if(el.tagName==='BUTTON') el.disabled=true;
+      else el.style.pointerEvents='none';
+    }
+  });
+}
+
+function handleAnswer(correct,next,retryFn){
   recordAnswer(session.currentWord.id,correct);
   if(correct){
     session.correct++;session.consecutiveCorrect++;
@@ -2203,7 +2250,13 @@ function handleAnswer(correct,next){
   document.getElementById('starsCount').textContent=getStars();
   document.getElementById('levelBadge').textContent=getLevelName(getStars());
   document.getElementById('sessionStreak').textContent=session.consecutiveCorrect>=2?`🔥${session.consecutiveCorrect}`:'';
-  setTimeout(()=>{hideFeedback();next();},correct?600:2000);
+  if(correct){
+    setTimeout(()=>{hideFeedback();next();},600);
+  } else if(retryFn){
+    setTimeout(()=>{hideFeedback();retryFn();},800);
+  } else {
+    setTimeout(()=>{hideFeedback();next();},2000);
+  }
 }
 
 function checkLevelUp(oldStars,newStars){
