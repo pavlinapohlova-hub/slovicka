@@ -1008,7 +1008,11 @@ function initData(){
   const allProfiles = getProfiles()||[];
   allProfiles.forEach(p=>{
     const existing = LS.get(`vocab_words_${p.id}`,null);
-    if(!existing||existing.length===0) return;
+    if(!existing||existing.length===0){
+      const seeded=DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_seed_'+i+'_'+p.id}));
+      LS.set(`vocab_words_${p.id}`,seeded);
+      return;
+    }
     // Sync fields from DEFAULT_VOCAB into existing stored words
     let changed = false;
     const updated = existing.map(w=>{
@@ -1043,8 +1047,9 @@ function createProfile(name){
   const color = PROFILE_COLORS[profiles.length%PROFILE_COLORS.length];
   profiles.push({id,name,color,createdAt:Date.now()});
   saveProfiles(profiles);
-  // New profile: empty words
-  LS.set(`vocab_words_${id}`,[]);
+  // New profile: seed with all DEFAULT_VOCAB words
+  const seeded=DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_seed_'+i+'_'+id}));
+  LS.set(`vocab_words_${id}`,seeded);
   LS.set(`vocab_stats_${id}`,{});
   LS.set(`vocab_stars_${id}`,0);
   LS.set(`vocab_streak_${id}`,{count:0,lastDate:''});
