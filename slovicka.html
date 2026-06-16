@@ -1872,7 +1872,7 @@ function answerType1(btn,answerId,correctId){
     handleAnswer(true,()=>nextRound());
   } else {
     const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
-    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
   }
 }
 
@@ -1889,7 +1889,7 @@ function answerType2(el,answerId,correctId){
     handleAnswer(true,()=>nextRound());
   } else {
     const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`));
-    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl,el));
   }
 }
 
@@ -1942,7 +1942,7 @@ function answerType3(btn,answerId,correctId){
     handleAnswer(true,()=>nextRound());
   } else {
     const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
-    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
   }
 }
 
@@ -2038,7 +2038,7 @@ function answerType5(btn,answerId,correctId){
     handleAnswer(true,()=>nextRound());
   } else {
     const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
-    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
   }
 }
 
@@ -2143,7 +2143,7 @@ function answerSentence(btn,clickedIdx,correctIdx){
   if(correct){
     handleAnswer(true,()=>nextRound());
   } else {
-    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',btns[correctIdx]));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',btns[correctIdx],btn));
   }
 }
 
@@ -2164,7 +2164,7 @@ function answerType6(el,answerId,correctId){
     handleAnswer(true,()=>nextRound());
   } else {
     const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`));
-    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl,el));
   }
 }
 
@@ -2209,27 +2209,23 @@ function checkSentence(){
   handleAnswer(isCorrect,()=>nextRound());
 }
 
-function setupRetry(selector,correctEl){
+function setupRetry(selector,correctEl,wrongEl){
   if(!correctEl) return;
+  function disableEl(el){el.onclick=null;if(el.tagName==='BUTTON')el.disabled=true;else el.style.pointerEvents='none';}
   document.querySelectorAll(selector).forEach(el=>{
-    if(el===correctEl){
-      el.classList.add('reveal');
-      el.removeAttribute('disabled');
-      el.style.pointerEvents='';
-      el.onclick=()=>{
-        document.querySelectorAll(selector).forEach(e=>{
-          e.onclick=null;
-          if(e.tagName==='BUTTON') e.disabled=true;
-          else e.style.pointerEvents='none';
-        });
-        el.classList.remove('reveal');el.classList.add('correct');
+    if(el===wrongEl){ disableEl(el); return; }
+    el.removeAttribute('disabled');
+    el.style.pointerEvents='';
+    el.onclick=()=>{
+      if(el===correctEl){
+        document.querySelectorAll(selector).forEach(disableEl);
+        el.classList.add('correct');
         setTimeout(()=>nextRound(),600);
-      };
-    } else {
-      el.onclick=null;
-      if(el.tagName==='BUTTON') el.disabled=true;
-      else el.style.pointerEvents='none';
-    }
+      } else {
+        el.classList.add('wrong');
+        disableEl(el);
+      }
+    };
   });
 }
 
