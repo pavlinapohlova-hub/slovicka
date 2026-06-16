@@ -732,7 +732,122 @@ const DEFAULT_VOCAB = [
   {en:"summer",cs:"léto",emoji:"🌞",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"autumn",cs:"podzim",emoji:"🍂",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"winter",cs:"zima",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  // Months
+  {en:"January",cs:"leden",emoji:"❄️",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"February",cs:"únor",emoji:"💝",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"March",cs:"březen",emoji:"🌱",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"April",cs:"duben",emoji:"🌧️",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"May",cs:"květen",emoji:"🌸",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"June",cs:"červen",emoji:"☀️",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"July",cs:"červenec",emoji:"🏖️",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"August",cs:"srpen",emoji:"🌻",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"September",cs:"září",emoji:"🍂",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"October",cs:"říjen",emoji:"🎃",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"November",cs:"listopad",emoji:"🍁",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  {en:"December",cs:"prosinec",emoji:"🎄",unit:"Months",category:"Months",type:"noun",noSentence:true},
+  // Days of the week
+  {en:"Monday",cs:"pondělí",emoji:"😩",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Tuesday",cs:"úterý",emoji:"📅",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Wednesday",cs:"středa",emoji:"🐪",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Thursday",cs:"čtvrtek",emoji:"⚡",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Friday",cs:"pátek",emoji:"🎉",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Saturday",cs:"sobota",emoji:"🛋️",unit:"Days",category:"Days",type:"noun",noSentence:true},
+  {en:"Sunday",cs:"neděle",emoji:"☀️",unit:"Days",category:"Days",type:"noun",noSentence:true},
 ];
+
+// Rod podstatných jmen (ma=mužský živý, mi=mužský neživý, f=ženský, n=střední, pl=množné)
+const NOUN_GENDERS = {
+  'train':'mi','plane':'n','bus':'mi','lorry':'n','motorbike':'f','taxi':'n',
+  'bathroom':'f','bedroom':'f','kitchen':'f','hall':'f','living room':'mi','garden':'f',
+  'cupboard':'f','box':'f','table':'mi','bed':'f',
+  'snake':'ma','bat':'ma','fox':'f','hedgehog':'ma','mouse':'f','frog':'f',
+  'wings':'pl','head':'f','teeth':'pl','tail':'mi','legs':'pl','arms':'pl',
+  'ears':'pl','nose':'mi','mouth':'pl','eyes':'pl',
+  'pencil case':'mi','pen':'n','bag':'f','pencil':'f','rubber':'f','book':'f',
+  'chair':'f','notebook':'mi','crayon':'f','ruler':'n',
+  'bike':'n','ball':'mi','guitar':'f','doll':'f','car':'n','scooter':'f',
+  'chicken':'f','cat':'f','cow':'f','horse':'ma','goat':'f','sheep':'f',
+  'farm':'mi','tractor':'mi','duck':'f','rabbit':'ma',
+  'mum':'f','granny':'f','dad':'ma','sister':'f','brother':'ma','grandad':'ma','aunt':'f',
+  'bananas':'pl','apples':'pl','cakes':'pl','tomatoes':'pl','sausages':'pl',
+  'pears':'pl','peaches':'pl','melons':'pl','olives':'pl','oranges':'pl',
+  'coat':'mi','trousers':'pl','skirt':'f','shirt':'f','shoes':'pl','socks':'pl',
+  'hat':'mi','jacket':'f','dress':'pl','boots':'pl','scarf':'f','gloves':'pl',
+  'elephant':'ma','giraffe':'f','tiger':'ma','lion':'ma','monkey':'f','zebra':'f',
+  'crocodile':'ma','parrot':'ma','penguin':'ma','hippo':'ma',
+  'park':'mi','hospital':'f','library':'f','cinema':'n','supermarket':'mi',
+  'restaurant':'f','swimming pool':'mi','street':'f',
+  'spring':'n','summer':'n','autumn':'mi','winter':'f',
+  'village':'f','city':'n','jungle':'f','cave':'f','forest':'mi','ocean':'mi',
+  'house':'mi','sea':'n','dog':'ma','panda':'f','whale':'f','kangaroo':'ma','shark':'ma',
+  'bear':'ma','dolphin':'ma','mountain':'f','island':'mi','waterfall':'mi',
+  'lake':'n','grass':'f','picnic':'mi','leaf':'mi','plant':'f','river':'f',
+  'field':'n','blanket':'f',
+  'bank':'f','bus station':'f','sports centre':'n','market':'mi','road':'f',
+  'money':'pl','swimsuit':'pl','towel':'mi',
+  'temperature':'f',
+  'animal':'n','fruit':'n','world':'mi','food':'n','body':'n','skin':'f',
+  'countryside':'mi','time':'mi','children':'pl','bin':'f',
+};
+
+// Akuzativní tvary přídavných jmen podle rodu
+const ADJ_FORMS = {
+  'hot':         {ma:'horkého',    mi:'horký',    f:'horkou',    n:'horké',    pl:'horké'},
+  'cold':        {ma:'studeného',  mi:'studený',  f:'studenou',  n:'studené',  pl:'studené'},
+  'hungry':      {ma:'hladového',  mi:'hladový',  f:'hladovou',  n:'hladové',  pl:'hladové'},
+  'thirsty':     {ma:'žíznivého',  mi:'žíznivý',  f:'žíznivou',  n:'žíznivé',  pl:'žíznivé'},
+  'slow':        {ma:'pomalého',   mi:'pomalý',   f:'pomalou',   n:'pomalé',   pl:'pomalé'},
+  'fast':        {ma:'rychlého',   mi:'rychlý',   f:'rychlou',   n:'rychlé',   pl:'rychlé'},
+  'long':        {ma:'dlouhého',   mi:'dlouhý',   f:'dlouhou',   n:'dlouhé',   pl:'dlouhé'},
+  'short':       {ma:'krátkého',   mi:'krátký',   f:'krátkou',   n:'krátké',   pl:'krátké'},
+  'big':         {ma:'velkého',    mi:'velký',    f:'velkou',    n:'velké',     pl:'velké'},
+  'small':       {ma:'malého',     mi:'malý',     f:'malou',     n:'malé',      pl:'malé'},
+  'old':         {ma:'starého',    mi:'starý',    f:'starou',    n:'staré',     pl:'staré'},
+  'new':         {ma:'nového',     mi:'nový',     f:'novou',     n:'nové',      pl:'nové'},
+  'tired':       {ma:'unaveného',  mi:'unavený',  f:'unavenou',  n:'unavené',   pl:'unavené'},
+  'happy':       {ma:'šťastného',  mi:'šťastný',  f:'šťastnou',  n:'šťastné',   pl:'šťastné'},
+  'sad':         {ma:'smutného',   mi:'smutný',   f:'smutnou',   n:'smutné',    pl:'smutné'},
+  'angry':       {ma:'naštvaného', mi:'naštvaný', f:'naštvanou', n:'naštvanné', pl:'naštvanné'},
+  'red':         {ma:'červeného',  mi:'červený',  f:'červenou',  n:'červené',   pl:'červené'},
+  'brown':       {ma:'hnědého',    mi:'hnědý',    f:'hnědou',    n:'hnědé',     pl:'hnědé'},
+  'yellow':      {ma:'žlutého',    mi:'žlutý',    f:'žlutou',    n:'žluté',     pl:'žluté'},
+  'black':       {ma:'černého',    mi:'černý',    f:'černou',    n:'černé',     pl:'černé'},
+  'blue':        {ma:'modrého',    mi:'modrý',    f:'modrou',    n:'modré',     pl:'modré'},
+  'grey':        {ma:'šedého',     mi:'šedý',     f:'šedou',     n:'šedé',      pl:'šedé'},
+  'white':       {ma:'bílého',     mi:'bílý',     f:'bílou',     n:'bílé',      pl:'bílé'},
+  'pink':        {ma:'růžového',   mi:'růžový',   f:'růžovou',   n:'růžové',    pl:'růžové'},
+  'green':       {ma:'zeleného',   mi:'zelený',   f:'zelenou',   n:'zelené',    pl:'zelené'},
+  'orange':      {ma:'oranžového', mi:'oranžový', f:'oranžovou', n:'oranžové',  pl:'oranžové'},
+  'good':        {ma:'dobrého',    mi:'dobrý',    f:'dobrou',    n:'dobré',     pl:'dobré'},
+  'bad':         {ma:'špatného',   mi:'špatný',   f:'špatnou',   n:'špatné',    pl:'špatné'},
+  'cheap':       {ma:'levného',    mi:'levný',    f:'levnou',    n:'levné',     pl:'levné'},
+  'expensive':   {ma:'drahého',    mi:'drahý',    f:'drahou',    n:'drahé',     pl:'drahé'},
+  'young':       {ma:'mladého',    mi:'mladý',    f:'mladou',    n:'mladé',     pl:'mladé'},
+  'heavy':       {ma:'těžkého',    mi:'těžký',    f:'těžkou',    n:'těžké',     pl:'těžké'},
+  'light':       {ma:'lehkého',    mi:'lehký',    f:'lehkou',    n:'lehké',     pl:'lehké'},
+  'dark':        {ma:'tmavého',    mi:'tmavý',    f:'tmavou',    n:'tmavé',     pl:'tmavé'},
+  'beautiful':   {ma:'krásného',   mi:'krásný',   f:'krásnou',   n:'krásné',    pl:'krásné'},
+  'ugly':        {ma:'ošklivého',  mi:'ošklivý',  f:'ošklivou',  n:'ošklivé',   pl:'ošklivé'},
+  'thin':        {ma:'tenkého',    mi:'tenký',    f:'tenkou',    n:'tenké',     pl:'tenké'},
+  'weak':        {ma:'slabého',    mi:'slabý',    f:'slabou',    n:'slabé',     pl:'slabé'},
+  'quiet':       {ma:'tichého',    mi:'tichý',    f:'tichou',    n:'tiché',     pl:'tiché'},
+  'fat':         {ma:'tlustého',   mi:'tlustý',   f:'tlustou',   n:'tlusté',    pl:'tlusté'},
+  'loud':        {ma:'hlasitého',  mi:'hlasitý',  f:'hlasitou',  n:'hlasité',   pl:'hlasité'},
+  'tall':        {ma:'vysokého',   mi:'vysoký',   f:'vysokou',   n:'vysoké',    pl:'vysoké'},
+  'strong':      {ma:'silného',    mi:'silný',    f:'silnou',    n:'silné',     pl:'silné'},
+  'naughty':     {ma:'zlobivého',  mi:'zlobivý',  f:'zlobivou',  n:'zlobivé',   pl:'zlobivé'},
+  'clever':      {ma:'chytrého',   mi:'chytrý',   f:'chytrou',   n:'chytré',    pl:'chytré'},
+  'dirty':       {ma:'špinavého',  mi:'špinavý',  f:'špinavou',  n:'špinavé',   pl:'špinavé'},
+  'clean':       {ma:'čistého',    mi:'čistý',    f:'čistou',    n:'čisté',     pl:'čisté'},
+  'curly':       {ma:'kudrnatého', mi:'kudrnatý', f:'kudrnatou', n:'kudrnaté',  pl:'kudrnaté'},
+  'straight':    {ma:'rovného',    mi:'rovný',    f:'rovnou',    n:'rovné',     pl:'rovné'},
+  'lazy':        {ma:'líného',     mi:'líný',     f:'línou',     n:'líné',      pl:'líné'},
+  'friendly':    {ma:'přátelského',mi:'přátelský',f:'přátelskou',n:'přátelské', pl:'přátelské'},
+  'interesting': {ma:'zajímavého', mi:'zajímavý', f:'zajímavou', n:'zajímavé',  pl:'zajímavé'},
+  'pretty':      {ma:'hezkého',    mi:'hezký',    f:'hezkou',    n:'hezké',     pl:'hezké'},
+  'slim':        {ma:'hubeného',   mi:'hubený',   f:'hubenou',   n:'hubené',    pl:'hubené'},
+  'sick':        {ma:'nemocného',  mi:'nemocný',  f:'nemocnou',  n:'nemocné',   pl:'nemocné'},
+};
 
 const PROFILE_COLORS = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e91e63'];
 // Mapa světa: kontinenty → státy v pevném pořadí.
@@ -1682,10 +1797,11 @@ function pickExerciseType(word){
   const ap=getActiveProfile();
   if(ap&&ap.mode==='beginner') return 6;
   const muted=getMute();
-  const types=[1,2,3,5,4,4,7,7,8,8];
-  const sentenceTypes=[4,7,8];
+  const adjNoun=hasAdjNounSupport(word,session.pool);
+  const types=adjNoun?[1,2,3,5,4,4,7,7,8,8,9,9,10,10]:[1,2,3,5,4,4,7,7,8,8];
   const validTypes=types.filter(t=>{
-    if(sentenceTypes.includes(t)) return (word.type==='noun'||word.type==='verb')&&!word.noSentence;
+    if([4,7,8].includes(t)) return (word.type==='noun'||word.type==='verb'||word.type==='adjective')&&!word.noSentence;
+    if([9,10].includes(t)) return adjNoun;
     if(t===3&&muted) return false;
     return true;
   });
@@ -1721,7 +1837,9 @@ function renderExercise(type,word){
   else if(type===5) renderExType5(c,word);
   else if(type===6) renderExType6(c,word);
   else if(type===7) renderExType7(c,word);
-  else renderExType8(c,word);
+  else if(type===8) renderExType8(c,word);
+  else if(type===9) renderExType9(c,word);
+  else renderExType10(c,word);
 }
 
 function getWrongOptions(correct,pool,count=3){
@@ -1824,14 +1942,58 @@ const VERB_TEMPLATES=[
   {tiles:(w)=>["I","can",`${w}.`], cs:(cs)=>`Umím ${cs}.`},
   {tiles:(w)=>["I","can't",`${w}.`], cs:(cs)=>`Neumím ${cs}.`},
 ];
+const ADJECTIVE_TEMPLATES=[
+  {tiles:(w)=>["It's",`${w}.`],     cs:(cs)=>`Je ${cs}.`},
+  {tiles:(w)=>["It's","not",`${w}.`], cs:(cs)=>`Není ${cs}.`},
+  {tiles:(w)=>["I'm",`${w}.`],      cs:(cs)=>`Jsem ${cs}.`},
+  {tiles:(w)=>["I'm","not",`${w}.`],  cs:(cs)=>`Nejsem ${cs}.`},
+];
+const ADJECTIVE_TEMPLATES_IMPERSONAL=[
+  {tiles:(w)=>["It's",`${w}.`],     cs:(cs)=>`Je ${cs}.`},
+  {tiles:(w)=>["It's","not",`${w}.`], cs:(cs)=>`Není ${cs}.`},
+];
+function pickAdjTemplate(word){
+  const pool=word.category==='Weather'?ADJECTIVE_TEMPLATES_IMPERSONAL:ADJECTIVE_TEMPLATES;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+const ADJ_NOUN_TEMPLATES=[
+  {tiles:(art,adj,noun)=>art?["I","can","see",art,adj,`${noun}.`]:["I","can","see",adj,`${noun}.`], cs:(a,n)=>`Vidím ${a} ${n}.`},
+  {tiles:(art,adj,noun)=>art?["I","can't","see",art,adj,`${noun}.`]:["I","can't","see",adj,`${noun}.`], cs:(a,n)=>`Nevidím ${a} ${n}.`},
+  {tiles:(art,adj,noun)=>art?["I've","got",art,adj,`${noun}.`]:["I've","got",adj,`${noun}.`], cs:(a,n)=>`Mám ${a} ${n}.`},
+  {tiles:(art,adj,noun)=>art?["I","haven't","got",art,adj,`${noun}.`]:["I","haven't","got",adj,`${noun}.`], cs:(a,n)=>`Nemám ${a} ${n}.`},
+];
+
+function getNounGender(word){return NOUN_GENDERS[word.en]||'mi';}
+
+function makeAdjNounPair(noun, pool){
+  const gender=getNounGender(noun);
+  const adjs=pool.filter(w=>w.type==='adjective'&&ADJ_FORMS[w.en]&&!w.noSentence);
+  if(!adjs.length) return null;
+  const adj=adjs[Math.floor(Math.random()*adjs.length)];
+  const tpl=ADJ_NOUN_TEMPLATES[Math.floor(Math.random()*ADJ_NOUN_TEMPLATES.length)];
+  const art=getArticle(noun.en,noun.plural);
+  const adjCs=ADJ_FORMS[adj.en][gender]||adj.cs;
+  const nounCs=csAcc(noun);
+  return {adj,tiles:tpl.tiles(art,adj.en,noun.en),cs:tpl.cs(adjCs,nounCs),en:tpl.tiles(art,adj.en,noun.en).join(' ')};
+}
+
+function hasAdjNounSupport(word,pool){
+  return word.type==='noun'&&!word.noSentence&&NOUN_GENDERS[word.en]&&pool.some(w=>w.type==='adjective'&&ADJ_FORMS[w.en]);
+}
 
 function renderExType4(c,word){
   const isVerb=word.type==='verb';
+  const isAdj=word.type==='adjective';
   let tpl,correctTiles,czHint;
   if(isVerb){
     tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
     correctTiles=tpl.tiles(word.en);
     czHint=tpl.cs(word.cs_verb||word.cs);
+  } else if(isAdj){
+    tpl=pickAdjTemplate(word);
+    correctTiles=tpl.tiles(word.en);
+    czHint=tpl.cs(word.cs);
   } else {
     tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
     const article=getArticle(word.en,word.plural);
@@ -1858,18 +2020,23 @@ function answerType5(btn,answerId,correctId){
 
 function makeSentencePair(word){
   const isVerb=word.type==='verb';
-  const templates=isVerb?VERB_TEMPLATES:SENTENCE_TEMPLATES;
-  const tpl=templates[Math.floor(Math.random()*templates.length)];
+  const isAdj=word.type==='adjective';
   if(isVerb){
+    const tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
     return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs_verb||word.cs)};
+  } else if(isAdj){
+    const tpl=pickAdjTemplate(word);
+    return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs)};
   } else {
-    const a=getArticle(word.en);
+    const tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
+    const a=getArticle(word.en,word.plural);
     return {en:tpl.tiles(a,word.en).join(' '), cs:tpl.cs(tpl.acc?csAcc(word):word.cs)};
   }
 }
 
 function getWrongSentences(correctWord, pool, count=3){
-  const candidates=shuffle(pool.filter(w=>w.id!==correctWord.id&&(w.type==='noun'||w.type==='verb')));
+  const sameType=correctWord.type;
+  const candidates=shuffle(pool.filter(w=>w.id!==correctWord.id&&(w.type===sameType||(sameType==='noun'&&w.type==='noun')||(sameType==='verb'&&w.type==='verb')||(sameType==='adjective'&&w.type==='adjective'))));
   const chosen=[];
   for(const w of candidates){
     if(chosen.length>=count) break;
@@ -1877,7 +2044,7 @@ function getWrongSentences(correctWord, pool, count=3){
     if(!chosen.find(x=>x.en===s.en)) chosen.push(s);
   }
   while(chosen.length<count){
-    const fb=DEFAULT_VOCAB.filter(w=>w.type==='noun'||w.type==='verb');
+    const fb=DEFAULT_VOCAB.filter(w=>w.type===sameType||w.type==='noun'||w.type==='verb');
     const w=fb[Math.floor(Math.random()*fb.length)];
     const s=makeSentencePair(w);
     if(!chosen.find(x=>x.en===s.en)) chosen.push(s);
@@ -1886,7 +2053,7 @@ function getWrongSentences(correctWord, pool, count=3){
 }
 
 function renderExType7(c,word){
-  if(word.type!=='noun'&&word.type!=='verb'){renderExType1(c,word);return;}
+  if(word.type!=='noun'&&word.type!=='verb'&&word.type!=='adjective'){renderExType1(c,word);return;}
   const correct=makeSentencePair(word);
   const wrongs=getWrongSentences(word,session.pool);
   const options=shuffle([{...correct,isCorrect:true},...wrongs.map(s=>({...s,isCorrect:false}))]);
@@ -1895,12 +2062,53 @@ function renderExType7(c,word){
 }
 
 function renderExType8(c,word){
-  if(word.type!=='noun'&&word.type!=='verb'){renderExType1(c,word);return;}
+  if(word.type!=='noun'&&word.type!=='verb'&&word.type!=='adjective'){renderExType1(c,word);return;}
   const correct=makeSentencePair(word);
   const wrongs=getWrongSentences(word,session.pool);
   const options=shuffle([{...correct,isCorrect:true},...wrongs.map(s=>({...s,isCorrect:false}))]);
   const idx=options.findIndex(o=>o.isCorrect);
   c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇨🇿 Jak to říct česky?</div><div style="background:rgba(46,74,138,0.4);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:#fff;font-family:'Fredoka One',cursive;font-size:26px">${esc(correct.en)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:16px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.cs)}</button>`).join('')}</div>`;
+}
+
+// Type 9: poskladej větu s přídavným jménem (tiles)
+function renderExType9(c,word){
+  const pair=makeAdjNounPair(word,session.pool);
+  if(!pair){renderExType4(c,word);return;}
+  session.sentenceTiles={correct:pair.tiles,placed:[],available:shuffle([...pair.tiles])};
+  c.innerHTML=`<div class="exercise-card" style="text-align:left"><div class="exercise-type-label">🧩 Poskladej větu s přídavným jménem</div><div style="text-align:center;margin:8px 0 4px"><span style="font-size:48px">${word.emoji||word.en[0].toUpperCase()}</span></div><div style="text-align:center;background:rgba(255,215,0,0.12);border-radius:10px;padding:10px 16px;margin:8px 0 14px"><span style="color:var(--gold);font-family:'Fredoka One',cursive;font-size:22px">${esc(pair.cs)}</span></div><p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Poskladej anglicky:</p><div class="answer-area" id="answerArea"><span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span></div><div class="tile-area" id="tileArea"></div></div><button class="check-btn" id="checkBtn" onclick="checkSentence()">Zkontrolovat ✓</button>`;
+  renderTiles();
+}
+
+// Type 10: vyber správný anglický překlad věty s přídavným jménem
+function renderExType10(c,word){
+  const pair=makeAdjNounPair(word,session.pool);
+  if(!pair){renderExType7(c,word);return;}
+  // Špatné možnosti: jiné přídavné jméno se stejným podstatným jménem
+  const otherAdjs=shuffle(session.pool.filter(w=>w.type==='adjective'&&ADJ_FORMS[w.en]&&w.id!==pair.adj.id));
+  const gender=getNounGender(word);
+  const art=getArticle(word.en,word.plural);
+  const tpl=ADJ_NOUN_TEMPLATES[0];
+  const wrongs=[];
+  for(const adjW of otherAdjs){
+    if(wrongs.length>=3) break;
+    const adjCs=ADJ_FORMS[adjW.en][gender];
+    if(!adjCs) continue;
+    const wrongEn=tpl.tiles(art,adjW.en,word.en).join(' ');
+    if(wrongEn!==pair.en) wrongs.push({en:wrongEn,cs:tpl.cs(adjCs,csAcc(word)),isCorrect:false});
+  }
+  // Doplnit špatné možnosti z fallback slovíček
+  const fallbackNouns=DEFAULT_VOCAB.filter(w=>w.type==='noun'&&NOUN_GENDERS[w.en]&&w.id!==word.id);
+  for(const nounW of shuffle(fallbackNouns)){
+    if(wrongs.length>=3) break;
+    const g2=getNounGender(nounW);
+    const adjCs2=ADJ_FORMS[pair.adj.en]&&ADJ_FORMS[pair.adj.en][g2];
+    if(!adjCs2) continue;
+    const art2=getArticle(nounW.en,nounW.plural);
+    wrongs.push({en:tpl.tiles(art2,pair.adj.en,nounW.en).join(' '),cs:tpl.cs(adjCs2,csAcc(nounW)),isCorrect:false});
+  }
+  const options=shuffle([{en:pair.en,cs:pair.cs,isCorrect:true},...wrongs.slice(0,3)]);
+  const idx=options.findIndex(o=>o.isCorrect);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇬🇧 Jak to říct anglicky?</div><div style="background:rgba(255,215,0,0.12);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:var(--gold);font-family:'Fredoka One',cursive;font-size:22px">${esc(pair.cs)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:15px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.en)}</button>`).join('')}</div>`;
 }
 
 function answerSentence(btn,clickedIdx,correctIdx){
