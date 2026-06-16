@@ -1659,9 +1659,28 @@ function updateMuteBtn(){
   const btn=document.getElementById('muteBtn');
   if(btn){btn.textContent=muted?'🔇':'🔊';btn.style.opacity=muted?'0.5':'1';}
 }
+let _preferredVoice=null;
+function _loadVoice(){
+  const voices=speechSynthesis.getVoices();
+  if(!voices.length) return;
+  const femaleNames=['Samantha','Zira','Karen','Moira','Tessa','Helena','Hazel','Susan','Victoria','Female','female'];
+  const enVoices=voices.filter(v=>/^en/i.test(v.lang));
+  _preferredVoice=enVoices.find(v=>femaleNames.some(n=>v.name.includes(n)))
+    ||enVoices.find(v=>/en-GB/i.test(v.lang))
+    ||enVoices[0]
+    ||null;
+}
+if(window.speechSynthesis){
+  speechSynthesis.onvoiceschanged=_loadVoice;
+  _loadVoice();
+}
 function speakWord(text){
   if(getMute()||!window.speechSynthesis)return;
-  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=0.85;
+  if(_preferredVoice) u.voice=_preferredVoice;
+  speechSynthesis.speak(u);
 }
 function answerType3(btn,answerId,correctId){
   document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
