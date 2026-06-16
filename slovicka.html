@@ -1041,14 +1041,15 @@ function initData(){
   updateStreak();
 }
 
-function createProfile(name){
+function createProfile(name,units){
   const profiles = getProfiles()||[];
   const id = 'profile_'+Date.now()+'_'+Math.random().toString(36).slice(2);
   const color = PROFILE_COLORS[profiles.length%PROFILE_COLORS.length];
-  profiles.push({id,name,color,createdAt:Date.now()});
+  profiles.push({id,name,color,createdAt:Date.now(),units:units||null});
   saveProfiles(profiles);
-  // New profile: seed with all DEFAULT_VOCAB words
-  const seeded=DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_seed_'+i+'_'+id}));
+  // New profile: seed with relevant DEFAULT_VOCAB words
+  const source=units?DEFAULT_VOCAB.filter(w=>units.includes(w.unit)):DEFAULT_VOCAB;
+  const seeded=source.map((w,i)=>({...w,id:'w_seed_'+i+'_'+id}));
   LS.set(`vocab_words_${id}`,seeded);
   LS.set(`vocab_stats_${id}`,{});
   LS.set(`vocab_stars_${id}`,0);
@@ -1213,10 +1214,11 @@ function renderProfilesTab(c){
           </div>
           ${isActive?'<span class="profile-active-badge">✓ Aktivní</span>':''}
           <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-            <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'}</div>
+            <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'} · ${p.units?'📄 LL slovíčka':'🌍 Vše'}</div>
             <div class="profile-actions">
               <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️</button>
               <button class="btn btn-secondary btn-sm" onclick="toggleProfileMode('${p.id}')" title="Přepnout režim">${p.mode==='beginner'?'→ Standardní':'→ Začátečník'}</button>
+              <button class="btn btn-secondary btn-sm" onclick="toggleProfileVocab('${p.id}')" title="Přepnout sadu slovíček">${p.units?'→ Vše':'→ LL'}</button>
               ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
               ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
             </div>
@@ -1234,9 +1236,25 @@ function renderProfilesTab(c){
         <input type="text" id="newProfileName" placeholder="např. Matyáš" maxlength="20">
       </div>
     </div>
+    <div class="form-group" style="margin-top:10px">
+      <label>Sada slovíček</label>
+      <select id="newProfileVocab" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd">
+        <option value="all">Všechna slovíčka</option>
+        <option value="ll">Jen slovíčka z PDF (LL)</option>
+      </select>
+    </div>
     <button class="btn btn-success" onclick="addProfileUI()">✅ Vytvořit profil</button>
-    <p style="color:#888;font-size:13px;margin-top:10px">Nový profil začne s prázdnou sadou slovíček.</p>
   </div>`;
+}
+
+function toggleProfileVocab(id){
+  const profiles=getProfiles()||[];
+  const p=profiles.find(x=>x.id===id);
+  if(!p) return;
+  p.units=p.units?null:LL_UNITS;
+  saveProfiles(profiles);
+  renderProfilesTab(document.getElementById('parentContent'));
+  showToast(p.units?'Sada: jen LL slovíčka z PDF':'Sada: všechna slovíčka','success');
 }
 
 function toggleProfileMode(id){
@@ -1299,7 +1317,9 @@ function addProfileUI(){
   if(!name){showToast('Zadej jméno dítěte','error');return;}
   const profiles=getProfiles()||[];
   if(profiles.length>=4){showToast('Maximálně 4 profily','error');return;}
-  createProfile(name);
+  const vocab=document.getElementById('newProfileVocab').value;
+  const units=vocab==='ll'?LL_UNITS:null;
+  createProfile(name,units);
   document.getElementById('newProfileName').value='';
   renderProfilesTab(document.getElementById('parentContent'));
   showToast(`Profil "${name}" vytvořen`,'success');
@@ -1784,10 +1804,13 @@ function goHome(){showChildSection('map');renderChildUI();}
 // ============================================================
 let session=null;
 
+const LL_UNITS=['LL Unit 1','LL Unit 2','LL Unit 3','LL Unit 4','LL Unit 5','LL Unit 6','LL Unit 7','LL Unit 8','LL Unit 9','LL Unit 10'];
+
 function buildWordPool(){
   const all=getWords()||[];
   const ap=getActiveProfile();
-  const eligible=ap&&ap.mode==='beginner'?all.filter(w=>!w.noEmoji):all;
+  let eligible=ap&&ap.mode==='beginner'?all.filter(w=>!w.noEmoji):all;
+  if(ap&&ap.units&&ap.units.length>0) eligible=eligible.filter(w=>ap.units.includes(w.unit));
   const sel=getSelectedSet();
   const pool=sel==='all'?eligible:eligible.filter(w=>w.unit===sel);
   return pool.length>=4?pool:eligible;
@@ -1871,7 +1894,7 @@ function answerType1(btn,answerId,correctId){
   if(correct){
     handleAnswer(true,()=>nextRound());
   } else {
-    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
     handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
   }
 }
@@ -1888,7 +1911,7 @@ function answerType2(el,answerId,correctId){
   if(correct){
     handleAnswer(true,()=>nextRound());
   } else {
-    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`));
+    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
     handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl,el));
   }
 }
@@ -1941,7 +1964,7 @@ function answerType3(btn,answerId,correctId){
   if(correct){
     handleAnswer(true,()=>nextRound());
   } else {
-    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
     handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
   }
 }
@@ -2037,7 +2060,7 @@ function answerType5(btn,answerId,correctId){
   if(correct){
     handleAnswer(true,()=>nextRound());
   } else {
-    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}'`));
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
     handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
   }
 }
@@ -2163,7 +2186,7 @@ function answerType6(el,answerId,correctId){
   if(correct){
     handleAnswer(true,()=>nextRound());
   } else {
-    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}'`));
+    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
     handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl,el));
   }
 }
