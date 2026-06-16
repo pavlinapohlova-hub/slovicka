@@ -1002,15 +1002,14 @@ function initData(){
     saveWords(words);
   }
 
-  // Migration: add new DEFAULT_VOCAB words (e.g. L3) and sync cs_acc for all existing profiles
+  // Migration: add any missing DEFAULT_VOCAB words and sync cs_acc for all existing profiles
   const defaultByEn = {};
   DEFAULT_VOCAB.forEach(w=>{ defaultByEn[w.en.toLowerCase()]=w; });
-  const l3Words = DEFAULT_VOCAB.filter(w=>w.unit&&w.unit.startsWith('L3'));
   const allProfiles = getProfiles()||[];
   allProfiles.forEach(p=>{
     const existing = LS.get(`vocab_words_${p.id}`,null);
     if(!existing||existing.length===0) return;
-    // Sync cs_acc from DEFAULT_VOCAB into existing stored words
+    // Sync fields from DEFAULT_VOCAB into existing stored words
     let changed = false;
     const updated = existing.map(w=>{
       const def = defaultByEn[w.en.toLowerCase()];
@@ -1020,13 +1019,15 @@ function initData(){
       if(def.plural && !w.plural){ upd={...upd,plural:true}; changed=true; }
       if(def.cs_verb && w.cs_verb !== def.cs_verb){ upd={...upd,cs_verb:def.cs_verb}; changed=true; }
       if(def.noSentence && !w.noSentence){ upd={...upd,noSentence:true}; changed=true; }
+      if(def.category && w.category !== def.category){ upd={...upd,category:def.category}; changed=true; }
+      if(def.type && w.type !== def.type){ upd={...upd,type:def.type}; changed=true; }
       return upd;
     });
-    // Add missing L3 words
+    // Add all missing DEFAULT_VOCAB words
     const existingKeys = new Set(updated.map(w=>w.en.toLowerCase()));
-    const toAdd = l3Words.filter(w=>!existingKeys.has(w.en.toLowerCase()));
+    const toAdd = DEFAULT_VOCAB.filter(w=>!existingKeys.has(w.en.toLowerCase()));
     if(toAdd.length>0){
-      const newWords = toAdd.map((w,i)=>({...w,id:'w_l3_'+i+'_'+p.id}));
+      const newWords = toAdd.map((w,i)=>({...w,id:'w_new_'+i+'_'+p.id}));
       LS.set(`vocab_words_${p.id}`,[...updated,...newWords]);
     } else if(changed){
       LS.set(`vocab_words_${p.id}`,updated);
