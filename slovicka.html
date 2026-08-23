@@ -1051,6 +1051,7 @@ const LS = {
 // PROFILE SYSTEM
 // ============================================================
 function getProfiles(){return LS.get('vocab_profiles',null)}
+function profileCloudKey(p){return p.cloudKey||('custom-'+p.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));}
 function saveProfiles(p){LS.set('vocab_profiles',p)}
 function getActiveProfileId(){return LS.get('vocab_active_profile',null)}
 function saveActiveProfileId(id){LS.set('vocab_active_profile',id)}
@@ -1086,7 +1087,7 @@ function initData(){
   if(!profiles){
     // First run - create Terézka profile and migrate any existing data
     const terezkaid = 'profile_terezka_'+Date.now();
-    profiles = [{id:terezkaid,name:'Terezka',color:PROFILE_COLORS[0],createdAt:Date.now()}];
+    profiles = [{id:terezkaid,name:'Terezka',cloudKey:'terezka',color:PROFILE_COLORS[0],createdAt:Date.now()}];
     saveProfiles(profiles);
     saveActiveProfileId(terezkaid);
 
@@ -1113,6 +1114,10 @@ function initData(){
     }
   }
 
+  profiles=getProfiles()||[];
+  const terezka=profiles.find(p=>p.name.trim().toLowerCase()==='terezka');
+  if(terezka&&!terezka.cloudKey){terezka.cloudKey='terezka';saveProfiles(profiles);}
+
   // Built-in Barunka profile: always available after every application update.
   // She uses audio + picture exercises only, without reading or writing.
   profiles = getProfiles()||[];
@@ -1121,6 +1126,7 @@ function initData(){
     barunka={
       id:'profile_barunka',
       name:'Barunka',
+      cloudKey:'barunka',
       color:PROFILE_COLORS[1],
       createdAt:Date.now(),
       mode:'beginner',
@@ -1131,6 +1137,7 @@ function initData(){
     saveProfiles(profiles);
   } else {
     let barunkaChanged=false;
+    if(barunka.cloudKey!=='barunka'){barunka.cloudKey='barunka';barunkaChanged=true;}
     if(barunka.mode!=='beginner'){barunka.mode='beginner';barunkaChanged=true;}
     if(barunka.learningMode!=='audio-images'){barunka.learningMode='audio-images';barunkaChanged=true;}
     if(!barunka.builtIn){barunka.builtIn=true;barunkaChanged=true;}
@@ -1471,6 +1478,7 @@ function renderWordsTab(c){
     return unitOk&&searchOk;
   });
   const ap=getActiveProfile();
+  const profiles=getProfiles()||[];
   c.innerHTML=`
   <div class="form-card" style="border-left:4px solid ${ap?ap.color:'#1a2744'}">
     <h3>Upravuješ slovíčka pro: <strong>${ap?esc(ap.name):''}</strong></h3>
@@ -1511,7 +1519,17 @@ function renderWordsTab(c){
         <option value="number">Číslovka</option>
       </select>
     </div>
-    <button class="btn btn-primary" onclick="addWordManually()">✅ Přidat slovíčko</button>
+    <div class="form-group" style="margin:12px 0;max-width:360px">
+      <label>Profil pro uložení na GitHub</label>
+      <select id="githubProfileKey">
+        ${profiles.map(p=>'<option value="'+profileCloudKey(p)+'"'+(p.id===ap?.id?' selected':'')+'>'+esc(p.name)+'</option>').join('')}
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="addWordManually()">✅ Přidat pouze zde</button>
+      <button class="btn btn-success" onclick="sendCustomWordToGitHub()">☁️ Přidat a uložit na GitHub</button>
+      <button class="btn btn-secondary" onclick="loadSharedCustomWords(true)">🔄 Načíst z GitHubu</button>
+    </div>
   </div>
 
   <div class="form-card">
@@ -1588,6 +1606,57 @@ function copyWordsFromProfile(){
   saveWords([...target,...newWords]);
   showToast(`Přidáno ${newWords.length} slovíček!`,'success');
   showParentTab('words');
+}
+
+
+function readCustomWordForm(){
+  const en=document.getElementById('addEn').value.trim();
+  const cs=document.getElementById('addCs').value.trim();
+  const emoji=document.getElementById('addEmoji').value.trim()||findEmojiForWord(en);
+  const category=document.getElementById('addCategory').value.trim()||'Vlastní';
+  const type=document.getElementById('addType').value;
+  if(!en||!cs){showToast('Vyplň anglické i české slovo','error');return null;}
+  return {en,cs,emoji,category,type};
+}
+
+function sendCustomWordToGitHub(){
+  const word=readCustomWordForm();
+  if(!word) return;
+  const profileKey=document.getElementById('githubProfileKey').value;
+  const payload={profileKey,...word,unit:'Vlastní'};
+  const title='[VLASTNI] Přidat slovíčko';
+  const body='Prosím přidat vlastní slovíčko do aplikace.\n\n<!-- CUSTOM_WORD_JSON\n'+JSON.stringify(payload)+'\n-->';
+  const url='https://github.com/pavlinapohlova-hub/slovicka/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
+  window.open(url,'_blank','noopener');
+  showToast('Na GitHubu potvrď odeslání tlačítkem Submit new issue','success');
+}
+
+async function loadSharedCustomWords(showResult=false){
+  try{
+    const api='https://api.github.com/repos/pavlinapohlova-hub/slovicka/contents/custom-words.json?ref=main&t='+Date.now();
+    const response=await fetch(api,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+    if(!response.ok) throw new Error('GitHub '+response.status);
+    const file=await response.json();
+    const jsonText=new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+    const shared=JSON.parse(jsonText);
+    const profiles=getProfiles()||[];
+    profiles.forEach(profile=>{
+      const profileKey=profileCloudKey(profile);
+      const stored=LS.get('vocab_words_'+profile.id)||[];
+      const withoutOldShared=stored.filter(w=>!w.sharedFromGitHub);
+      const localKeys=new Set(withoutOldShared.map(w=>w.en.toLowerCase()+'|||'+w.unit));
+      const additions=shared.filter(w=>w.profileKey===profileKey&&!localKeys.has(w.en.toLowerCase()+'|||Vlastní')).map(w=>({
+        id:w.id,en:w.en,cs:w.cs,emoji:w.emoji||'',unit:'Vlastní',category:w.category||'Vlastní',type:w.type||'noun',custom:true,sharedFromGitHub:true
+      }));
+      LS.set('vocab_words_'+profile.id,[...withoutOldShared,...additions]);
+    });
+    if(showResult) showToast('Vlastní slovíčka načtena z GitHubu','success');
+    renderChildUI();
+    if(inParent&&document.getElementById('tab-words').classList.contains('active')) renderWordsTab(document.getElementById('parentContent'));
+  }catch(error){
+    if(showResult) showToast('Vlastní slovíčka se nepodařilo načíst','error');
+    console.warn('GitHub custom words sync:',error);
+  }
 }
 
 function addWordManually(){
@@ -2530,6 +2599,7 @@ function showToast(msg,type=''){
 // ============================================================
 initData();
 renderChildUI();
+loadSharedCustomWords();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('pinScreen').style.display!=='none')pinSubmit();});
 </script>
 </body>
