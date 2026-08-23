@@ -1045,6 +1045,30 @@ function initData(){
     }
   }
 
+  // Built-in Barunka profile: always available after every application update.
+  // She uses audio + picture exercises only, without reading or writing.
+  profiles = getProfiles()||[];
+  let barunka = profiles.find(p=>p.id==='profile_barunka'||p.name.trim().toLowerCase()==='barunka');
+  if(!barunka){
+    barunka={
+      id:'profile_barunka',
+      name:'Barunka',
+      color:PROFILE_COLORS[1],
+      createdAt:Date.now(),
+      mode:'beginner',
+      learningMode:'audio-images',
+      builtIn:true
+    };
+    profiles.push(barunka);
+    saveProfiles(profiles);
+  } else {
+    let barunkaChanged=false;
+    if(barunka.mode!=='beginner'){barunka.mode='beginner';barunkaChanged=true;}
+    if(barunka.learningMode!=='audio-images'){barunka.learningMode='audio-images';barunkaChanged=true;}
+    if(!barunka.builtIn){barunka.builtIn=true;barunkaChanged=true;}
+    if(barunkaChanged) saveProfiles(profiles);
+  }
+
   if(getWords()===null){
     const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
     saveWords(words);
@@ -1265,7 +1289,7 @@ function renderProfilesTab(c){
             <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'} · ${p.units?'📄 LL slovíčka':'🌍 Vše'}</div>
             <div class="profile-actions">
               <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️</button>
-              <button class="btn btn-secondary btn-sm" onclick="toggleProfileMode('${p.id}')" title="Přepnout režim">${p.mode==='beginner'?'→ Standardní':'→ Začátečník'}</button>
+              <button class="btn btn-secondary btn-sm" onclick="toggleProfileMode('${p.id}')" title="Přepnout režim">${p.learningMode==='audio-images'?'🔊 Poslech + obrázky':(p.mode==='beginner'?'→ Standardní':'→ Začátečník')}</button>
               <button class="btn btn-secondary btn-sm" onclick="toggleProfileVocab('${p.id}')" title="Přepnout sadu slovíček">${p.units?'→ Vše':'→ LL'}</button>
               ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
               ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
@@ -1309,6 +1333,10 @@ function toggleProfileMode(id){
   const profiles=getProfiles()||[];
   const p=profiles.find(x=>x.id===id);
   if(!p) return;
+  if(p.learningMode==='audio-images'){
+    showToast('Barunka má trvale režim Poslech + obrázky','success');
+    return;
+  }
   p.mode=p.mode==='beginner'?'standard':'beginner';
   saveProfiles(profiles);
   renderProfilesTab(document.getElementById('parentContent'));
@@ -1857,7 +1885,7 @@ const LL_UNITS=['LL Unit 1','LL Unit 2','LL Unit 3','LL Unit 4','LL Unit 5','LL 
 function buildWordPool(){
   const all=getWords()||[];
   const ap=getActiveProfile();
-  let eligible=ap&&ap.mode==='beginner'?all.filter(w=>!w.noEmoji):all;
+  let eligible=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')?all.filter(w=>!w.noEmoji):all;
   if(ap&&ap.units&&ap.units.length>0) eligible=eligible.filter(w=>ap.units.includes(w.unit));
   const sel=getSelectedSet();
   const pool=sel==='all'?eligible:eligible.filter(w=>w.unit===sel);
@@ -1874,7 +1902,7 @@ function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Mat
 
 function pickExerciseType(word){
   const ap=getActiveProfile();
-  if(ap&&ap.mode==='beginner') return 6;
+  if(ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')) return 6;
   const muted=getMute();
   const adjNoun=hasAdjNounSupport(word,session.pool);
   const types=adjNoun?[1,3,5,4,4,7,7,8,8,9,9,10,10]:[1,3,5,4,4,7,7,8,8];
@@ -2222,7 +2250,7 @@ function renderExType6(c,word){
   const wrongs=getWrongOptions(word,session.pool,3);
   const options=shuffle([word,...wrongs]);
   const ap=getActiveProfile();
-  const big=ap&&ap.mode==='beginner';
+  const big=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images');
   const showEmoji=(o)=>o.emoji?(o.plural&&o.category!=='Parts of the body'?o.emoji+o.emoji:o.emoji):mkFallback(o,56);
   c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">${big?'🔊 POSLECHNI A VYBER OBRÁZEK':'🎧 Poslechni a vyber obrázek'}</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">${big?'KLIKNI PRO PŘEHRÁNÍ':'Klikni pro přehrání'}</div></div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType6(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${showEmoji(o)}</span></div>`).join('')}</div>`;
   setTimeout(()=>speakWord(word.en),400);
