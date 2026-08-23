@@ -167,7 +167,11 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 
 .practice-section{background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin-bottom:24px}
 .practice-section h3{color:var(--gold);margin-bottom:14px;font-size:18px}
-.set-selector{display:flex;flex-wrap:wrap;gap:8px}
+.set-selector{display:flex;flex-direction:column;gap:14px}
+.all-words-row{display:flex;flex-wrap:wrap;gap:8px}
+.book-section{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px}
+.book-title{font-size:13px;font-weight:800;color:var(--gold);margin-bottom:9px;letter-spacing:.2px}
+.book-chapters{display:flex;flex-wrap:wrap;gap:8px}
 .set-btn{padding:10px 18px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.2);background:transparent;color:var(--text-light);cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
 .set-btn:hover,.set-btn.active{background:var(--blue-light);border-color:rgba(255,255,255,0.5);color:#fff}
 .set-btn.active{border-color:var(--gold);color:var(--gold)}
@@ -317,7 +321,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
     </div>
     <button class="start-btn" id="startBtn" onclick="startSession()">🚲 Vyrazit na výpravu!</button>
     <div class="practice-section">
-      <h3>📚 Co chceš procvičovat?</h3>
+      <h3>📚 Vyber učebnici a kapitolu</h3>
       <div class="set-selector" id="setSelector"></div>
     </div>
   </div>
@@ -552,124 +556,6 @@ const DEFAULT_VOCAB = [
   {en:"melons",cs:"melouny",emoji:"🍈",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
   {en:"olives",cs:"olivy",emoji:"🫒",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
   {en:"oranges",cs:"pomeranče",emoji:"🍊",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
-  // LiveLife - Unit 1 - To Live
-  {en:"live",cs:"žít",emoji:"🏡",unit:"LL Unit 1",category:"Verbs",type:"verb",noSentence:true},
-  {en:"village",cs:"vesnice",cs_acc:"vesnici",emoji:"🏘️",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"city",cs:"město",emoji:"🏙️",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"jungle",cs:"džungle",cs_acc:"džungli",emoji:"🌴",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"cave",cs:"jeskyně",cs_acc:"jeskyni",emoji:"🪨",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"forest",cs:"les",emoji:"🌲🌲🌲",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"ocean",cs:"oceán",emoji:"🌊",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"house",cs:"dům",emoji:"🏠",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"sea",cs:"moře",emoji:"⛵",unit:"LL Unit 1",category:"Places",type:"noun"},
-  {en:"aunt",cs:"teta",cs_acc:"tetu",emoji:"👩",unit:"LL Unit 1",category:"Family",type:"noun"},
-  {en:"dog",cs:"pes",cs_acc:"psa",emoji:"🐕",unit:"LL Unit 1",category:"Animals",type:"noun"},
-  {en:"panda",cs:"panda",cs_acc:"pandu",emoji:"🐼",unit:"LL Unit 1",category:"Animals",type:"noun"},
-  {en:"whale",cs:"velryba",cs_acc:"velrybu",emoji:"🐋",unit:"LL Unit 1",category:"Animals",type:"noun"},
-  {en:"kangaroo",cs:"klokan",cs_acc:"klokana",emoji:"🦘",unit:"LL Unit 1",category:"Animals",type:"noun"},
-  {en:"shark",cs:"žralok",cs_acc:"žraloka",emoji:"🦈",unit:"LL Unit 1",category:"Animals",type:"noun"},
-  // LiveLife - Unit 2 - World of Animals (KB3)
-  {en:"bear",cs:"medvěd",cs_acc:"medvěda",emoji:"🐻",unit:"LL Unit 2",category:"Animals",type:"noun"},
-  {en:"dolphin",cs:"delfín",cs_acc:"delfína",emoji:"🐬",unit:"LL Unit 2",category:"Animals",type:"noun"},
-  {en:"mountain",cs:"hora",cs_acc:"horu",emoji:"⛰️",unit:"LL Unit 2",category:"Nature",type:"noun"},
-  {en:"island",cs:"ostrov",emoji:"🏝️",unit:"LL Unit 2",category:"Nature",type:"noun"},
-  {en:"waterfall",cs:"vodopád",emoji:"💧",unit:"LL Unit 2",category:"Nature",type:"noun"},
-  // LiveLife - Unit 3 - A Day in the Country (KB3)
-  {en:"lake",cs:"jezero",emoji:"🏞️",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"grass",cs:"tráva",cs_acc:"trávu",emoji:"🌿",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"picnic",cs:"piknik",emoji:"🧺",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"leaf",cs:"list",emoji:"🍃",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"plant",cs:"rostlina",cs_acc:"rostlinu",emoji:"🪴",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"river",cs:"řeka",cs_acc:"řeku",emoji:"🏞️",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"field",cs:"pole",emoji:"🌾",unit:"LL Unit 3",category:"Nature",type:"noun"},
-  {en:"blanket",cs:"deka",cs_acc:"deku",emoji:"🛏️",unit:"LL Unit 3",category:"Home",type:"noun"},
-  // LiveLife - Unit 4 - In the City (KB3)
-  {en:"bank",cs:"banka",cs_acc:"banku",emoji:"🏦",unit:"LL Unit 4",category:"City",type:"noun"},
-  {en:"bus station",cs:"autobusová zastávka",emoji:"🚌",unit:"LL Unit 4",category:"City",type:"noun"},
-  {en:"sports centre",cs:"sportovní centrum",emoji:"🏋️",unit:"LL Unit 4",category:"City",type:"noun"},
-  {en:"market",cs:"trh",emoji:"🛒",unit:"LL Unit 4",category:"City",type:"noun"},
-  {en:"road",cs:"silnice",cs_acc:"silnici",emoji:"🛣️",unit:"LL Unit 4",category:"City",type:"noun"},
-  {en:"money",cs:"peníze",emoji:"💰",unit:"LL Unit 4",category:"City",type:"noun",plural:true},
-  {en:"swimsuit",cs:"plavky",emoji:"👙",unit:"LL Unit 4",category:"Clothes",type:"noun",plural:true},
-  {en:"towel",cs:"ručník",emoji:"🏖️",unit:"LL Unit 4",category:"Home",type:"noun"},
-  // LiveLife - Unit 5 - Health
-  {en:"headache",cs:"bolest hlavy",emoji:"🤕",unit:"LL Unit 5",category:"Health",type:"noun",noSentence:true},
-  {en:"toothache",cs:"bolest zubu",emoji:"🦷",unit:"LL Unit 5",category:"Health",type:"noun",noSentence:true},
-  {en:"stomach-ache",cs:"bolest břicha",emoji:"🤢",unit:"LL Unit 5",category:"Health",type:"noun",noSentence:true},
-  {en:"earache",cs:"bolest ucha",emoji:"👂",unit:"LL Unit 5",category:"Health",type:"noun",noSentence:true},
-  {en:"backache",cs:"bolest zad",emoji:"🏥",unit:"LL Unit 5",category:"Health",type:"noun",noSentence:true},
-  {en:"cough",cs:"kašel",emoji:"😷",unit:"LL Unit 5",category:"Health",type:"noun",noSentence:true},
-  {en:"temperature",cs:"teplota",cs_acc:"teplotu",emoji:"🌡️",unit:"LL Unit 5",category:"Health",type:"noun"},
-  {en:"sick",cs:"nemocný",emoji:"🤒",unit:"LL Unit 5",category:"Health",type:"adjective"},
-  // LiveLife - Unit 6 - Opposites
-  {en:"cheap",cs:"levný",emoji:"🏷️",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"expensive",cs:"drahý",emoji:"💸",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"young",cs:"mladý",emoji:"👶",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"heavy",cs:"těžký",emoji:"⚖️",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"light",cs:"lehký",emoji:"🪶",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"dark",cs:"tmavý",emoji:"🌑",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"beautiful",cs:"krásný",emoji:"🌸",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"ugly",cs:"ošklivý",emoji:"😬",unit:"LL Unit 6",category:"Adjectives",type:"adjective"},
-  {en:"left",cs:"levý",emoji:"⬅️",unit:"LL Unit 6",category:"Directions",type:"adjective"},
-  {en:"right",cs:"pravý",emoji:"➡️",unit:"LL Unit 6",category:"Directions",type:"adjective"},
-  // LiveLife - Unit 7 - Describing people and things
-  {en:"thin",cs:"tenký",emoji:"🥢",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"weak",cs:"slabý",emoji:"😔",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"quiet",cs:"tichý",emoji:"🤫",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"fat",cs:"tlustý",emoji:"🐷",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"loud",cs:"hlasitý",emoji:"📢",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"tall",cs:"vysoký",emoji:"🦒",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"strong",cs:"silný",emoji:"💪",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"naughty",cs:"zlobivý",emoji:"😈",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"clever",cs:"chytrý",emoji:"🧠",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"dirty",cs:"špinavý",emoji:"🪣",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"clean",cs:"čistý",emoji:"✨",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"curly",cs:"kudrnatý",emoji:"🌀",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"straight",cs:"rovný",emoji:"📏",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"lazy",cs:"líný",emoji:"😴",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"friendly",cs:"přátelský",emoji:"🤝",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"interesting",cs:"zajímavý",emoji:"🤔",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"pretty",cs:"hezký",emoji:"🌺",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  {en:"slim",cs:"hubený",emoji:"🪶",unit:"LL Unit 7",category:"Adjectives",type:"adjective"},
-  // LiveLife - Unit 8 - Action Verbs
-  {en:"jump",cs:"skákat",emoji:"🐸",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"run",cs:"běžet",emoji:"🏃",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"dance",cs:"tancovat",emoji:"💃",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"eat",cs:"jíst",emoji:"🍽️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"drink",cs:"pít",emoji:"🥤",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"cook",cs:"vařit",emoji:"👨‍🍳",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"catch",cs:"chytat",emoji:"🥎",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"make",cs:"vyrábět",emoji:"🔨",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"stand",cs:"stát",emoji:"🧍",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"listen",cs:"poslouchat",emoji:"👂",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"draw",cs:"kreslit",emoji:"🖊️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"sleep",cs:"spát",emoji:"😴",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"speak",cs:"mluvit",emoji:"🗣️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"write",cs:"psát",emoji:"✏️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"sit",cs:"sedět",emoji:"🪑",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"buy",cs:"nakupovat",emoji:"🛍️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  {en:"like",cs:"mít rád",emoji:"❤️",unit:"LL Unit 8",category:"Verbs",type:"verb"},
-  // LiveLife - Unit 9 - Prepositions
-  {en:"under",cs:"pod",emoji:"⬇️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"on",cs:"na",emoji:"⬆️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"in",cs:"v",emoji:"📦",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"near",cs:"blízko",emoji:"📍",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"next to",cs:"vedle",emoji:"↔️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"behind",cs:"za",emoji:"↩️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"in front of",cs:"před",emoji:"⏩",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"between",cs:"mezi",emoji:"↕️",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  {en:"opposite",cs:"naproti",emoji:"🔄",unit:"LL Unit 9",category:"Prepositions",type:"adjective",noSentence:true,noEmoji:true},
-  // LiveLife - Unit 10 - Mixed vocabulary
-  {en:"animal",cs:"zvíře",emoji:"🐾",unit:"LL Unit 10",category:"Animals",type:"noun"},
-  {en:"fruit",cs:"ovoce",emoji:"🍎",unit:"LL Unit 10",category:"Food",type:"noun"},
-  {en:"world",cs:"svět",emoji:"🌍",unit:"LL Unit 10",category:"Places",type:"noun"},
-  {en:"food",cs:"jídlo",emoji:"🍽️",unit:"LL Unit 10",category:"Food",type:"noun"},
-  {en:"body",cs:"tělo",emoji:"🧍",unit:"LL Unit 10",category:"Body",type:"noun"},
-  {en:"skin",cs:"pleť",cs_acc:"pleť",emoji:"🤲",unit:"LL Unit 10",category:"Body",type:"noun"},
-  {en:"countryside",cs:"venkov",emoji:"🏡",unit:"LL Unit 10",category:"Places",type:"noun"},
-  {en:"time",cs:"čas",emoji:"⏰",unit:"LL Unit 10",category:"Mixed",type:"noun"},
-  {en:"children",cs:"děti",emoji:"👧👦",unit:"LL Unit 10",category:"People",type:"noun",plural:true},
-  {en:"bin",cs:"popelnice",cs_acc:"popelnici",emoji:"🗑️",unit:"LL Unit 10",category:"City",type:"noun"},
   // Let's Explore 3
   // Unit 1 - Clothes
   {en:"coat",cs:"kabát",emoji:"🧥",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
@@ -732,21 +618,34 @@ const DEFAULT_VOCAB = [
   {en:"summer",cs:"léto",emoji:"🌞",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"autumn",cs:"podzim",emoji:"🍂",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"winter",cs:"zima",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
-  // Explore Together 1 (Oxford Picture Dictionary, Level 03) — new words not already present
-  // Hello! - In my backpack
+  // Explore Together 1 — official Oxford Picture Dictionary
+  // Hello
+  {en:"Monday",cs:"pondělí",emoji:"😩",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Tuesday",cs:"úterý",emoji:"📅",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Wednesday",cs:"středa",emoji:"🐪",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Thursday",cs:"čtvrtek",emoji:"⚡",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Friday",cs:"pátek",emoji:"🎉",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Saturday",cs:"sobota",emoji:"🛋️",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Sunday",cs:"neděle",emoji:"☀️",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
   {en:"binoculars",cs:"dalekohled",emoji:"🔭",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
   {en:"camera",cs:"fotoaparát",emoji:"📷",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
   {en:"map",cs:"mapa",cs_acc:"mapu",emoji:"🗺️",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
   {en:"torch",cs:"baterka",cs_acc:"baterku",emoji:"🔦",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
   {en:"watch",cs:"hodinky",emoji:"⌚",unit:"ET1 Hello",category:"In my backpack",type:"noun",plural:true},
-  // Unit 1 - Outdoors
-  {en:"bird",cs:"pták",cs_acc:"ptáka",emoji:"🐦",unit:"ET1 Unit 1",category:"Outdoors",type:"noun"},
-  {en:"flower",cs:"květina",cs_acc:"květinu",emoji:"🌸",unit:"ET1 Unit 1",category:"Outdoors",type:"noun"},
-  {en:"tree",cs:"strom",emoji:"🌳",unit:"ET1 Unit 1",category:"Outdoors",type:"noun"},
-  {en:"boat",cs:"loď",cs_acc:"loď",emoji:"⛵",unit:"ET1 Unit 1",category:"Outdoors",type:"noun"},
-  {en:"fish",cs:"ryba",cs_acc:"rybu",emoji:"🐟",unit:"ET1 Unit 1",category:"Outdoors",type:"noun"},
-  {en:"tent",cs:"stan",emoji:"⛺",unit:"ET1 Unit 1",category:"Outdoors",type:"noun"},
-  // Unit 2 - Food and drink
+  // Unit 1
+  {en:"bird",cs:"pták",cs_acc:"ptáka",emoji:"🐦",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"flower",cs:"květina",cs_acc:"květinu",emoji:"🌸",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"house",cs:"dům",emoji:"🏠",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"lake",cs:"jezero",emoji:"🏞️",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"mountain",cs:"hora",cs_acc:"horu",emoji:"⛰️",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"tree",cs:"strom",emoji:"🌳",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"boat",cs:"loď",cs_acc:"loď",emoji:"⛵",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  {en:"fish",cs:"ryba",cs_acc:"rybu",emoji:"🐟",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  {en:"river",cs:"řeka",cs_acc:"řeku",emoji:"🏞️",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  {en:"tent",cs:"stan",emoji:"⛺",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  // Unit 2
+  {en:"chicken",cs:"slepice",cs_acc:"slepici",emoji:"🐔",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"fish",cs:"ryba",cs_acc:"rybu",emoji:"🐟",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
   {en:"ham",cs:"šunka",cs_acc:"šunku",emoji:"🍖",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
   {en:"juice",cs:"džus",emoji:"🧃",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
   {en:"mushrooms",cs:"houby",emoji:"🍄",unit:"ET1 Unit 2",category:"Food and drink",type:"noun",plural:true},
@@ -755,7 +654,9 @@ const DEFAULT_VOCAB = [
   {en:"pizza",cs:"pizza",cs_acc:"pizzu",emoji:"🍕",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
   {en:"salad",cs:"salát",emoji:"🥗",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
   {en:"soup",cs:"polévka",cs_acc:"polévku",emoji:"🥣",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
-  // Unit 3 - In the garden and small creatures
+  // Unit 3
+  {en:"grass",cs:"tráva",cs_acc:"trávu",emoji:"🌿",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
+  {en:"leaf",cs:"list",emoji:"🍃",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
   {en:"stick",cs:"klacík",emoji:"🪵",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
   {en:"stone",cs:"kámen",emoji:"🪨",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
   {en:"ant",cs:"mravenec",cs_acc:"mravence",emoji:"🐜",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
@@ -764,38 +665,205 @@ const DEFAULT_VOCAB = [
   {en:"butterfly",cs:"motýl",cs_acc:"motýla",emoji:"🦋",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
   {en:"grasshopper",cs:"kobylka",cs_acc:"kobylku",emoji:"🦗",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
   {en:"insects",cs:"hmyz",emoji:"🐞",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
-  // Unit 4 - Clothes
+  // Unit 4
+  {en:"boots",cs:"holínky",emoji:"👢",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"dress",cs:"šaty",emoji:"👗",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"hat",cs:"klobouk",emoji:"🎩",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"jacket",cs:"bunda",cs_acc:"bundu",emoji:"🧥",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
   {en:"jumper",cs:"svetr",emoji:"🧶",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"shoes",cs:"boty",emoji:"👟",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
   {en:"shorts",cs:"kraťasy",emoji:"🩳",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"skirt",cs:"sukně",cs_acc:"sukni",emoji:"👗",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"trousers",cs:"kalhoty",emoji:"👖",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
   {en:"T-shirt",cs:"tričko",emoji:"👕",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
-  // Unit 5 - At the beach
-  {en:"bucket",cs:"kbelík",emoji:"🪣",unit:"ET1 Unit 5",category:"At the beach",type:"noun"},
-  {en:"sand",cs:"písek",emoji:"🏖️",unit:"ET1 Unit 5",category:"At the beach",type:"noun"},
-  {en:"sandcastle",cs:"hrad z písku",emoji:"🏰",unit:"ET1 Unit 5",category:"At the beach",type:"noun"},
-  {en:"spade",cs:"lopatka",cs_acc:"lopatku",emoji:"⛏️",unit:"ET1 Unit 5",category:"At the beach",type:"noun"},
-  {en:"dry",cs:"suchý",emoji:"☀️",unit:"ET1 Unit 5",category:"At the beach",type:"adjective"},
-  {en:"wet",cs:"mokrý",emoji:"💧",unit:"ET1 Unit 5",category:"At the beach",type:"adjective"},
-  // Months
-  {en:"January",cs:"leden",emoji:"❄️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"February",cs:"únor",emoji:"💝",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"March",cs:"březen",emoji:"🌱",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"April",cs:"duben",emoji:"🌧️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"May",cs:"květen",emoji:"🌸",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"June",cs:"červen",emoji:"☀️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"July",cs:"červenec",emoji:"🏖️",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"August",cs:"srpen",emoji:"🌻",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"September",cs:"září",emoji:"🍂",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"October",cs:"říjen",emoji:"🎃",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"November",cs:"listopad",emoji:"🍁",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  {en:"December",cs:"prosinec",emoji:"🎄",unit:"Months",category:"Months",type:"noun",noSentence:true,noEmoji:true},
-  // Days of the week
-  {en:"Monday",cs:"pondělí",emoji:"😩",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
-  {en:"Tuesday",cs:"úterý",emoji:"📅",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
-  {en:"Wednesday",cs:"středa",emoji:"🐪",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
-  {en:"Thursday",cs:"čtvrtek",emoji:"⚡",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
-  {en:"Friday",cs:"pátek",emoji:"🎉",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
-  {en:"Saturday",cs:"sobota",emoji:"🛋️",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
-  {en:"Sunday",cs:"neděle",emoji:"☀️",unit:"Days",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  // Unit 5
+  {en:"bucket",cs:"kbelík",emoji:"🪣",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"sand",cs:"písek",emoji:"🏖️",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"sandcastle",cs:"hrad z písku",emoji:"🏰",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"sea",cs:"moře",emoji:"⛵",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"spade",cs:"lopatka",cs_acc:"lopatku",emoji:"⛏️",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"towel",cs:"ručník",emoji:"🏖️",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"clean",cs:"čistý",emoji:"✨",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  {en:"dirty",cs:"špinavý",emoji:"🪣",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  {en:"dry",cs:"suchý",emoji:"☀️",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  {en:"wet",cs:"mokrý",emoji:"💧",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  // Explore Together 2 — official Oxford Picture Dictionary
+  // Hello
+  {en:"red",cs:"červená",emoji:"🔴",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"orange",cs:"oranžová",emoji:"🟠",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"yellow",cs:"žlutá",emoji:"🟡",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"black",cs:"černá",emoji:"⚫",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"white",cs:"bílá",emoji:"⚪",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"green",cs:"zelená",emoji:"🟢",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"blue",cs:"modrá",emoji:"🔵",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"purple",cs:"fialová",emoji:"🟣",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"pink",cs:"růžová",emoji:"🩷",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"brown",cs:"hnědá",emoji:"🟤",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"grey",cs:"šedá",emoji:"🩶",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"Sam",cs:"Sam",emoji:"👦",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Lucy",cs:"Lucy",emoji:"👧",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Carla",cs:"Carla",emoji:"👧",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Sophie",cs:"Sophie",emoji:"👧",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Nick",cs:"Nick",emoji:"👦",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Mike",cs:"Mike",emoji:"👦",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  // Unit 1
+  {en:"skateboard",cs:"jezdit na skateboardu",emoji:"🛹",unit:"ET2 Unit 1",category:"Activities",type:"verb",noSentence:true},
+  {en:"dive",cs:"potápět se",emoji:"🤿",unit:"ET2 Unit 1",category:"Activities",type:"verb",noSentence:true},
+  {en:"draw",cs:"kreslit",emoji:"🖊️",unit:"ET2 Unit 1",category:"Activities",type:"verb"},
+  {en:"skate",cs:"bruslit",emoji:"⛸️",unit:"ET2 Unit 1",category:"Activities",type:"verb"},
+  {en:"paint",cs:"malovat",emoji:"🎨",unit:"ET2 Unit 1",category:"Activities",type:"verb"},
+  {en:"ride a horse",cs:"jezdit na koni",emoji:"🏇",unit:"ET2 Unit 1",category:"Activities",type:"verb",noSentence:true},
+  {en:"play computer games",cs:"hrát počítačové hry",emoji:"🎮",unit:"ET2 Unit 1",category:"Free time",type:"verb"},
+  {en:"play football",cs:"hrát fotbal",emoji:"⚽",unit:"ET2 Unit 1",category:"Free time",type:"verb"},
+  {en:"play basketball",cs:"hrát basketbal",emoji:"🏀",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play tennis",cs:"hrát tenis",emoji:"🎾",unit:"ET2 Unit 1",category:"Free time",type:"verb"},
+  {en:"play the piano",cs:"hrát na klavír",emoji:"🎹",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play the violin",cs:"hrát na housle",emoji:"🎻",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play the drums",cs:"hrát na bubny",emoji:"🥁",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play the recorder",cs:"hrát na zobcovou flétnu",emoji:"🪈",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  // Unit 2
+  {en:"sunglasses",cs:"sluneční brýle",emoji:"🕶️",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true,noSentence:true},
+  {en:"sandals",cs:"sandály",emoji:"🩴",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true,noSentence:true},
+  {en:"swimsuit",cs:"plavky",emoji:"👙",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true},
+  {en:"jeans",cs:"džíny",emoji:"👖",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true,noSentence:true},
+  {en:"scarf",cs:"šála",cs_acc:"šálu",emoji:"🧣",unit:"ET2 Unit 2",category:"Clothes",type:"noun"},
+  {en:"raincoat",cs:"pláštěnka",emoji:"🌧️",unit:"ET2 Unit 2",category:"Clothes",type:"noun",noSentence:true},
+  {en:"woolly hat",cs:"vlněná čepice",emoji:"🧢",unit:"ET2 Unit 2",category:"Clothes",type:"noun",noSentence:true},
+  {en:"gloves",cs:"rukavice",emoji:"🧤",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true},
+  {en:"summer",cs:"léto",emoji:"🌞",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"autumn",cs:"podzim",emoji:"🍂",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"winter",cs:"zima",emoji:"⛄",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"spring",cs:"jaro",emoji:"🌸",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  // Unit 3
+  {en:"fridge",cs:"lednice",emoji:"🧊",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"cooker",cs:"sporák",emoji:"🍳",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"TV",cs:"televize",emoji:"📺",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"sofa",cs:"pohovka",emoji:"🛋️",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"phone",cs:"telefon",emoji:"📱",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"next to",cs:"vedle",emoji:"↔️",unit:"ET2 Unit 3",category:"Around the house",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"mirror",cs:"zrcadlo",emoji:"🪞",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"radio",cs:"rádio",emoji:"📻",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"plant",cs:"rostlina",cs_acc:"rostlinu",emoji:"🪴",unit:"ET2 Unit 3",category:"My bedroom",type:"noun"},
+  {en:"bin",cs:"popelnice",cs_acc:"popelnici",emoji:"🗑️",unit:"ET2 Unit 3",category:"My bedroom",type:"noun"},
+  {en:"wardrobe",cs:"šatní skříň",emoji:"🚪",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"bookcase",cs:"knihovna",emoji:"📚",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"picture",cs:"obrázek",emoji:"🖼️",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"lamp",cs:"lampa",emoji:"💡",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  // Unit 4
+  {en:"crocodile",cs:"krokodýl",cs_acc:"krokodýla",emoji:"🐊",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"zebra",cs:"zebra",cs_acc:"zebru",emoji:"🦓",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"parrot",cs:"papoušek",cs_acc:"papouška",emoji:"🦜",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"flamingo",cs:"plameňák",emoji:"🦩",unit:"ET2 Unit 4",category:"Wild animals",type:"noun",noSentence:true},
+  {en:"lion",cs:"lev",cs_acc:"lva",emoji:"🦁",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"python",cs:"krajta",emoji:"🐍",unit:"ET2 Unit 4",category:"Wild animals",type:"noun",noSentence:true},
+  {en:"monkey",cs:"opice",cs_acc:"opici",emoji:"🐒",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"gorilla",cs:"gorila",emoji:"🦍",unit:"ET2 Unit 4",category:"Wild animals",type:"noun",noSentence:true},
+  {en:"feathers",cs:"peří",emoji:"🪶",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  {en:"hair",cs:"srst",emoji:"🐕",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",noSentence:true},
+  {en:"whiskers",cs:"vousky",emoji:"🐱",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  {en:"claws",cs:"drápy",emoji:"🐾",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  {en:"teeth",cs:"zuby",emoji:"🦷",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true},
+  {en:"scales",cs:"šupiny",emoji:"🐟",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  // Unit 5
+  {en:"breakfast",cs:"snídaně",emoji:"🥣",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"lunch",cs:"oběd",emoji:"🍱",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"dinner",cs:"večeře",emoji:"🍽️",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"rice",cs:"rýže",emoji:"🍚",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"vegetables",cs:"zelenina",emoji:"🥕",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"ham",cs:"šunka",cs_acc:"šunku",emoji:"🍖",unit:"ET2 Unit 5",category:"Food, part II",type:"noun"},
+  {en:"salad",cs:"salát",emoji:"🥗",unit:"ET2 Unit 5",category:"Food, part I",type:"noun"},
+  {en:"toast",cs:"toast",emoji:"🍞",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",noSentence:true},
+  {en:"water",cs:"voda",emoji:"💧",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",noSentence:true},
+  {en:"jam",cs:"džem",emoji:"🍓",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",noSentence:true},
+  {en:"sandwiches",cs:"sendviče",emoji:"🥪",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",plural:true,noSentence:true},
+  {en:"pasta",cs:"těstoviny",emoji:"🍝",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",plural:true,noSentence:true},
+  {en:"eggs",cs:"vejce",emoji:"🥚",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",plural:true,noSentence:true},
+  {en:"juice",cs:"džus",emoji:"🧃",unit:"ET2 Unit 5",category:"Food, part I",type:"noun"},
+  // Explore Together 3 — official Oxford Picture Dictionary
+  // Hello
+  {en:"ten",cs:"deset",emoji:"🔟",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"twenty",cs:"dvacet",emoji:"2️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number"},
+  {en:"thirty",cs:"třicet",emoji:"3️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"forty",cs:"čtyřicet",emoji:"4️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"fifty",cs:"padesát",emoji:"5️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"sixty",cs:"šedesát",emoji:"6️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"seventy",cs:"sedmdesát",emoji:"7️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"eighty",cs:"osmdesát",emoji:"8️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"ninety",cs:"devadesát",emoji:"9️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"one hundred",cs:"sto",emoji:"💯",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  // Unit 1
+  {en:"curly hair",cs:"kudrnaté vlasy",emoji:"🌀",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"wavy hair",cs:"vlnité vlasy",emoji:"🌊",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"straight hair",cs:"rovné vlasy",emoji:"📏",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"blond hair",cs:"blond vlasy",emoji:"👱",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"glasses",cs:"brýle",emoji:"👓",unit:"ET3 Unit 1",category:"Describing people",type:"noun",plural:true,noSentence:true},
+  {en:"ponytail",cs:"culík",emoji:"👱‍♀️",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"moustache",cs:"knír",emoji:"👨",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"beard",cs:"vousy",emoji:"🧔",unit:"ET3 Unit 1",category:"Describing people",type:"noun",plural:true,noSentence:true},
+  {en:"tall",cs:"vysoký",emoji:"🦒",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"short",cs:"krátký",emoji:"📐",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"strong",cs:"silný",emoji:"💪",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"thin",cs:"tenký",emoji:"🥢",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"old",cs:"starý",emoji:"👴",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"young",cs:"mladý",emoji:"👶",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  // Unit 2
+  {en:"reading",cs:"čtení",emoji:"📖",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"eating",cs:"jídlo",emoji:"🍽️",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"watching TV",cs:"sledování televize",emoji:"📺",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"listening to music",cs:"poslouchání hudby",emoji:"🎧",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"drinking",cs:"pití",emoji:"🥤",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"washing up",cs:"mytí nádobí",emoji:"🧽",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"tidying up",cs:"uklízení",emoji:"🧹",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"talking on the phone",cs:"telefonování",emoji:"📱",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"biscuits",cs:"sušenky",emoji:"🍪",unit:"ET3 Unit 2",category:"At home",type:"noun",plural:true,noSentence:true},
+  {en:"auntie",cs:"teta",emoji:"👩",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  {en:"uncle",cs:"strýc",emoji:"👨",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  {en:"cousin",cs:"bratranec nebo sestřenice",emoji:"🧒",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  {en:"comics",cs:"komiksy",emoji:"💬",unit:"ET3 Unit 2",category:"At home",type:"noun",plural:true,noSentence:true},
+  {en:"tea",cs:"čaj",emoji:"🍵",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  // Unit 3
+  {en:"park",cs:"park",emoji:"🌳",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"station",cs:"nádraží",emoji:"🚉",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"hospital",cs:"nemocnice",cs_acc:"nemocnici",emoji:"🏥",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"school",cs:"škola",emoji:"🏫",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"bridge",cs:"most",emoji:"🌉",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"bank",cs:"banka",cs_acc:"banku",emoji:"🏦",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"restaurant",cs:"restaurace",cs_acc:"restauraci",emoji:"🍴",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"shop",cs:"obchod",emoji:"🏪",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"stable",cs:"stáj",emoji:"🐴",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"swimming pool",cs:"bazén",emoji:"🏊",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"in front of",cs:"před",emoji:"⏩",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"between",cs:"mezi",emoji:"↕️",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"opposite",cs:"naproti",emoji:"🔄",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"behind",cs:"za",emoji:"↩️",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  // Unit 4
+  {en:"playing Frisbee",cs:"hraní frisbee",emoji:"🥏",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"playing board games",cs:"hraní deskových her",emoji:"🎲",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"playing golf",cs:"hraní golfu",emoji:"⛳",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"taking photos",cs:"fotografování",emoji:"📷",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"doing exercises",cs:"cvičení",emoji:"🤸",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"skipping",cs:"skákání přes švihadlo",emoji:"🪢",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"playing cards",cs:"hraní karet",emoji:"🃏",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"talking to friends",cs:"povídání s kamarády",emoji:"🗣️",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"in the morning",cs:"ráno",emoji:"🌅",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  {en:"in the afternoon",cs:"odpoledne",emoji:"☀️",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  {en:"in the evening",cs:"večer",emoji:"🌆",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  {en:"at night",cs:"v noci",emoji:"🌙",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  // Unit 5
+  {en:"get up",cs:"vstát",emoji:"🛏️",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"have breakfast",cs:"snídat",emoji:"🥣",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"go to school",cs:"jít do školy",emoji:"🎒",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"have lunch",cs:"obědvat",emoji:"🍱",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"go home",cs:"jít domů",emoji:"🏠",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"have dinner",cs:"večeřet",emoji:"🍽️",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"brush my teeth",cs:"čistit si zuby",emoji:"🪥",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"go to bed",cs:"jít spát",emoji:"🌙",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"wake up",cs:"vzbudit se",emoji:"⏰",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"get dressed",cs:"obléknout se",emoji:"👕",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"have a shower",cs:"sprchovat se",emoji:"🚿",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"half past",cs:"půl",emoji:"🕧",unit:"ET3 Unit 5",category:"My day, part 2",type:"noun",noSentence:true,noEmoji:true},
+  {en:"quarter to",cs:"tři čtvrtě na",emoji:"🕘",unit:"ET3 Unit 5",category:"My day, part 2",type:"noun",noSentence:true,noEmoji:true},
+  {en:"quarter past",cs:"čtvrt na",emoji:"🕒",unit:"ET3 Unit 5",category:"My day, part 2",type:"noun",noSentence:true,noEmoji:true},
 ];
 
 // Rod podstatných jmen (ma=mužský živý, mi=mužský neživý, f=ženský, n=střední, pl=množné)
@@ -1074,12 +1142,24 @@ function initData(){
     saveWords(words);
   }
 
+  // Remove deprecated non-LE/ET collections from already stored profiles.
+  const isDeprecatedUnit=unit=>unit==='Months'||unit==='Days'||(unit&&unit.startsWith('LL '));
+  const selectedBeforeCleanup=getSelectedSet();
+  if(selectedBeforeCleanup!=='all'&&isDeprecatedUnit(selectedBeforeCleanup)) saveSelectedSet('all');
+  profiles=getProfiles()||[];
+  let profileSettingsChanged=false;
+  profiles.forEach(p=>{if(p.units){p.units=null;profileSettingsChanged=true;}});
+  if(profileSettingsChanged) saveProfiles(profiles);
+
   // Migration: add any missing DEFAULT_VOCAB words and sync cs_acc for all existing profiles
-  const defaultByEn = {};
-  DEFAULT_VOCAB.forEach(w=>{ defaultByEn[w.en.toLowerCase()]=w; });
+  const vocabKey=w=>w.en.toLowerCase()+'|||'+w.unit;
+  const defaultByKey = {};
+  DEFAULT_VOCAB.forEach(w=>{ defaultByKey[vocabKey(w)]=w; });
   const allProfiles = getProfiles()||[];
   allProfiles.forEach(p=>{
-    const existing = LS.get(`vocab_words_${p.id}`,null);
+    const stored = LS.get(`vocab_words_${p.id}`,null);
+    const customUnitChanged=stored&&stored.some(w=>w.unit==='Z fotky');
+    const existing = stored&&stored.filter(w=>!isDeprecatedUnit(w.unit)).map(w=>w.unit==='Z fotky'?{...w,unit:'Vlastní'}:w);
     if(!existing||existing.length===0){
       const seeded=DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_seed_'+i+'_'+p.id}));
       LS.set(`vocab_words_${p.id}`,seeded);
@@ -1088,7 +1168,7 @@ function initData(){
     // Sync fields from DEFAULT_VOCAB into existing stored words
     let changed = false;
     const updated = existing.map(w=>{
-      const def = defaultByEn[w.en.toLowerCase()];
+      const def = defaultByKey[vocabKey(w)];
       if(!def) return w;
       let upd = w;
       if(def.cs_acc && w.cs_acc !== def.cs_acc){ upd={...upd,cs_acc:def.cs_acc}; changed=true; }
@@ -1100,12 +1180,12 @@ function initData(){
       return upd;
     });
     // Add all missing DEFAULT_VOCAB words
-    const existingKeys = new Set(updated.map(w=>w.en.toLowerCase()));
-    const toAdd = DEFAULT_VOCAB.filter(w=>!existingKeys.has(w.en.toLowerCase()));
+    const existingKeys = new Set(updated.map(vocabKey));
+    const toAdd = DEFAULT_VOCAB.filter(w=>!existingKeys.has(vocabKey(w)));
     if(toAdd.length>0){
       const newWords = toAdd.map((w,i)=>({...w,id:'w_new_'+i+'_'+p.id}));
       LS.set(`vocab_words_${p.id}`,[...updated,...newWords]);
-    } else if(changed){
+    } else if(changed||customUnitChanged||existing.length!==(stored||[]).length){
       LS.set(`vocab_words_${p.id}`,updated);
     }
   });
@@ -1286,11 +1366,10 @@ function renderProfilesTab(c){
           </div>
           ${isActive?'<span class="profile-active-badge">✓ Aktivní</span>':''}
           <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-            <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'} · ${p.units?'📄 LL slovíčka':'🌍 Vše'}</div>
+            <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'}</div>
             <div class="profile-actions">
               <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️</button>
               <button class="btn btn-secondary btn-sm" onclick="toggleProfileMode('${p.id}')" title="Přepnout režim">${p.learningMode==='audio-images'?'🔊 Poslech + obrázky':(p.mode==='beginner'?'→ Standardní':'→ Začátečník')}</button>
-              <button class="btn btn-secondary btn-sm" onclick="toggleProfileVocab('${p.id}')" title="Přepnout sadu slovíček">${p.units?'→ Vše':'→ LL'}</button>
               ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
               ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
             </div>
@@ -1308,25 +1387,8 @@ function renderProfilesTab(c){
         <input type="text" id="newProfileName" placeholder="např. Matyáš" maxlength="20">
       </div>
     </div>
-    <div class="form-group" style="margin-top:10px">
-      <label>Sada slovíček</label>
-      <select id="newProfileVocab" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd">
-        <option value="all">Všechna slovíčka</option>
-        <option value="ll">Jen slovíčka z PDF (LL)</option>
-      </select>
-    </div>
     <button class="btn btn-success" onclick="addProfileUI()">✅ Vytvořit profil</button>
   </div>`;
-}
-
-function toggleProfileVocab(id){
-  const profiles=getProfiles()||[];
-  const p=profiles.find(x=>x.id===id);
-  if(!p) return;
-  p.units=p.units?null:LL_UNITS;
-  saveProfiles(profiles);
-  renderProfilesTab(document.getElementById('parentContent'));
-  showToast(p.units?'Sada: jen LL slovíčka z PDF':'Sada: všechna slovíčka','success');
 }
 
 function toggleProfileMode(id){
@@ -1393,9 +1455,7 @@ function addProfileUI(){
   if(!name){showToast('Zadej jméno dítěte','error');return;}
   const profiles=getProfiles()||[];
   if(profiles.length>=4){showToast('Maximálně 4 profily','error');return;}
-  const vocab=document.getElementById('newProfileVocab').value;
-  const units=vocab==='ll'?LL_UNITS:null;
-  createProfile(name,units);
+  createProfile(name,null);
   document.getElementById('newProfileName').value='';
   renderProfilesTab(document.getElementById('parentContent'));
   showToast(`Profil "${name}" vytvořen`,'success');
@@ -1438,10 +1498,9 @@ function renderWordsTab(c){
     </div>
     <div class="form-row three">
       <div class="form-group"><label>Emoji</label><input type="text" id="addEmoji" placeholder="🐘" style="width:80px"></div>
-      <div class="form-group"><label>Lekce/Téma</label><input type="text" id="addUnit" placeholder="Unit 6" list="unitList"></div>
+      <div class="form-group"><label>Sada</label><div style="padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;background:#f5f7fa;font-weight:700">VLASTNÍ · Ručně přidaná</div></div>
       <div class="form-group"><label>Kategorie</label><input type="text" id="addCategory" placeholder="Animals" list="catList"></div>
     </div>
-    <datalist id="unitList">${units.map(u=>`<option value="${u}">`).join('')}</datalist>
     <datalist id="catList">${[...new Set(words.map(w=>w.category))].map(x=>`<option value="${x}">`).join('')}</datalist>
     <div class="form-group" style="margin-bottom:14px;max-width:200px">
       <label>Typ slova</label>
@@ -1535,7 +1594,7 @@ function addWordManually(){
   const en=document.getElementById('addEn').value.trim();
   const cs=document.getElementById('addCs').value.trim();
   const emoji=document.getElementById('addEmoji').value.trim();
-  const unit=document.getElementById('addUnit').value.trim()||'Vlastní';
+  const unit='Vlastní';
   const category=document.getElementById('addCategory').value.trim()||'Vlastní';
   const type=document.getElementById('addType').value;
   if(!en||!cs){showToast('Vyplň anglické i české slovo','error');return;}
@@ -1641,7 +1700,7 @@ function confirmExtracted(count){
     if(!cb||!cb.checked) continue;
     const w=window._extractedWords[i];
     if(allWords.find(x=>x.en.toLowerCase()===w.en.toLowerCase())) continue;
-    allWords.push({id:'w_photo_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2),en:w.en,cs:w.cs,emoji:document.getElementById('extEmoji_'+i).value.trim(),unit:'Z fotky',category:'Extrahováno',type:document.getElementById('extType_'+i).value,custom:true});
+    allWords.push({id:'w_photo_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2),en:w.en,cs:w.cs,emoji:document.getElementById('extEmoji_'+i).value.trim(),unit:'Vlastní',category:'Extrahováno',type:document.getElementById('extType_'+i).value,custom:true});
     added++;
   }
   saveWords(allWords);
@@ -1846,15 +1905,54 @@ function renderWorldMap(){
   map.innerHTML=html;
 }
 
+const BOOK_ORDER=['LE1','LE2','LE3','ET1','ET2','ET3','VLASTNÍ','OTHER'];
+const BOOK_NAMES={
+  LE1:"Let's Explore 1",
+  LE2:"Let's Explore 2",
+  LE3:"Let's Explore 3",
+  ET1:"Explore Together 1",
+  ET2:"Explore Together 2",
+  ET3:"Explore Together 3",
+  VLASTNÍ:"Vlastní slovíčka",
+  OTHER:"Ostatní"
+};
+
+function getUnitDisplayInfo(unit){
+  let m;
+  if((m=unit.match(/^L1 (.+)$/))) return {book:'LE1',chapter:m[1]};
+  if((m=unit.match(/^L3 (.+)$/))) return {book:'LE3',chapter:m[1]};
+  if((m=unit.match(/^ET([123]) (.+)$/))) return {book:'ET'+m[1],chapter:m[2]};
+  if(unit==='Hello'||/^Unit \d+$/.test(unit)) return {book:'LE2',chapter:unit};
+  if(unit==='Vlastní'||unit==='Z fotky') return {book:'VLASTNÍ',chapter:'Ručně přidaná'};
+  return {book:'OTHER',chapter:unit};
+}
+
+function chapterSortValue(chapter){
+  if(chapter==='Hello') return 0;
+  const m=chapter.match(/^Unit (\d+)$/);
+  if(m) return Number(m[1]);
+  return 1000;
+}
+
 function renderSetSelector(){
   const words=getWords()||[];
-  const units=[...new Set(words.map(w=>w.unit))].sort();
+  const units=[...new Set(words.map(w=>w.unit))];
   const selected=getSelectedSet();
   const sel=document.getElementById('setSelector');
-  let html=`<button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna (${words.length})</button>`;
-  units.forEach(u=>{
-    const count=words.filter(w=>w.unit===u).length;
-    html+=`<button class="set-btn${selected===u?' active':''}" onclick="selectSet(this,'${u.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">${esc(u)} (${count})</button>`;
+  const groups={};
+  units.forEach(unit=>{
+    const info=getUnitDisplayInfo(unit);
+    (groups[info.book]||(groups[info.book]=[])).push({...info,unit,count:words.filter(w=>w.unit===unit).length});
+  });
+  let html=`<div class="all-words-row"><button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna slovíčka (${words.length})</button></div>`;
+  BOOK_ORDER.filter(book=>groups[book]).forEach(book=>{
+    const chapters=groups[book].sort((a,b)=>chapterSortValue(a.chapter)-chapterSortValue(b.chapter)||a.chapter.localeCompare(b.chapter,'cs'));
+    html+=`<div class="book-section"><div class="book-title">📘 ${book} · ${esc(BOOK_NAMES[book])}</div><div class="book-chapters">`;
+    chapters.forEach(({unit,chapter,count})=>{
+      const safeUnit=unit.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      html+=`<button class="set-btn${selected===unit?' active':''}" onclick="selectSet(this,'${safeUnit}')">${book} · ${esc(chapter)} (${count})</button>`;
+    });
+    html+='</div></div>';
   });
   sel.innerHTML=html;
 }
@@ -1880,7 +1978,6 @@ function goHome(){showChildSection('map');renderChildUI();}
 // ============================================================
 let session=null;
 
-const LL_UNITS=['LL Unit 1','LL Unit 2','LL Unit 3','LL Unit 4','LL Unit 5','LL Unit 6','LL Unit 7','LL Unit 8','LL Unit 9','LL Unit 10'];
 
 function buildWordPool(){
   const all=getWords()||[];
