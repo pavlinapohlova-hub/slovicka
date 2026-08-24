@@ -183,6 +183,9 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .book-title{font-size:13px;font-weight:800;color:var(--gold);margin-bottom:9px;letter-spacing:.2px}
 .book-select-btn{width:100%;text-align:left;background:rgba(255,215,0,.08);border:1.5px solid rgba(255,215,0,.25);border-radius:9px;padding:9px 11px;color:var(--gold);font:800 13px 'Nunito',sans-serif;cursor:pointer;margin-bottom:9px;transition:all .2s}
 .book-select-btn:hover,.book-select-btn.active{background:rgba(255,215,0,.18);border-color:var(--gold);color:#fff}
+.book-word-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(255,255,255,.035);border-radius:9px;padding:8px 10px;margin-bottom:9px}
+.book-word-label{font-size:12px;font-weight:800;color:var(--text-light);margin-right:auto}
+.book-word-row .direction-btn{flex:0 1 82px}
 .book-chapters{display:flex;flex-wrap:wrap;gap:8px}
 .set-btn{padding:10px 18px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.2);background:transparent;color:var(--text-light);cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
 .set-btn:hover,.set-btn.active{background:var(--blue-light);border-color:rgba(255,255,255,0.5);color:#fff}
@@ -2056,7 +2059,15 @@ function renderSetSelector(){
     const chapters=groups[book].sort((a,b)=>chapterSortValue(a.chapter)-chapterSortValue(b.chapter)||a.chapter.localeCompare(b.chapter,'cs'));
     const bookCount=chapters.reduce((sum,ch)=>sum+ch.count,0);
     const safeBook=book.replace(/'/g,"\\'");
-    html+=`<div class="book-section"><button class="book-select-btn${practiceMode==='mixed'&&selected==='book:'+book?' active':''}" onclick="selectBook('${safeBook}')">📘 ${book} · ${esc(BOOK_NAMES[book])} — celá učebnice (${bookCount})</button><div class="book-chapters">`;
+    html+=`<div class="book-section">
+      <button class="book-select-btn${practiceMode==='mixed'&&selected==='book:'+book?' active':''}" onclick="selectBook('${safeBook}')">📘 ${book} · ${esc(BOOK_NAMES[book])} — celá učebnice (${bookCount})</button>
+      <div class="book-word-row">
+        <span class="book-word-label">🔤 ${book} · Slovíčka</span>
+        <button class="direction-btn${practiceMode==='bookwords'&&selected==='book:'+book&&practiceDirection==='en-cs'?' active':''}" onclick="selectBookWords('${safeBook}','en-cs')">AJ → ČJ</button>
+        <button class="direction-btn${practiceMode==='bookwords'&&selected==='book:'+book&&practiceDirection==='cs-en'?' active':''}" onclick="selectBookWords('${safeBook}','cs-en')">ČJ → AJ</button>
+        <button class="direction-btn${practiceMode==='bookwords'&&selected==='book:'+book&&practiceDirection==='mix'?' active':''}" onclick="selectBookWords('${safeBook}','mix')">MIX</button>
+      </div>
+      <div class="book-chapters">`;
     chapters.forEach(({unit,chapter,count})=>{
       const safeUnit=unit.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
       html+=`<button class="set-btn${practiceMode==='mixed'&&selected===unit?' active':''}" onclick="selectSet(this,'${safeUnit}')">${book} · ${esc(chapter)} (${count})</button>`;
@@ -2085,6 +2096,13 @@ function selectBook(book){
   renderSetSelector();
 }
 
+function selectBookWords(book,direction){
+  practiceMode='bookwords';
+  practiceDirection=direction;
+  saveSelectedSet('book:'+book);
+  renderSetSelector();
+}
+
 function showChildSection(sec){
   document.getElementById('mapScreen').style.display=sec==='map'?'block':'none';
   document.getElementById('exerciseScreen').style.display=sec==='exercise'?'block':'none';
@@ -2107,7 +2125,7 @@ function buildWordPool(){
   if(ap&&ap.units&&ap.units.length>0) eligible=eligible.filter(w=>ap.units.includes(w.unit));
   const sel=getSelectedSet();
   let pool=eligible;
-  if(practiceMode==='mixed'&&sel!=='all'){
+  if((practiceMode==='mixed'||practiceMode==='bookwords')&&sel!=='all'){
     if(sel.startsWith('book:')){
       const wantedBook=sel.slice(5);
       pool=eligible.filter(w=>getUnitDisplayInfo(w.unit).book===wantedBook);
@@ -2130,7 +2148,7 @@ function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Mat
 function pickExerciseType(word){
   const ap=getActiveProfile();
   if(ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')) return 6;
-  if(practiceMode==='words') return practiceDirection==='mix'?(Math.random()<.5?1:5):(practiceDirection==='en-cs'?1:5);
+  if(practiceMode==='words'||practiceMode==='bookwords') return practiceDirection==='mix'?(Math.random()<.5?1:5):(practiceDirection==='en-cs'?1:5);
   if(practiceMode==='sentences') return practiceDirection==='mix'?(Math.random()<.5?8:7):(practiceDirection==='en-cs'?8:7);
   if(practiceMode==='listening') return practiceDirection==='mix'?(Math.random()<.5?3:11):(practiceDirection==='en-cs'?3:11);
   if(practiceMode==='allmix'){
