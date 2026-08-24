@@ -169,7 +169,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .practice-section h3{color:var(--gold);margin-bottom:14px;font-size:18px}
 .set-selector{display:flex;flex-direction:column;gap:14px}
 .all-words-row{display:flex;flex-wrap:wrap;gap:8px}
-.practice-mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.practice-mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .practice-mode-card{background:rgba(255,255,255,0.055);border:1.5px solid rgba(255,255,255,0.14);border-radius:14px;padding:12px;text-align:center}
 .practice-mode-card.active{border-color:var(--gold);background:rgba(255,215,0,0.09)}
 .practice-mode-name{font-weight:800;color:#fff;margin-bottom:3px}
@@ -177,6 +177,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .direction-row{display:flex;gap:6px}
 .direction-btn{flex:1;padding:8px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--text-light);font:700 12px 'Nunito',sans-serif;cursor:pointer}
 .direction-btn:hover,.direction-btn.active{background:var(--blue-light);border-color:var(--gold);color:var(--gold)}
+@media(max-width:920px){.practice-mode-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.practice-mode-grid{grid-template-columns:1fr}.practice-mode-desc{min-height:0}}
 .book-section{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px}
 .book-title{font-size:13px;font-weight:800;color:var(--gold);margin-bottom:9px;letter-spacing:.2px}
@@ -2040,8 +2041,14 @@ function renderSetSelector(){
         <div class="direction-row">
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='en-cs'?' active':''}" onclick="selectPractice('${m.id}','en-cs')">AJ → ČJ</button>
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='cs-en'?' active':''}" onclick="selectPractice('${m.id}','cs-en')">ČJ → AJ</button>
+          <button class="direction-btn${practiceMode===m.id&&practiceDirection==='mix'?' active':''}" onclick="selectPractice('${m.id}','mix')">MIX</button>
         </div>
-      </div>`).join('')+'</div>';
+      </div>`).join('')+`
+      <div class="practice-mode-card${practiceMode==='allmix'?' active':''}">
+        <div class="practice-mode-name">🎲 Mix všeho</div>
+        <div class="practice-mode-desc">Slovíčka, věty i poslech v obou směrech</div>
+        <div class="direction-row"><button class="direction-btn${practiceMode==='allmix'?' active':''}" onclick="selectPractice('allmix','mix')">VŠE DOHROMADY</button></div>
+      </div></div>`;
   }
   BOOK_ORDER.filter(book=>groups[book]).forEach(book=>{
     const chapters=groups[book].sort((a,b)=>chapterSortValue(a.chapter)-chapterSortValue(b.chapter)||a.chapter.localeCompare(b.chapter,'cs'));
@@ -2080,8 +2087,8 @@ function goHome(){showChildSection('map');renderChildUI();}
 // SESSION / EXERCISES
 // ============================================================
 let session=null;
-let practiceMode='words';
-let practiceDirection='en-cs';
+let practiceMode='allmix';
+let practiceDirection='mix';
 
 function buildWordPool(){
   const all=getWords()||[];
@@ -2105,9 +2112,14 @@ function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Mat
 function pickExerciseType(word){
   const ap=getActiveProfile();
   if(ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')) return 6;
-  if(practiceMode==='words') return practiceDirection==='en-cs'?1:5;
-  if(practiceMode==='sentences') return practiceDirection==='en-cs'?8:7;
-  if(practiceMode==='listening') return practiceDirection==='en-cs'?3:11;
+  if(practiceMode==='words') return practiceDirection==='mix'?(Math.random()<.5?1:5):(practiceDirection==='en-cs'?1:5);
+  if(practiceMode==='sentences') return practiceDirection==='mix'?(Math.random()<.5?8:7):(practiceDirection==='en-cs'?8:7);
+  if(practiceMode==='listening') return practiceDirection==='mix'?(Math.random()<.5?3:11):(practiceDirection==='en-cs'?3:11);
+  if(practiceMode==='allmix'){
+    const sentenceOK=(word.type==='noun'||word.type==='verb'||word.type==='adjective')&&!word.noSentence;
+    const allTypes=sentenceOK?[1,5,3,11,7,8]:[1,5,3,11];
+    return allTypes[Math.floor(Math.random()*allTypes.length)];
+  }
   const muted=getMute();
   const adjNoun=hasAdjNounSupport(word,session.pool);
   const types=adjNoun?[1,3,5,4,4,7,7,8,8,9,9,10,10]:[1,3,5,4,4,7,7,8,8];
