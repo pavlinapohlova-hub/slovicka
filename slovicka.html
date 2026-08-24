@@ -129,7 +129,7 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .level-badge{background:linear-gradient(135deg,#2e4a8a,#4a3a8a);padding:8px 14px;border-radius:16px;font-size:12px;font-weight:700;color:#d4b4ff;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .streak-display{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;color:#ff7043}
 
-#mapScreen{padding:20px 24px}
+#mapScreen{padding:20px 24px 120px}
 .map-title{text-align:center;font-size:28px;color:var(--gold);margin-bottom:4px}
 .map-subtitle{text-align:center;color:var(--text-dim);margin-bottom:20px;font-size:14px}
 @keyframes pulse{0%,100%{box-shadow:0 0 12px rgba(255,215,0,0.4)}50%{box-shadow:0 0 28px rgba(255,215,0,0.9)}}
@@ -172,13 +172,24 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .practice-mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .practice-mode-card{background:rgba(255,255,255,0.055);border:1.5px solid rgba(255,255,255,0.14);border-radius:14px;padding:12px;text-align:center}
 .practice-mode-card.active{border-color:var(--gold);background:rgba(255,215,0,0.09)}
+.practice-mode-card.allmix{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,165,0,.18),rgba(255,215,0,.08));border-color:rgba(255,215,0,.55);display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;gap:8px 18px}
+.practice-mode-card.allmix .practice-mode-name{font-size:18px;color:var(--gold)}
+.practice-mode-card.allmix .practice-mode-desc{min-height:0;margin:0}
+.practice-mode-card.allmix .direction-row{grid-column:2;grid-row:1/3}
+.practice-mode-card.allmix .direction-btn{min-width:170px;padding:11px 14px}
 .practice-mode-name{font-weight:800;color:#fff;margin-bottom:3px}
 .practice-mode-desc{font-size:11px;color:var(--text-dim);min-height:32px;margin-bottom:9px}
 .direction-row{display:flex;gap:6px}
 .direction-btn{flex:1;padding:8px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--text-light);font:700 12px 'Nunito',sans-serif;cursor:pointer}
 .direction-btn:hover,.direction-btn.active{background:var(--blue-light);border-color:var(--gold);color:var(--gold)}
 @media(max-width:920px){.practice-mode-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:680px){.practice-mode-grid{grid-template-columns:1fr}.practice-mode-desc{min-height:0}}
+@media(max-width:680px){
+  .practice-mode-grid{grid-template-columns:1fr}
+  .practice-mode-desc{min-height:0}
+  .practice-mode-card.allmix{grid-template-columns:1fr;text-align:center}
+  .practice-mode-card.allmix .direction-row{grid-column:1;grid-row:auto}
+  .practice-mode-card.allmix .direction-btn{min-width:0}
+}
 .book-section{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px}
 .book-title{font-size:13px;font-weight:800;color:var(--gold);margin-bottom:9px;letter-spacing:.2px}
 .book-select-btn{width:100%;text-align:left;background:rgba(255,215,0,.08);border:1.5px solid rgba(255,215,0,.25);border-radius:9px;padding:9px 11px;color:var(--gold);font:800 13px 'Nunito',sans-serif;cursor:pointer;margin-bottom:9px;transition:all .2s}
@@ -195,8 +206,9 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .empty-words .empty-icon{font-size:56px;margin-bottom:16px}
 .empty-words p{font-size:16px;margin-bottom:8px}
 
-.start-btn{display:block;margin:20px auto 0;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#1a2744;font-family:'Fredoka One',cursive;font-size:24px;padding:18px 48px;border-radius:16px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(255,215,0,0.4);transition:all .2s;letter-spacing:.5px}
-.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,215,0,0.5)}
+.start-btn{position:fixed;right:24px;bottom:18px;z-index:450;display:block;margin:0;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#1a2744;font-family:'Fredoka One',cursive;font-size:21px;padding:15px 30px;border-radius:16px;border:none;cursor:pointer;box-shadow:0 5px 24px rgba(255,215,0,.55);transition:all .2s;letter-spacing:.5px}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,215,0,0.65)}
+@media(max-width:680px){.start-btn{left:14px;right:14px;bottom:12px;width:calc(100% - 28px);font-size:20px;padding:15px 12px;border-radius:14px}}
 
 #exerciseScreen{padding:20px 24px;max-width:760px;margin:0 auto}
 .exercise-progress{display:flex;align-items:center;gap:12px;margin-bottom:20px}
@@ -2040,7 +2052,12 @@ function renderSetSelector(){
       {id:'sentences',icon:'💬',name:'Věty',desc:'Věty namíchané z celé slovní zásoby'},
       {id:'listening',icon:'🎧',name:'Poslech',desc:'Poslech slov a výběr překladu'}
     ];
-    html='<div class="practice-mode-grid">'+modes.map(m=>`
+    html=`<div class="practice-mode-grid">
+      <div class="practice-mode-card allmix${practiceMode==='allmix'?' active':''}">
+        <div class="practice-mode-name">🎲 Mix všeho</div>
+        <div class="practice-mode-desc">Slovíčka, věty i poslech v obou směrech</div>
+        <div class="direction-row"><button class="direction-btn${practiceMode==='allmix'?' active':''}" onclick="selectPractice('allmix','mix')">VŠE DOHROMADY</button></div>
+      </div>`+modes.map(m=>`
       <div class="practice-mode-card${practiceMode===m.id?' active':''}">
         <div class="practice-mode-name">${m.icon} ${m.name}</div>
         <div class="practice-mode-desc">${m.desc}</div>
@@ -2049,12 +2066,7 @@ function renderSetSelector(){
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='cs-en'?' active':''}" onclick="selectPractice('${m.id}','cs-en')">ČJ → AJ</button>
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='mix'?' active':''}" onclick="selectPractice('${m.id}','mix')">MIX</button>
         </div>
-      </div>`).join('')+`
-      <div class="practice-mode-card${practiceMode==='allmix'?' active':''}">
-        <div class="practice-mode-name">🎲 Mix všeho</div>
-        <div class="practice-mode-desc">Slovíčka, věty i poslech v obou směrech</div>
-        <div class="direction-row"><button class="direction-btn${practiceMode==='allmix'?' active':''}" onclick="selectPractice('allmix','mix')">VŠE DOHROMADY</button></div>
-      </div></div>`;
+      </div>`).join('')+'</div>';
   }
   BOOK_ORDER.filter(book=>groups[book]).forEach(book=>{
     const chapters=groups[book].sort((a,b)=>chapterSortValue(a.chapter)-chapterSortValue(b.chapter)||a.chapter.localeCompare(b.chapter,'cs'));
