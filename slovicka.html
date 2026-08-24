@@ -627,7 +627,7 @@ const DEFAULT_VOCAB = [
   {en:"spring",cs:"jaro",emoji:"🌸",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"summer",cs:"léto",emoji:"🌞",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   {en:"autumn",cs:"podzim",emoji:"🍂",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
-  {en:"winter",cs:"zima",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"winter",cs:"zima",cs_acc:"zimu",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
   // Explore Together 1 — official Oxford Picture Dictionary
   // Hello
   {en:"Monday",cs:"pondělí",emoji:"😩",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
@@ -742,7 +742,7 @@ const DEFAULT_VOCAB = [
   {en:"gloves",cs:"rukavice",emoji:"🧤",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true},
   {en:"summer",cs:"léto",emoji:"🌞",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
   {en:"autumn",cs:"podzim",emoji:"🍂",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
-  {en:"winter",cs:"zima",emoji:"⛄",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"winter",cs:"zima",cs_acc:"zimu",emoji:"⛄",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
   {en:"spring",cs:"jaro",emoji:"🌸",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
   // Unit 3
   {en:"fridge",cs:"lednice",emoji:"🧊",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
@@ -2277,6 +2277,14 @@ function csAcc(word){
   return word.cs;
 }
 
+const SEASON_SENTENCES={
+  spring:{en:"It's spring.",cs:"Je jaro."},
+  summer:{en:"It's summer.",cs:"Je léto."},
+  autumn:{en:"It's autumn.",cs:"Je podzim."},
+  winter:{en:"It's winter.",cs:"Je zima."}
+};
+function isSeasonWord(word){return !!(word&&SEASON_SENTENCES[word.en]);}
+
 const SENTENCE_TEMPLATES=[
   {tiles:(a,w)=>a?["I","can","see",`${a} ${w}.`]:["I","can","see",`${w}.`], cs:(cs)=>`Vidím ${cs}.`, acc:true},
   {tiles:(a,w)=>a?["I","can't","see",`${a} ${w}.`]:["I","can't","see",`${w}.`], cs:(cs)=>`Nevidím ${cs}.`, acc:true},
@@ -2324,14 +2332,18 @@ function makeAdjNounPair(noun, pool){
 }
 
 function hasAdjNounSupport(word,pool){
-  return word.type==='noun'&&!word.noSentence&&NOUN_GENDERS[word.en]&&pool.some(w=>w.type==='adjective'&&ADJ_FORMS[w.en]);
+  return word.type==='noun'&&!word.noSentence&&!isSeasonWord(word)&&NOUN_GENDERS[word.en]&&pool.some(w=>w.type==='adjective'&&ADJ_FORMS[w.en]);
 }
 
 function renderExType4(c,word){
   const isVerb=word.type==='verb';
   const isAdj=word.type==='adjective';
   let tpl,correctTiles,czHint;
-  if(isVerb){
+  if(isSeasonWord(word)){
+    const pair=SEASON_SENTENCES[word.en];
+    correctTiles=["It's",word.en+"."];
+    czHint=pair.cs;
+  } else if(isVerb){
     tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
     correctTiles=tpl.tiles(word.en);
     czHint=tpl.cs(word.cs_verb||word.cs);
@@ -2368,6 +2380,7 @@ function answerType5(btn,answerId,correctId){
 }
 
 function makeSentencePair(word){
+  if(isSeasonWord(word)) return {...SEASON_SENTENCES[word.en]};
   const isVerb=word.type==='verb';
   const isAdj=word.type==='adjective';
   if(isVerb){
