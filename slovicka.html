@@ -169,6 +169,15 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
 .practice-section h3{color:var(--gold);margin-bottom:14px;font-size:18px}
 .set-selector{display:flex;flex-direction:column;gap:14px}
 .all-words-row{display:flex;flex-wrap:wrap;gap:8px}
+.practice-mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.practice-mode-card{background:rgba(255,255,255,0.055);border:1.5px solid rgba(255,255,255,0.14);border-radius:14px;padding:12px;text-align:center}
+.practice-mode-card.active{border-color:var(--gold);background:rgba(255,215,0,0.09)}
+.practice-mode-name{font-weight:800;color:#fff;margin-bottom:3px}
+.practice-mode-desc{font-size:11px;color:var(--text-dim);min-height:32px;margin-bottom:9px}
+.direction-row{display:flex;gap:6px}
+.direction-btn{flex:1;padding:8px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--text-light);font:700 12px 'Nunito',sans-serif;cursor:pointer}
+.direction-btn:hover,.direction-btn.active{background:var(--blue-light);border-color:var(--gold);color:var(--gold)}
+@media(max-width:680px){.practice-mode-grid{grid-template-columns:1fr}.practice-mode-desc{min-height:0}}
 .book-section{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px}
 .book-title{font-size:13px;font-weight:800;color:var(--gold);margin-bottom:9px;letter-spacing:.2px}
 .book-chapters{display:flex;flex-wrap:wrap;gap:8px}
@@ -319,11 +328,11 @@ h1,h2,h3,.game-font{font-family:'Fredoka One',cursive}
       <p>Zatím tu nejsou žádná slovíčka.</p>
       <p style="font-size:14px;color:var(--text-dim)">Popros rodiče, aby přidal slovíčka v rodičovském režimu.</p>
     </div>
-    <button class="start-btn" id="startBtn" onclick="startSession()">🚲 Vyrazit na výpravu!</button>
     <div class="practice-section">
-      <h3>📚 Vyber učebnici a kapitolu</h3>
+      <h3>📚 Vyber učebnici, kapitolu nebo způsob procvičování</h3>
       <div class="set-selector" id="setSelector"></div>
     </div>
+    <button class="start-btn" id="startBtn" onclick="startSession()">🚲 Vyrazit na výpravu!</button>
   </div>
 
   <div id="exerciseScreen" style="display:none">
@@ -2007,31 +2016,56 @@ function renderSetSelector(){
   const words=getWords()||[];
   const units=[...new Set(words.map(w=>w.unit))];
   const selected=getSelectedSet();
+  const ap=getActiveProfile();
+  const beginner=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images');
   const sel=document.getElementById('setSelector');
   const groups={};
   units.forEach(unit=>{
     const info=getUnitDisplayInfo(unit);
     (groups[info.book]||(groups[info.book]=[])).push({...info,unit,count:words.filter(w=>w.unit===unit).length});
   });
-  let html=`<div class="all-words-row"><button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna slovíčka (${words.length})</button></div>`;
+  let html='';
+  if(beginner){
+    html=`<div class="all-words-row"><button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna slovíčka (${words.length})</button></div>`;
+  }else{
+    const modes=[
+      {id:'words',icon:'🔤',name:`Všechna slovíčka (${words.length})`,desc:'Samostatná slovíčka z celé zásoby'},
+      {id:'sentences',icon:'💬',name:'Věty',desc:'Věty namíchané z celé slovní zásoby'},
+      {id:'listening',icon:'🎧',name:'Poslech',desc:'Poslech slov a výběr překladu'}
+    ];
+    html='<div class="practice-mode-grid">'+modes.map(m=>`
+      <div class="practice-mode-card${practiceMode===m.id?' active':''}">
+        <div class="practice-mode-name">${m.icon} ${m.name}</div>
+        <div class="practice-mode-desc">${m.desc}</div>
+        <div class="direction-row">
+          <button class="direction-btn${practiceMode===m.id&&practiceDirection==='en-cs'?' active':''}" onclick="selectPractice('${m.id}','en-cs')">AJ → ČJ</button>
+          <button class="direction-btn${practiceMode===m.id&&practiceDirection==='cs-en'?' active':''}" onclick="selectPractice('${m.id}','cs-en')">ČJ → AJ</button>
+        </div>
+      </div>`).join('')+'</div>';
+  }
   BOOK_ORDER.filter(book=>groups[book]).forEach(book=>{
     const chapters=groups[book].sort((a,b)=>chapterSortValue(a.chapter)-chapterSortValue(b.chapter)||a.chapter.localeCompare(b.chapter,'cs'));
     html+=`<div class="book-section"><div class="book-title">📘 ${book} · ${esc(BOOK_NAMES[book])}</div><div class="book-chapters">`;
     chapters.forEach(({unit,chapter,count})=>{
       const safeUnit=unit.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      html+=`<button class="set-btn${selected===unit?' active':''}" onclick="selectSet(this,'${safeUnit}')">${book} · ${esc(chapter)} (${count})</button>`;
+      html+=`<button class="set-btn${practiceMode==='mixed'&&selected===unit?' active':''}" onclick="selectSet(this,'${safeUnit}')">${book} · ${esc(chapter)} (${count})</button>`;
     });
     html+='</div></div>';
   });
   sel.innerHTML=html;
 }
 
-function selectSet(elOrName, name){
-  if(typeof elOrName==='string'){saveSelectedSet(elOrName);}
-  else{saveSelectedSet(name);}
-  document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));
-  if(typeof elOrName!=='string') elOrName.classList.add('active');
-  else document.querySelectorAll('.set-btn')[0].classList.add('active');
+function selectPractice(mode,direction){
+  practiceMode=mode;
+  practiceDirection=direction;
+  saveSelectedSet('all');
+  renderSetSelector();
+}
+
+function selectSet(elOrName,name){
+  practiceMode='mixed';
+  saveSelectedSet(typeof elOrName==='string'?elOrName:name);
+  renderSetSelector();
 }
 
 function showChildSection(sec){
@@ -2046,7 +2080,8 @@ function goHome(){showChildSection('map');renderChildUI();}
 // SESSION / EXERCISES
 // ============================================================
 let session=null;
-
+let practiceMode='words';
+let practiceDirection='en-cs';
 
 function buildWordPool(){
   const all=getWords()||[];
@@ -2054,7 +2089,8 @@ function buildWordPool(){
   let eligible=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')?all.filter(w=>!w.noEmoji):all;
   if(ap&&ap.units&&ap.units.length>0) eligible=eligible.filter(w=>ap.units.includes(w.unit));
   const sel=getSelectedSet();
-  const pool=sel==='all'?eligible:eligible.filter(w=>w.unit===sel);
+  let pool=practiceMode==='mixed'&&sel!=='all'?eligible.filter(w=>w.unit===sel):eligible;
+  if(practiceMode==='sentences') pool=pool.filter(w=>(w.type==='noun'||w.type==='verb'||w.type==='adjective')&&!w.noSentence);
   return pool.length>=4?pool:eligible;
 }
 
@@ -2069,6 +2105,9 @@ function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Mat
 function pickExerciseType(word){
   const ap=getActiveProfile();
   if(ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')) return 6;
+  if(practiceMode==='words') return practiceDirection==='en-cs'?1:5;
+  if(practiceMode==='sentences') return practiceDirection==='en-cs'?8:7;
+  if(practiceMode==='listening') return practiceDirection==='en-cs'?3:11;
   const muted=getMute();
   const adjNoun=hasAdjNounSupport(word,session.pool);
   const types=adjNoun?[1,3,5,4,4,7,7,8,8,9,9,10,10]:[1,3,5,4,4,7,7,8,8];
@@ -2112,7 +2151,8 @@ function renderExercise(type,word){
   else if(type===7) renderExType7(c,word);
   else if(type===8) renderExType8(c,word);
   else if(type===9) renderExType9(c,word);
-  else renderExType10(c,word);
+  else if(type===10) renderExType10(c,word);
+  else renderExType11(c,word);
 }
 
 function getWrongOptions(correct,pool,count=3){
@@ -2164,6 +2204,14 @@ function renderExType3(c,word){
   c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🎧 Poslechni a přelož</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">Klikni pro přehrání</div></div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
   setTimeout(()=>speakWord(word.en),400);
 }
+function renderExType11(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  const spoken=esc(word.cs).replace(/'/g,"\\'");
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🎧 Poslechni a přelož do angličtiny</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${spoken}','cs-CZ')">🔊</button><div class="listen-hint">Klikni pro přehrání</div></div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.en)}</button>`).join('')}</div>`;
+  setTimeout(()=>speakWord(word.cs,'cs-CZ'),400);
+}
+
 function toggleMute(){
   const muted=!getMute();
   saveMute(muted);
@@ -2191,12 +2239,12 @@ if(window.speechSynthesis){
   speechSynthesis.onvoiceschanged=_loadVoice;
   _loadVoice();
 }
-function speakWord(text){
+function speakWord(text,lang='en-US'){
   if(getMute()||!window.speechSynthesis)return;
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US';u.rate=0.85;
-  if(_preferredVoice) u.voice=_preferredVoice;
+  u.lang=lang;u.rate=0.85;
+  if(/^en/i.test(lang)&&_preferredVoice) u.voice=_preferredVoice;
   speechSynthesis.speak(u);
 }
 function answerType3(btn,answerId,correctId){
