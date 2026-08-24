@@ -1,0 +1,2725 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Výprava za slovíčky 🌍</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#FFD700;--gold-dark:#FFA500;--green:#4CAF50;--red:#e74c3c;
+  --blue-dark:#1a2744;--blue-mid:#243560;--blue-light:#2e4a8a;
+  --text-light:#f0e6d3;--text-dim:#a0b0cc;
+  --card-bg:rgba(255,255,255,0.08);--card-border:rgba(255,255,255,0.15);
+}
+body{font-family:'Nunito',sans-serif;background:var(--blue-dark);color:var(--text-light);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.game-font{font-family:'Fredoka',sans-serif;font-weight:700}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+
+#modeBtn{position:fixed;top:14px;right:14px;z-index:1000;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);color:#fff;padding:8px 16px;border-radius:20px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
+#modeBtn:hover{background:rgba(255,255,255,0.22)}
+
+#pinScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--blue-dark)}
+.pin-box{background:var(--blue-mid);border:1px solid var(--card-border);border-radius:20px;padding:40px;text-align:center;max-width:360px;width:100%}
+.pin-box h2{font-size:28px;margin-bottom:8px}
+.pin-box p{color:var(--text-dim);margin-bottom:24px}
+.pin-dots{display:flex;gap:12px;justify-content:center;margin-bottom:24px}
+.pin-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.3);transition:all .2s}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold)}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto}
+.pin-key{background:var(--card-bg);border:1.5px solid var(--card-border);color:#fff;font-size:24px;font-family:'Fredoka',cursive;padding:16px;border-radius:12px;cursor:pointer;transition:all .15s}
+.pin-key:hover{background:rgba(255,255,255,0.15);transform:scale(1.05)}
+.pin-error{color:var(--red);font-size:14px;margin-top:10px;min-height:20px}
+
+#parentScreen{background:#f5f7fa;color:#222;min-height:100vh}
+.parent-header{background:#1a2744;color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.parent-header h1{font-size:22px;flex:1}
+.parent-tabs{display:flex;gap:4px;background:#e8edf5;padding:4px;border-radius:10px;margin:16px 24px 0;flex-wrap:wrap}
+.parent-tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700;font-size:14px;border:none;background:transparent;transition:all .2s;white-space:nowrap}
+.parent-tab.active{background:#fff;color:#1a2744;box-shadow:0 1px 4px rgba(0,0,0,0.12)}
+.parent-content{padding:20px 24px}
+
+.form-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.form-card h3{margin-bottom:16px;color:#1a2744;font-size:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.three{grid-template-columns:1fr 1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:13px;font-weight:700;color:#666}
+.form-group input,.form-group select{padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;font-family:'Nunito',sans-serif;outline:none;transition:border .2s}
+.form-group input:focus,.form-group select:focus{border-color:#2e4a8a}
+.btn{padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:15px;transition:all .2s}
+.btn-primary{background:#1a2744;color:#fff}
+.btn-primary:hover{background:#243560}
+.btn-success{background:#4CAF50;color:#fff}
+.btn-danger{background:#e74c3c;color:#fff}
+.btn-secondary{background:#e8edf5;color:#333}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:6px 14px;font-size:13px}
+
+.word-list{display:flex;flex-direction:column;gap:8px}
+.word-item{background:#fff;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.word-fallback{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;flex-shrink:0}
+.word-info{flex:1}
+.word-en{font-weight:700;font-size:16px;color:#1a2744}
+.word-cs{font-size:14px;color:#666}
+.word-meta{font-size:12px;color:#999}
+.word-actions{display:flex;gap:8px}
+.word-stat-badge{background:#e8edf5;border-radius:6px;padding:3px 8px;font-size:12px;color:#555;font-weight:700}
+.word-stat-badge.good{background:#e8f5e9;color:#2e7d32}
+.word-stat-badge.bad{background:#ffebee;color:#c62828}
+
+.filter-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar select{padding:8px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:'Nunito',sans-serif}
+.filter-bar input{flex:1;min-width:180px;padding:8px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:'Nunito',sans-serif}
+
+.upload-zone{border:2.5px dashed #ccc;border-radius:14px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc}
+.upload-zone:hover,.upload-zone.drag{border-color:#2e4a8a;background:#f0f4ff}
+.upload-zone input{display:none}
+.upload-icon{font-size:48px;margin-bottom:12px}
+.extracted-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.extracted-item{display:flex;align-items:center;gap:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #eee;flex-wrap:wrap}
+.extracted-item input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#1a2744}
+.extracted-item .ext-en{font-weight:700;color:#1a2744}
+.extracted-item .ext-cs{color:#666;font-size:14px}
+.extracted-emoji-input{width:52px;padding:6px;border:1px solid #ddd;border-radius:6px;text-align:center;font-size:18px}
+.api-loading{text-align:center;padding:24px;color:#666}
+.api-loading .spinner{font-size:32px;animation:spin 1s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.stat-number{font-size:36px;font-weight:800;color:#1a2744;font-family:'Fredoka',cursive}
+.stat-label{font-size:13px;color:#888;margin-top:4px}
+.stat-card.green .stat-number{color:#2e7d32}
+.stat-card.orange .stat-number{color:#e65100}
+.stat-card.grey .stat-number{color:#555}
+.progress-table{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.progress-table table{width:100%;border-collapse:collapse}
+.progress-table th{background:#f5f7fa;padding:10px 14px;text-align:left;font-size:13px;color:#666;border-bottom:1px solid #eee}
+.progress-table td{padding:10px 14px;border-bottom:1px solid #eee;font-size:14px}
+.progress-table tr:last-child td{border-bottom:none}
+.mini-bar{height:8px;background:#eee;border-radius:4px;overflow:hidden;width:80px}
+.mini-bar-fill{height:100%;background:#4CAF50;border-radius:4px}
+.mini-bar-fill.medium{background:#FF9800}
+.mini-bar-fill.low{background:#e74c3c}
+
+.settings-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.settings-card h3{margin-bottom:14px;color:#1a2744}
+.api-key-note{font-size:12px;color:#888;margin-top:6px}
+
+/* PROFILES */
+.profile-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.profile-card{background:#fff;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:2.5px solid transparent;transition:all .2s}
+.profile-card.active-profile{border-color:#1a2744;background:#f0f4ff}
+.profile-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;flex-shrink:0}
+.profile-name{font-size:18px;font-weight:800;color:#1a2744;flex:1}
+.profile-meta{font-size:13px;color:#888}
+.profile-active-badge{background:#1a2744;color:#fff;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:700}
+.profile-actions{display:flex;gap:8px}
+
+#childScreen{background:var(--blue-dark);min-height:100vh;padding-bottom:40px}
+.child-header{background:rgba(0,0,0,0.25);padding:14px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap}
+.child-header h1{font-size:20px;color:var(--gold)}
+.profile-name-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:16px;font-size:14px;font-weight:700;color:var(--text-light)}
+.header-right{display:flex;align-items:center;gap:12px;margin-left:auto;padding-right:120px}
+.stars-display{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);padding:8px 16px;border-radius:20px}
+.stars-count{font-family:'Fredoka',cursive;font-size:22px;color:var(--gold)}
+.level-badge{background:linear-gradient(135deg,#2e4a8a,#4a3a8a);padding:8px 14px;border-radius:16px;font-size:12px;font-weight:700;color:#d4b4ff;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.streak-display{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;color:#ff7043}
+
+#mapScreen{padding:20px 24px 120px}
+.map-title{text-align:center;font-size:28px;color:var(--gold);margin-bottom:4px}
+.map-subtitle{text-align:center;color:var(--text-dim);margin-bottom:20px;font-size:14px}
+@keyframes pulse{0%,100%{box-shadow:0 0 12px rgba(255,215,0,0.4)}50%{box-shadow:0 0 28px rgba(255,215,0,0.9)}}
+.road-chapter-done{background:rgba(255,255,255,0.05);border-radius:12px;padding:10px 14px;border:1px solid rgba(255,255,255,0.08);margin-bottom:10px}
+.road-chapter-done-label{font-size:11px;color:#4CAF50;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.done-pins{display:flex;flex-wrap:wrap;gap:6px}
+.done-pin{width:32px;height:32px;border-radius:50%;background:rgba(76,175,80,0.2);border:2px solid #4CAF50;display:flex;align-items:center;justify-content:center;font-size:15px}
+.road-chapter-sky{background:linear-gradient(180deg,#a8d8ea 0%,#a8d8ea 44%,#c5e8b0 44%,#7ec87e 100%);border-radius:14px;padding:16px 16px 14px;margin-bottom:10px}
+.road-chapter-label-sky{font-size:12px;font-weight:700;color:#1e4010;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.stops-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4px}
+.stop{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.stop-pin{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:3px solid #fff;position:relative}
+.stop-pin.done{background:#7ec87e;box-shadow:0 2px 6px rgba(0,0,0,0.15)}
+.stop-pin.curr{background:#ffd96a;box-shadow:0 0 0 4px rgba(255,217,106,0.5);animation:pulse 2s ease-in-out infinite}
+.stop-pin.locked{background:#bbb;opacity:0.4}
+.stop-pin.mystery{background:#ccc;border:3px dashed rgba(255,255,255,0.5);opacity:0.5}
+.stop-chk{position:absolute;bottom:0;right:0;width:15px;height:15px;background:#2e8b2e;border-radius:50%;font-size:8px;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.stop-name{font-size:9px;font-weight:700;color:#1e4010;text-align:center;max-width:64px;line-height:1.2;min-height:20px}
+.stop-name.dim{color:rgba(0,0,0,0.3)}
+.stop-stars{font-size:8px;color:#6b4a00;text-align:center}
+.road-track{height:52px;background:#7a7a7a;border-radius:8px;position:relative;overflow:hidden}
+.road-track::before{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:repeating-linear-gradient(90deg,#ffe066 0,#ffe066 24px,transparent 24px,transparent 44px);transform:translateY(-50%);z-index:1}
+.road-done-overlay{position:absolute;left:0;top:0;bottom:0;background:rgba(100,180,100,0.28);transition:width .6s}
+.bike-wrap{position:absolute;bottom:6px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:2;transition:left .6s}
+.bike-emoji{font-size:28px;line-height:1;display:block;transform:scaleX(-1);filter:drop-shadow(0 2px 2px rgba(0,0,0,0.25))}
+.bike-shadow{width:22px;height:4px;background:rgba(0,0,0,0.2);border-radius:50%;margin-top:-1px}
+.road-teaser{background:rgba(255,255,255,0.04);border:2px dashed rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;text-align:center;margin-bottom:10px}
+.road-teaser-label{font-size:12px;color:var(--text-dim);font-weight:700}
+.road-teaser-hint{font-size:11px;color:rgba(255,215,0,0.6);margin-top:4px}
+.chapter-stars-bar{display:flex;align-items:center;gap:8px;margin-top:10px;background:rgba(255,255,255,0.5);border-radius:16px;padding:6px 12px}
+.chapter-stars-label{font-size:11px;color:#2d5a1b;font-weight:700}
+.chapter-stars-track{flex:1;height:7px;background:rgba(0,0,0,0.1);border-radius:4px;overflow:hidden}
+.chapter-stars-fill{height:100%;background:#ffd96a;border-radius:4px}
+.chapter-stars-count{font-size:11px;font-weight:700;color:#6b4a00}
+
+.practice-section{background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin-bottom:24px}
+.practice-section h3{color:var(--gold);margin-bottom:14px;font-size:18px}
+.set-selector{display:flex;flex-direction:column;gap:14px}
+.all-words-row{display:flex;flex-wrap:wrap;gap:8px}
+.practice-mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.practice-mode-card{background:rgba(255,255,255,0.055);border:1.5px solid rgba(255,255,255,0.14);border-radius:14px;padding:12px;text-align:center}
+.practice-mode-card.active{border-color:var(--gold);background:rgba(255,215,0,0.09)}
+.practice-mode-card.allmix{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,165,0,.18),rgba(255,215,0,.08));border-color:rgba(255,215,0,.55);display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;gap:8px 18px}
+.practice-mode-card.allmix .practice-mode-name{font-size:18px;color:var(--gold)}
+.practice-mode-card.allmix .practice-mode-desc{min-height:0;margin:0}
+.practice-mode-card.allmix .direction-row{grid-column:2;grid-row:1/3}
+.practice-mode-card.allmix .direction-btn{min-width:170px;padding:11px 14px}
+.practice-mode-name{font-weight:800;color:#fff;margin-bottom:3px}
+.practice-mode-desc{font-size:11px;color:var(--text-dim);min-height:32px;margin-bottom:9px}
+.direction-row{display:flex;gap:6px}
+.direction-btn{flex:1;padding:8px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--text-light);font:700 12px 'Nunito',sans-serif;cursor:pointer}
+.direction-btn:hover,.direction-btn.active{background:var(--blue-light);border-color:var(--gold);color:var(--gold)}
+@media(max-width:920px){.practice-mode-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){
+  .practice-mode-grid{grid-template-columns:1fr}
+  .practice-mode-desc{min-height:0}
+  .practice-mode-card.allmix{grid-template-columns:1fr;text-align:center}
+  .practice-mode-card.allmix .direction-row{grid-column:1;grid-row:auto}
+  .practice-mode-card.allmix .direction-btn{min-width:0}
+}
+.book-section{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px}
+.book-title{font-size:13px;font-weight:800;color:var(--gold);margin-bottom:9px;letter-spacing:.2px}
+.book-select-btn{width:100%;text-align:left;background:rgba(255,215,0,.08);border:1.5px solid rgba(255,215,0,.25);border-radius:9px;padding:9px 11px;color:var(--gold);font:800 13px 'Nunito',sans-serif;cursor:pointer;margin-bottom:9px;transition:all .2s}
+.book-select-btn:hover,.book-select-btn.active{background:rgba(255,215,0,.18);border-color:var(--gold);color:#fff}
+.book-chapters{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.chapter-choice{display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,.025);border-radius:11px;padding:7px}
+.chapter-choice .set-btn{width:100%;border-radius:12px;padding:9px 10px}
+.chapter-words-btn{width:100%;padding:8px 10px;border-radius:10px;border:1.5px solid rgba(78,205,196,.35);background:rgba(78,205,196,.08);color:#b9fff8;cursor:pointer;font:700 12px 'Nunito',sans-serif;transition:all .2s}
+.chapter-words-btn:hover,.chapter-words-btn.active{background:rgba(78,205,196,.2);border-color:#4ecdc4;color:#fff}
+.set-btn{padding:10px 18px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.2);background:transparent;color:var(--text-light);cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
+.set-btn:hover,.set-btn.active{background:var(--blue-light);border-color:rgba(255,255,255,0.5);color:#fff}
+.set-btn.active{border-color:var(--gold);color:var(--gold)}
+.empty-words{text-align:center;padding:40px 20px;color:var(--text-dim)}
+.empty-words .empty-icon{font-size:56px;margin-bottom:16px}
+.empty-words p{font-size:16px;margin-bottom:8px}
+
+.start-btn{position:fixed;right:24px;bottom:18px;z-index:450;display:block;margin:0;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#1a2744;font-family:'Fredoka',cursive;font-size:21px;padding:15px 30px;border-radius:16px;border:none;cursor:pointer;box-shadow:0 5px 24px rgba(255,215,0,.55);transition:all .2s;letter-spacing:.5px}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,215,0,0.65)}
+@media(max-width:680px){.start-btn{left:14px;right:14px;bottom:12px;width:calc(100% - 28px);font-size:20px;padding:15px 12px;border-radius:14px}}
+
+#exerciseScreen{padding:20px 24px;max-width:760px;margin:0 auto}
+.exercise-progress{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.exercise-progress-bar{flex:1;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden}
+.exercise-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold));border-radius:5px;transition:width .4s}
+.exercise-counter{font-weight:700;font-size:15px;color:var(--text-dim);white-space:nowrap}
+.exercise-streak{color:var(--gold);font-weight:700}
+
+.exercise-card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px;margin-bottom:20px;text-align:center}
+.exercise-type-label{font-size:13px;color:var(--text-dim);margin-bottom:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.exercise-word{font-family:'Fredoka',cursive;font-size:48px;color:#fff;margin-bottom:8px;line-height:1.1}
+.exercise-emoji{font-size:80px;margin-bottom:12px;display:block}
+.exercise-instruction{font-size:16px;color:var(--text-dim)}
+
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.answer-btn{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.15);color:#fff;font-family:'Nunito',sans-serif;font-size:18px;font-weight:700;padding:18px 16px;border-radius:14px;cursor:pointer;transition:all .2s;min-height:60px}
+.answer-btn:hover:not(:disabled){background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.4);transform:translateY(-1px)}
+.answer-btn.correct{background:rgba(76,175,80,0.25);border-color:#4CAF50;color:#a5d6a7}
+.answer-btn.wrong{background:rgba(231,76,60,0.25);border-color:#e74c3c;color:#ef9a9a;animation:shake .4s}
+.answer-btn.reveal{background:rgba(76,175,80,0.2);border-color:#4CAF50}
+.answer-btn:disabled{cursor:default}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.emoji-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.emoji-choice{background:rgba(255,255,255,0.07);border:2.5px solid rgba(255,255,255,0.15);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:120px;justify-content:center}
+.emoji-choice:hover:not(:disabled){background:rgba(255,255,255,0.14);transform:scale(1.03)}
+.emoji-choice .big-emoji{font-size:60px}
+.emoji-choice .choice-word{font-size:16px;font-weight:700;color:var(--text-dim)}
+.emoji-choice.correct{background:rgba(76,175,80,0.25);border-color:#4CAF50}
+.emoji-choice.wrong{background:rgba(231,76,60,0.25);border-color:#e74c3c;animation:shake .4s}
+.emoji-choice.reveal{background:rgba(76,175,80,0.2);border-color:#4CAF50}
+
+.listen-area{text-align:center;padding:16px 0}
+.listen-btn{background:linear-gradient(135deg,#2e4a8a,#4a6ac8);border:none;border-radius:50%;width:90px;height:90px;font-size:40px;cursor:pointer;margin:0 auto;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 4px 20px rgba(46,74,138,0.4)}
+.listen-btn:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(46,74,138,0.6)}
+.listen-hint{font-size:14px;color:var(--text-dim);margin-top:10px}
+
+.answer-area{min-height:64px;background:rgba(0,0,0,0.2);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;transition:border .2s}
+.answer-area.correct-border{border-color:#4CAF50}
+.answer-area.wrong-border{border-color:#e74c3c;animation:shake .4s}
+.answer-placeholder{color:rgba(255,255,255,0.2);font-size:15px;pointer-events:none}
+.tile-area{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
+.tile{background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);color:#fff;font-family:'Nunito',sans-serif;font-size:17px;font-weight:700;padding:12px 18px;border-radius:10px;cursor:pointer;transition:all .2s;user-select:none}
+.tile:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px)}
+.tile.in-answer{background:linear-gradient(135deg,#243560,#2e4a8a);border-color:#4a7ad4}
+.check-btn{display:block;margin:0 auto;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#1a2744;font-family:'Fredoka',cursive;font-size:20px;padding:14px 36px;border-radius:14px;border:none;cursor:pointer;transition:all .2s}
+.check-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,215,0,0.4)}
+.check-btn:disabled{opacity:.5;cursor:default;transform:none}
+
+.feedback-flash{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.feedback-flash.show{opacity:1}
+.feedback-flash.correct-flash{background:radial-gradient(ellipse at center,rgba(76,175,80,0.25) 0%,transparent 70%)}
+.feedback-flash.wrong-flash{background:radial-gradient(ellipse at center,rgba(231,76,60,0.25) 0%,transparent 70%)}
+.feedback-text{font-family:'Fredoka',cursive;font-size:64px;text-shadow:0 2px 12px rgba(0,0,0,0.5)}
+
+.confetti-container{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:600;overflow:hidden}
+.confetti-piece{position:absolute;width:10px;height:10px;opacity:0;animation:confettiFall 1.2s ease-out forwards}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+#resultsScreen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 70px);padding:24px}
+.results-card{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:24px;padding:40px;text-align:center;max-width:500px;width:100%}
+.results-title{font-size:38px;color:var(--gold);margin-bottom:22px}
+.results-stars{display:none}
+.results-earned{font-size:28px;font-weight:800;color:var(--gold)}
+.results-label{color:var(--text-dim);margin-bottom:24px;font-size:16px}
+.results-score{font-size:18px;margin-bottom:28px;color:var(--text-light)}
+.results-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:12px 22px;border-radius:10px;font-size:15px;z-index:2000;opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.error{background:#c62828}
+.toast.success{background:#2e7d32}
+
+.home-btn{background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:8px 16px;border-radius:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
+.home-btn:hover{background:rgba(255,255,255,0.18)}
+
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#fff;border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-box h3{color:#1a2744;margin-bottom:16px;font-size:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+
+#childScreen.beginner-mode .exercise-word,
+#childScreen.beginner-mode .answer-btn,
+#childScreen.beginner-mode .exercise-type-label,
+#childScreen.beginner-mode .exercise-instruction,
+#childScreen.beginner-mode .set-btn,
+#childScreen.beginner-mode .map-title,
+#childScreen.beginner-mode .map-subtitle,
+#childScreen.beginner-mode .stage-name,
+#childScreen.beginner-mode .profile-name-badge,
+#childScreen.beginner-mode .level-badge{text-transform:uppercase;letter-spacing:.5px}
+#childScreen.beginner-mode .exercise-word{font-size:52px}
+#childScreen.beginner-mode .answer-btn{font-size:20px}
+#childScreen.beginner-mode .big-emoji{font-size:72px}
+.levelup-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%) scale(0.8);background:linear-gradient(135deg,#c8900a,#ffd700);color:#1a2744;padding:16px 32px;border-radius:16px;font-family:'Fredoka',cursive;font-size:26px;z-index:700;opacity:0;pointer-events:none;transition:all .4s;box-shadow:0 8px 32px rgba(255,215,0,0.5);white-space:nowrap}
+.levelup-banner.show{opacity:1;transform:translateX(-50%) scale(1)}
+
+@media(max-width:640px){
+  .form-row,.form-row.three{grid-template-columns:1fr}
+  .answers,.emoji-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr}
+  .exercise-word{font-size:36px}
+  .exercise-emoji{font-size:60px}
+  .stage-circle{width:60px;height:60px;font-size:22px}
+  .map-connector{width:24px}
+}
+</style>
+</head>
+<body>
+
+<button id="modeBtn" onclick="toggleMode()">👨‍👩‍👧 Rodič</button>
+
+<!-- CHILD SCREEN -->
+<div id="childScreen" class="screen active">
+  <div class="child-header">
+    <h1 class="game-font">🌍 Výprava za slovíčky</h1>
+    <div class="profile-name-badge" id="profileNameBadge" onclick="cycleProfile()" style="cursor:pointer" title="Klikni pro přepnutí profilu">Terézka</div>
+    <div class="header-right">
+      <button id="muteBtn" onclick="toggleMute()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:7px 14px;border-radius:10px;cursor:pointer;font-size:18px;transition:all .2s">🔊</button>
+      <div class="streak-display" id="streakDisplay">🔥 1</div>
+      <div class="stars-display">
+        <span style="font-size:20px">⭐</span>
+        <span class="stars-count" id="starsCount">0</span>
+      </div>
+      <div class="level-badge" id="levelBadge">Začátečník průzkumník</div>
+    </div>
+  </div>
+
+  <div id="mapScreen">
+    <div class="map-title">🚲 Tvoje výprava</div>
+    <div class="map-subtitle">Sbírej hvězdičky a jeď dál po pohádkové cestě!</div>
+    <div id="worldMap"></div>
+    <div id="noWordsMsg" style="display:none" class="empty-words">
+      <div class="empty-icon">📚</div>
+      <p>Zatím tu nejsou žádná slovíčka.</p>
+      <p style="font-size:14px;color:var(--text-dim)">Popros rodiče, aby přidal slovíčka v rodičovském režimu.</p>
+    </div>
+    <div class="practice-section">
+      <h3>📚 Vyber učebnici, kapitolu nebo způsob procvičování</h3>
+      <div class="set-selector" id="setSelector"></div>
+    </div>
+    <button class="start-btn" id="startBtn" onclick="startSession()">🚲 Vyrazit na výpravu!</button>
+  </div>
+
+  <div id="exerciseScreen" style="display:none">
+    <div class="exercise-progress">
+      <button class="home-btn" onclick="goHome()">🏠 Domů</button>
+      <div class="exercise-progress-bar">
+        <div class="exercise-progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="exercise-counter" id="exerciseCounter">1 / 10</div>
+      <div class="exercise-streak" id="sessionStreak"></div>
+    </div>
+    <div id="exerciseContent"></div>
+  </div>
+
+  <div id="resultsScreen" style="display:none">
+    <div class="results-card">
+      <div class="results-title game-font">🎉 Výprava dokončena!</div>
+      <div class="results-stars" id="resultsStars">⭐</div>
+      <div class="results-earned" id="resultsEarned">+5 hvězdiček</div>
+      <div class="results-label">Celkem: <span id="resultsTotalStars">0</span> hvězdiček</div>
+      <div class="results-score" id="resultsScore"></div>
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startSession()" style="font-size:18px;padding:14px 28px">🔄 Hrát znovu</button>
+        <button class="btn btn-secondary" onclick="goHome()" style="font-size:18px;padding:14px 28px">🗺️ Zpět na mapu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PIN SCREEN -->
+<div id="pinScreen" style="display:none">
+  <div class="pin-box">
+    <div style="font-size:48px;margin-bottom:12px">🔐</div>
+    <h2>Rodičovský režim</h2>
+    <p>Zadej PIN kód pro vstup</p>
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot" id="dot0"></div>
+      <div class="pin-dot" id="dot1"></div>
+      <div class="pin-dot" id="dot2"></div>
+      <div class="pin-dot" id="dot3"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key" onclick="pinClear()">⌫</button>
+      <button class="pin-key" onclick="pinPress('0')">0</button>
+      <button class="pin-key" onclick="pinSubmit()">✓</button>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+    <button class="btn btn-secondary" onclick="cancelPin()" style="margin-top:16px;width:100%">Zpět</button>
+  </div>
+</div>
+
+<!-- PARENT SCREEN -->
+<div id="parentScreen" class="screen" style="display:none">
+  <div class="parent-header">
+    <h1>🔐 Rodičovský režim</h1>
+    <span id="parentActiveProfile" style="background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:12px;font-size:14px;font-weight:700"></span>
+    <button class="btn btn-secondary btn-sm" onclick="lockParent()">Zamknout</button>
+  </div>
+  <div class="parent-tabs">
+    <button class="parent-tab active" onclick="showParentTab('profiles')" id="tab-profiles">👤 Profily</button>
+    <button class="parent-tab" onclick="showParentTab('words')" id="tab-words">📚 Slovíčka</button>
+    <button class="parent-tab" onclick="showParentTab('progress')" id="tab-progress">📊 Pokrok</button>
+    <button class="parent-tab" onclick="showParentTab('settings')" id="tab-settings">⚙️ Nastavení</button>
+  </div>
+  <div class="parent-content" id="parentContent"></div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay hidden" id="editModal">
+  <div class="modal-box">
+    <h3>✏️ Upravit slovíčko</h3>
+    <div class="form-group" style="margin-bottom:10px"><label>Anglicky</label><input type="text" id="editEn"></div>
+    <div class="form-group" style="margin-bottom:10px"><label>Česky</label><input type="text" id="editCs"></div>
+    <div class="form-group" style="margin-bottom:10px"><label>Emoji</label><input type="text" id="editEmoji" style="width:80px"></div>
+    <div class="form-row" style="margin-bottom:10px">
+      <div class="form-group"><label>Lekce</label><input type="text" id="editUnit"></div>
+      <div class="form-group"><label>Kategorie</label><input type="text" id="editCategory"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:10px"><label>Typ slova</label>
+      <select id="editType">
+        <option value="noun">Podstatné jméno</option>
+        <option value="verb">Sloveso</option>
+        <option value="adjective">Přídavné jméno</option>
+        <option value="number">Číslovka</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeEditModal()">Zrušit</button>
+      <button class="btn btn-primary" onclick="saveEditModal()">Uložit</button>
+    </div>
+  </div>
+</div>
+
+<div class="feedback-flash" id="feedbackFlash"><div class="feedback-text" id="feedbackText"></div></div>
+<div class="confetti-container" id="confettiContainer"></div>
+<div class="toast" id="toast"></div>
+<div class="levelup-banner" id="levelupBanner"></div>
+
+<script>
+// ============================================================
+// DEFAULT VOCAB
+// ============================================================
+const DEFAULT_VOCAB = [
+  {en:"eleven",cs:"jedenáct",emoji:"1️⃣1️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"twelve",cs:"dvanáct",emoji:"1️⃣2️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"thirteen",cs:"třináct",emoji:"1️⃣3️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"fourteen",cs:"čtrnáct",emoji:"1️⃣4️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"fifteen",cs:"patnáct",emoji:"1️⃣5️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"sixteen",cs:"šestnáct",emoji:"1️⃣6️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"seventeen",cs:"sedmnáct",emoji:"1️⃣7️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"eighteen",cs:"osmnáct",emoji:"1️⃣8️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"nineteen",cs:"devatenáct",emoji:"1️⃣9️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"twenty",cs:"dvacet",emoji:"2️⃣0️⃣",unit:"Hello",category:"Numbers 11-20",type:"number"},
+  {en:"run",cs:"běžet",emoji:"🏃",unit:"Unit 1",category:"Action verbs",type:"verb"},
+  {en:"jump",cs:"skákat",emoji:"🦘",unit:"Unit 1",category:"Action verbs",type:"verb"},
+  {en:"climb",cs:"šplhat",emoji:"🧗",unit:"Unit 1",category:"Action verbs",type:"verb"},
+  {en:"dance",cs:"tančit",emoji:"💃",unit:"Unit 1",category:"Action verbs",type:"verb"},
+  {en:"rollerblade",cs:"bruslit na inline bruslích",emoji:"🛼",unit:"Unit 1",category:"Action verbs",type:"verb"},
+  {en:"ride a bike",cs:"jezdit na kole",emoji:"🚴",unit:"Unit 1",category:"Action verbs",type:"verb"},
+  {en:"hot",cs:"horký",emoji:"🔥",unit:"Unit 1",category:"Adjectives",type:"adjective"},
+  {en:"cold",cs:"studený",emoji:"🥶",unit:"Unit 1",category:"Adjectives",type:"adjective"},
+  {en:"hungry",cs:"hladový",emoji:"😋",unit:"Unit 1",category:"Adjectives",type:"adjective"},
+  {en:"thirsty",cs:"žíznivý",emoji:"🥤",unit:"Unit 1",category:"Adjectives",type:"adjective"},
+  {en:"train",cs:"vlak",emoji:"🚂",unit:"Unit 2",category:"Transport",type:"noun"},
+  {en:"plane",cs:"letadlo",emoji:"✈️",unit:"Unit 2",category:"Transport",type:"noun"},
+  {en:"bus",cs:"autobus",emoji:"🚌",unit:"Unit 2",category:"Transport",type:"noun"},
+  {en:"lorry",cs:"nákladní auto",emoji:"🚛",unit:"Unit 2",category:"Transport",type:"noun"},
+  {en:"motorbike",cs:"motorka",cs_acc:"motorku",emoji:"🏍️",unit:"Unit 2",category:"Transport",type:"noun"},
+  {en:"taxi",cs:"taxi",emoji:"🚕",unit:"Unit 2",category:"Transport",type:"noun"},
+  {en:"slow",cs:"pomalý",emoji:"🐢",unit:"Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"fast",cs:"rychlý",emoji:"⚡",unit:"Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"long",cs:"dlouhý",emoji:"📏",unit:"Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"short",cs:"krátký",emoji:"📐",unit:"Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"bathroom",cs:"koupelna",cs_acc:"koupelnu",emoji:"🛁",unit:"Unit 3",category:"Rooms",type:"noun"},
+  {en:"bedroom",cs:"ložnice",cs_acc:"ložnici",emoji:"🛏️",unit:"Unit 3",category:"Rooms",type:"noun"},
+  {en:"kitchen",cs:"kuchyně",cs_acc:"kuchyni",emoji:"🍳",unit:"Unit 3",category:"Rooms",type:"noun"},
+  {en:"hall",cs:"chodba",cs_acc:"chodbu",emoji:"🚪",unit:"Unit 3",category:"Rooms",type:"noun"},
+  {en:"living room",cs:"obývací pokoj",emoji:"🛋️",unit:"Unit 3",category:"Rooms",type:"noun"},
+  {en:"garden",cs:"zahrada",cs_acc:"zahradu",emoji:"🌻",unit:"Unit 3",category:"Rooms",type:"noun"},
+  {en:"cupboard",cs:"skříň",emoji:"🗄️",unit:"Unit 3",category:"Furniture",type:"noun"},
+  {en:"box",cs:"krabice",cs_acc:"krabici",emoji:"📦",unit:"Unit 3",category:"Furniture",type:"noun"},
+  {en:"table",cs:"stůl",emoji:"🪑",unit:"Unit 3",category:"Furniture",type:"noun",noEmoji:true},
+  {en:"bed",cs:"postel",emoji:"🛏️",unit:"Unit 3",category:"Furniture",type:"noun"},
+  {en:"snake",cs:"had",cs_acc:"hada",emoji:"🐍",unit:"Unit 4",category:"Animals",type:"noun"},
+  {en:"bat",cs:"netopýr",cs_acc:"netopýra",emoji:"🦇",unit:"Unit 4",category:"Animals",type:"noun"},
+  {en:"fox",cs:"liška",cs_acc:"lišku",emoji:"🦊",unit:"Unit 4",category:"Animals",type:"noun"},
+  {en:"hedgehog",cs:"ježek",cs_acc:"ježka",emoji:"🦔",unit:"Unit 4",category:"Animals",type:"noun"},
+  {en:"mouse",cs:"myš",emoji:"🐭",unit:"Unit 4",category:"Animals",type:"noun"},
+  {en:"frog",cs:"žába",cs_acc:"žábu",emoji:"🐸",unit:"Unit 4",category:"Animals",type:"noun"},
+  {en:"walk",cs:"chodit",emoji:"🚶",unit:"Unit 4",category:"Verbs",type:"verb"},
+  {en:"swim",cs:"plavat",emoji:"🏊",unit:"Unit 4",category:"Verbs",type:"verb"},
+  {en:"fly",cs:"létat",emoji:"🕊️",unit:"Unit 4",category:"Verbs",type:"verb"},
+  {en:"sing",cs:"zpívat",emoji:"🎵",unit:"Unit 4",category:"Verbs",type:"verb"},
+  {en:"wings",cs:"křídla",emoji:"🪶",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"head",cs:"hlava",cs_acc:"hlavu",emoji:"🫠",unit:"Unit 5",category:"Parts of the body",type:"noun"},
+  {en:"teeth",cs:"zuby",emoji:"🦷",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"tail",cs:"ocas",emoji:"🦓",unit:"Unit 5",category:"Parts of the body",type:"noun"},
+  {en:"legs",cs:"nohy",emoji:"🦵",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"arms",cs:"paže",emoji:"💪",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"ears",cs:"uši",emoji:"👂",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"nose",cs:"nos",emoji:"👃",unit:"Unit 5",category:"Parts of the body",type:"noun"},
+  {en:"mouth",cs:"ústa",emoji:"👄",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"eyes",cs:"oči",emoji:"👀",unit:"Unit 5",category:"Parts of the body",type:"noun",plural:true},
+  {en:"red",cs:"červená",emoji:"🔴",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"brown",cs:"hnědá",emoji:"🟤",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"yellow",cs:"žlutá",emoji:"🟡",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"black",cs:"černá",emoji:"⚫",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"blue",cs:"modrá",emoji:"🔵",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"grey",cs:"šedá",emoji:"🩶",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"white",cs:"bílá",emoji:"⚪",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"pink",cs:"růžová",emoji:"🩷",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"green",cs:"zelená",emoji:"🟢",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"orange",cs:"oranžová",emoji:"🟠",unit:"L1 Hello",category:"Colours",type:"adjective"},
+  {en:"pencil case",cs:"penál",emoji:"🖊️",unit:"L1 Unit 1",category:"School items",type:"noun"},
+  {en:"pen",cs:"pero",emoji:"🖊️",unit:"L1 Unit 1",category:"School items",type:"noun"},
+  {en:"bag",cs:"taška",cs_acc:"tašku",emoji:"🎒",unit:"L1 Unit 1",category:"School items",type:"noun"},
+  {en:"pencil",cs:"tužka",cs_acc:"tužku",emoji:"✏️",unit:"L1 Unit 1",category:"School items",type:"noun"},
+  {en:"rubber",cs:"guma",cs_acc:"gumu",emoji:"🩹",unit:"L1 Unit 1",category:"School items",type:"noun"},
+  {en:"book",cs:"kniha",cs_acc:"knihu",emoji:"📚",unit:"L1 Unit 1",category:"School items",type:"noun"},
+  {en:"chair",cs:"židle",cs_acc:"židli",emoji:"🪑",unit:"L1 Unit 1",category:"Classroom items",type:"noun"},
+  {en:"notebook",cs:"sešit",emoji:"📓",unit:"L1 Unit 1",category:"Classroom items",type:"noun"},
+  {en:"crayon",cs:"voskovka",cs_acc:"voskovku",emoji:"🖍️",unit:"L1 Unit 1",category:"Classroom items",type:"noun"},
+  {en:"ruler",cs:"pravítko",emoji:"📏",unit:"L1 Unit 1",category:"Classroom items",type:"noun"},
+  {en:"bike",cs:"kolo",emoji:"🚲",unit:"L1 Unit 2",category:"Toys",type:"noun"},
+  {en:"ball",cs:"míč",emoji:"⚽",unit:"L1 Unit 2",category:"Toys",type:"noun"},
+  {en:"guitar",cs:"kytara",cs_acc:"kytaru",emoji:"🎸",unit:"L1 Unit 2",category:"Toys",type:"noun"},
+  {en:"doll",cs:"panenka",cs_acc:"panenku",emoji:"🪆",unit:"L1 Unit 2",category:"Toys",type:"noun"},
+  {en:"car",cs:"auto",emoji:"🚗",unit:"L1 Unit 2",category:"Toys",type:"noun"},
+  {en:"scooter",cs:"koloběžka",cs_acc:"koloběžku",emoji:"🛴",unit:"L1 Unit 2",category:"Toys",type:"noun"},
+  {en:"big",cs:"velký",emoji:"🐘",unit:"L1 Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"small",cs:"malý",emoji:"🐭",unit:"L1 Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"old",cs:"starý",emoji:"👴",unit:"L1 Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"new",cs:"nový",emoji:"✨",unit:"L1 Unit 2",category:"Adjectives",type:"adjective"},
+  {en:"chicken",cs:"slepice",cs_acc:"slepici",emoji:"🐔",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"cat",cs:"kočka",cs_acc:"kočku",emoji:"🐱",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"cow",cs:"kráva",cs_acc:"krávu",emoji:"🐮",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"horse",cs:"kůň",cs_acc:"koně",emoji:"🐴",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"goat",cs:"koza",cs_acc:"kozu",emoji:"🐐",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"sheep",cs:"ovce",cs_acc:"ovci",emoji:"🐑",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"farm",cs:"statek",emoji:"🏡",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"tractor",cs:"traktor",emoji:"🚜",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"duck",cs:"kachna",cs_acc:"kachnu",emoji:"🦆",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"rabbit",cs:"králík",cs_acc:"králíka",emoji:"🐰",unit:"L1 Unit 3",category:"The Farm",type:"noun"},
+  {en:"mum",cs:"maminka",cs_acc:"maminku",emoji:"👩",unit:"L1 Unit 4",category:"Family",type:"noun"},
+  {en:"granny",cs:"babička",cs_acc:"babičku",emoji:"👵",unit:"L1 Unit 4",category:"Family",type:"noun"},
+  {en:"dad",cs:"tatínek",cs_acc:"tatínka",emoji:"👨",unit:"L1 Unit 4",category:"Family",type:"noun"},
+  {en:"sister",cs:"sestra",cs_acc:"sestru",emoji:"👧",unit:"L1 Unit 4",category:"Family",type:"noun"},
+  {en:"brother",cs:"bratr",cs_acc:"bratra",emoji:"👦",unit:"L1 Unit 4",category:"Family",type:"noun"},
+  {en:"grandad",cs:"dědeček",cs_acc:"dědečka",emoji:"👴",unit:"L1 Unit 4",category:"Family",type:"noun"},
+  {en:"tired",cs:"unavený",emoji:"😴",unit:"L1 Unit 4",category:"Feelings",type:"adjective"},
+  {en:"happy",cs:"šťastný",emoji:"😊",unit:"L1 Unit 4",category:"Feelings",type:"adjective"},
+  {en:"sad",cs:"smutný",emoji:"😢",unit:"L1 Unit 4",category:"Feelings",type:"adjective"},
+  {en:"angry",cs:"naštvaný",emoji:"😠",unit:"L1 Unit 4",category:"Feelings",type:"adjective"},
+  {en:"bananas",cs:"banány",emoji:"🍌",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"apples",cs:"jablka",emoji:"🍎",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"cakes",cs:"dortíčky",emoji:"🎂",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"tomatoes",cs:"rajčata",emoji:"🍅",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"sausages",cs:"klobásy",emoji:"🌭",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"pears",cs:"hrušky",emoji:"🍐",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"peaches",cs:"broskve",emoji:"🍑",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"melons",cs:"melouny",emoji:"🍈",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"olives",cs:"olivy",emoji:"🫒",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  {en:"oranges",cs:"pomeranče",emoji:"🍊",unit:"L1 Unit 5",category:"Food",type:"noun",plural:true},
+  // Let's Explore 3
+  // Unit 1 - Clothes
+  {en:"coat",cs:"kabát",emoji:"🧥",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"trousers",cs:"kalhoty",emoji:"👖",unit:"L3 Unit 1",category:"Clothes",type:"noun",plural:true},
+  {en:"skirt",cs:"sukně",cs_acc:"sukni",emoji:"👗",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"shirt",cs:"košile",cs_acc:"košili",emoji:"👔",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"shoes",cs:"boty",emoji:"👟",unit:"L3 Unit 1",category:"Clothes",type:"noun",plural:true},
+  {en:"socks",cs:"ponožky",emoji:"🧦",unit:"L3 Unit 1",category:"Clothes",type:"noun",plural:true},
+  {en:"hat",cs:"klobouk",emoji:"🎩",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"jacket",cs:"bunda",cs_acc:"bundu",emoji:"🧥",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"dress",cs:"šaty",emoji:"👗",unit:"L3 Unit 1",category:"Clothes",type:"noun",plural:true},
+  {en:"boots",cs:"holínky",emoji:"👢",unit:"L3 Unit 1",category:"Clothes",type:"noun",plural:true},
+  {en:"scarf",cs:"šála",cs_acc:"šálu",emoji:"🧣",unit:"L3 Unit 1",category:"Clothes",type:"noun"},
+  {en:"gloves",cs:"rukavice",emoji:"🧤",unit:"L3 Unit 1",category:"Clothes",type:"noun",plural:true},
+  // Unit 2 - Wild animals
+  {en:"elephant",cs:"slon",cs_acc:"slona",emoji:"🐘",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"giraffe",cs:"žirafa",cs_acc:"žirafu",emoji:"🦒",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"tiger",cs:"tygr",cs_acc:"tygra",emoji:"🐯",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"lion",cs:"lev",cs_acc:"lva",emoji:"🦁",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"monkey",cs:"opice",cs_acc:"opici",emoji:"🐒",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"zebra",cs:"zebra",cs_acc:"zebru",emoji:"🦓",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"crocodile",cs:"krokodýl",cs_acc:"krokodýla",emoji:"🐊",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"parrot",cs:"papoušek",cs_acc:"papouška",emoji:"🦜",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"penguin",cs:"tučňák",cs_acc:"tučňáka",emoji:"🐧",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  {en:"hippo",cs:"hroch",cs_acc:"hrocha",emoji:"🦛",unit:"L3 Unit 2",category:"Wild animals",type:"noun"},
+  // Unit 3 - Sports and hobbies
+  {en:"play football",cs:"hrát fotbal",emoji:"⚽",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"play tennis",cs:"hrát tenis",emoji:"🎾",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"go swimming",cs:"jít plavat",cs_verb:"plavat",emoji:"🏊",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"go cycling",cs:"jezdit na kole",cs_verb:"jezdit na kole",emoji:"🚴",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"do gymnastics",cs:"dělat gymnastiku",emoji:"🤸",unit:"L3 Unit 3",category:"Sports",type:"verb"},
+  {en:"paint pictures",cs:"malovat obrázky",emoji:"🎨",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
+  {en:"read books",cs:"číst knihy",emoji:"📚",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
+  {en:"play computer games",cs:"hrát počítačové hry",emoji:"🎮",unit:"L3 Unit 3",category:"Hobbies",type:"verb"},
+  // Unit 4 - Daily routine (noSentence: true - "I can wake up" nedává smysl)
+  {en:"wake up",cs:"vzbudit se",emoji:"⏰",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"get up",cs:"vstát",emoji:"🛏️",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"have breakfast",cs:"snídat",emoji:"🥣",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"go to school",cs:"jít do školy",emoji:"🎒",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"have lunch",cs:"obědvat",emoji:"🍱",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"do homework",cs:"dělat domácí úkoly",emoji:"📝",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"have dinner",cs:"večeřet",emoji:"🍽️",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  {en:"go to bed",cs:"jít spát",emoji:"🌙",unit:"L3 Unit 4",category:"Daily routine",type:"verb",noSentence:true},
+  // Unit 5 - Town and places
+  {en:"park",cs:"park",emoji:"🌳",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"hospital",cs:"nemocnice",cs_acc:"nemocnici",emoji:"🏥",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"library",cs:"knihovna",cs_acc:"knihovnu",emoji:"📖",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"cinema",cs:"kino",emoji:"🎬",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"supermarket",cs:"supermarket",emoji:"🛒",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"restaurant",cs:"restaurace",cs_acc:"restauraci",emoji:"🍴",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"swimming pool",cs:"bazén",emoji:"🏊",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  {en:"street",cs:"ulice",cs_acc:"ulici",emoji:"🛣️",unit:"L3 Unit 5",category:"Town",type:"noun"},
+  // Unit 6 - Weather and seasons
+  {en:"sunny",cs:"slunečno",emoji:"☀️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"cloudy",cs:"oblačno",emoji:"☁️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"rainy",cs:"deštivo",emoji:"🌧️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"windy",cs:"větrno",emoji:"💨",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"snowy",cs:"sněživo",emoji:"❄️",unit:"L3 Unit 6",category:"Weather",type:"adjective"},
+  {en:"spring",cs:"jaro",emoji:"🌸",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"summer",cs:"léto",emoji:"🌞",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"autumn",cs:"podzim",emoji:"🍂",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  {en:"winter",cs:"zima",cs_acc:"zimu",emoji:"⛄",unit:"L3 Unit 6",category:"Seasons",type:"noun"},
+  // Explore Together 1 — official Oxford Picture Dictionary
+  // Hello
+  {en:"Monday",cs:"pondělí",emoji:"😩",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Tuesday",cs:"úterý",emoji:"📅",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Wednesday",cs:"středa",emoji:"🐪",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Thursday",cs:"čtvrtek",emoji:"⚡",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Friday",cs:"pátek",emoji:"🎉",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Saturday",cs:"sobota",emoji:"🛋️",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Sunday",cs:"neděle",emoji:"☀️",unit:"ET1 Hello",category:"Days",type:"noun",noSentence:true,noEmoji:true},
+  {en:"binoculars",cs:"dalekohled",emoji:"🔭",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
+  {en:"camera",cs:"fotoaparát",emoji:"📷",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
+  {en:"map",cs:"mapa",cs_acc:"mapu",emoji:"🗺️",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
+  {en:"torch",cs:"baterka",cs_acc:"baterku",emoji:"🔦",unit:"ET1 Hello",category:"In my backpack",type:"noun"},
+  {en:"watch",cs:"hodinky",emoji:"⌚",unit:"ET1 Hello",category:"In my backpack",type:"noun",plural:true},
+  // Unit 1
+  {en:"bird",cs:"pták",cs_acc:"ptáka",emoji:"🐦",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"flower",cs:"květina",cs_acc:"květinu",emoji:"🌸",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"house",cs:"dům",emoji:"🏠",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"lake",cs:"jezero",emoji:"🏞️",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"mountain",cs:"hora",cs_acc:"horu",emoji:"⛰️",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"tree",cs:"strom",emoji:"🌳",unit:"ET1 Unit 1",category:"Outdoors, part I",type:"noun"},
+  {en:"boat",cs:"loď",cs_acc:"loď",emoji:"⛵",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  {en:"fish",cs:"ryba",cs_acc:"rybu",emoji:"🐟",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  {en:"river",cs:"řeka",cs_acc:"řeku",emoji:"🏞️",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  {en:"tent",cs:"stan",emoji:"⛺",unit:"ET1 Unit 1",category:"Outdoors, part II",type:"noun"},
+  // Unit 2
+  {en:"chicken",cs:"slepice",cs_acc:"slepici",emoji:"🐔",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"fish",cs:"ryba",cs_acc:"rybu",emoji:"🐟",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"ham",cs:"šunka",cs_acc:"šunku",emoji:"🍖",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"juice",cs:"džus",emoji:"🧃",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"mushrooms",cs:"houby",emoji:"🍄",unit:"ET1 Unit 2",category:"Food and drink",type:"noun",plural:true},
+  {en:"onions",cs:"cibule",emoji:"🧅",unit:"ET1 Unit 2",category:"Food and drink",type:"noun",plural:true},
+  {en:"peppers",cs:"papriky",emoji:"🫑",unit:"ET1 Unit 2",category:"Food and drink",type:"noun",plural:true},
+  {en:"pizza",cs:"pizza",cs_acc:"pizzu",emoji:"🍕",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"salad",cs:"salát",emoji:"🥗",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  {en:"soup",cs:"polévka",cs_acc:"polévku",emoji:"🥣",unit:"ET1 Unit 2",category:"Food and drink",type:"noun"},
+  // Unit 3
+  {en:"grass",cs:"tráva",cs_acc:"trávu",emoji:"🌿",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
+  {en:"leaf",cs:"list",emoji:"🍃",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
+  {en:"stick",cs:"klacík",emoji:"🪵",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
+  {en:"stone",cs:"kámen",emoji:"🪨",unit:"ET1 Unit 3",category:"In the garden",type:"noun"},
+  {en:"ant",cs:"mravenec",cs_acc:"mravence",emoji:"🐜",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
+  {en:"bee",cs:"včela",cs_acc:"včelu",emoji:"🐝",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
+  {en:"beetle",cs:"brouk",cs_acc:"brouka",emoji:"🪲",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
+  {en:"butterfly",cs:"motýl",cs_acc:"motýla",emoji:"🦋",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
+  {en:"grasshopper",cs:"kobylka",cs_acc:"kobylku",emoji:"🦗",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
+  {en:"insects",cs:"hmyz",emoji:"🐞",unit:"ET1 Unit 3",category:"Small creatures",type:"noun"},
+  // Unit 4
+  {en:"boots",cs:"holínky",emoji:"👢",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"dress",cs:"šaty",emoji:"👗",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"hat",cs:"klobouk",emoji:"🎩",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"jacket",cs:"bunda",cs_acc:"bundu",emoji:"🧥",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"jumper",cs:"svetr",emoji:"🧶",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"shoes",cs:"boty",emoji:"👟",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"shorts",cs:"kraťasy",emoji:"🩳",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"skirt",cs:"sukně",cs_acc:"sukni",emoji:"👗",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  {en:"trousers",cs:"kalhoty",emoji:"👖",unit:"ET1 Unit 4",category:"Clothes",type:"noun",plural:true},
+  {en:"T-shirt",cs:"tričko",emoji:"👕",unit:"ET1 Unit 4",category:"Clothes",type:"noun"},
+  // Unit 5
+  {en:"bucket",cs:"kbelík",emoji:"🪣",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"sand",cs:"písek",emoji:"🏖️",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"sandcastle",cs:"hrad z písku",emoji:"🏰",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"sea",cs:"moře",emoji:"⛵",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"spade",cs:"lopatka",cs_acc:"lopatku",emoji:"⛏️",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"towel",cs:"ručník",emoji:"🏖️",unit:"ET1 Unit 5",category:"At the beach, part I",type:"noun"},
+  {en:"clean",cs:"čistý",emoji:"✨",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  {en:"dirty",cs:"špinavý",emoji:"🪣",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  {en:"dry",cs:"suchý",emoji:"☀️",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  {en:"wet",cs:"mokrý",emoji:"💧",unit:"ET1 Unit 5",category:"At the beach, part II",type:"adjective"},
+  // Explore Together 2 — official Oxford Picture Dictionary
+  // Hello
+  {en:"red",cs:"červená",emoji:"🔴",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"orange",cs:"oranžová",emoji:"🟠",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"yellow",cs:"žlutá",emoji:"🟡",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"black",cs:"černá",emoji:"⚫",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"white",cs:"bílá",emoji:"⚪",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"green",cs:"zelená",emoji:"🟢",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"blue",cs:"modrá",emoji:"🔵",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"purple",cs:"fialová",emoji:"🟣",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"pink",cs:"růžová",emoji:"🩷",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"brown",cs:"hnědá",emoji:"🟤",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"grey",cs:"šedá",emoji:"🩶",unit:"ET2 Hello",category:"Colours",type:"adjective"},
+  {en:"Sam",cs:"Sam",emoji:"👦",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Lucy",cs:"Lucy",emoji:"👧",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Carla",cs:"Carla",emoji:"👧",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Sophie",cs:"Sophie",emoji:"👧",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Nick",cs:"Nick",emoji:"👦",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  {en:"Mike",cs:"Mike",emoji:"👦",unit:"ET2 Hello",category:"Meet the characters",type:"noun",noSentence:true,noEmoji:true},
+  // Unit 1
+  {en:"skateboard",cs:"jezdit na skateboardu",emoji:"🛹",unit:"ET2 Unit 1",category:"Activities",type:"verb",noSentence:true},
+  {en:"dive",cs:"potápět se",emoji:"🤿",unit:"ET2 Unit 1",category:"Activities",type:"verb",noSentence:true},
+  {en:"draw",cs:"kreslit",emoji:"🖊️",unit:"ET2 Unit 1",category:"Activities",type:"verb"},
+  {en:"skate",cs:"bruslit",emoji:"⛸️",unit:"ET2 Unit 1",category:"Activities",type:"verb"},
+  {en:"paint",cs:"malovat",emoji:"🎨",unit:"ET2 Unit 1",category:"Activities",type:"verb"},
+  {en:"ride a horse",cs:"jezdit na koni",emoji:"🏇",unit:"ET2 Unit 1",category:"Activities",type:"verb",noSentence:true},
+  {en:"play computer games",cs:"hrát počítačové hry",emoji:"🎮",unit:"ET2 Unit 1",category:"Free time",type:"verb"},
+  {en:"play football",cs:"hrát fotbal",emoji:"⚽",unit:"ET2 Unit 1",category:"Free time",type:"verb"},
+  {en:"play basketball",cs:"hrát basketbal",emoji:"🏀",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play tennis",cs:"hrát tenis",emoji:"🎾",unit:"ET2 Unit 1",category:"Free time",type:"verb"},
+  {en:"play the piano",cs:"hrát na klavír",emoji:"🎹",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play the violin",cs:"hrát na housle",emoji:"🎻",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play the drums",cs:"hrát na bubny",emoji:"🥁",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  {en:"play the recorder",cs:"hrát na zobcovou flétnu",emoji:"🪈",unit:"ET2 Unit 1",category:"Free time",type:"verb",noSentence:true},
+  // Unit 2
+  {en:"sunglasses",cs:"sluneční brýle",emoji:"🕶️",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true,noSentence:true},
+  {en:"sandals",cs:"sandály",emoji:"🩴",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true,noSentence:true},
+  {en:"swimsuit",cs:"plavky",emoji:"👙",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true},
+  {en:"jeans",cs:"džíny",emoji:"👖",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true,noSentence:true},
+  {en:"scarf",cs:"šála",cs_acc:"šálu",emoji:"🧣",unit:"ET2 Unit 2",category:"Clothes",type:"noun"},
+  {en:"raincoat",cs:"pláštěnka",emoji:"🌧️",unit:"ET2 Unit 2",category:"Clothes",type:"noun",noSentence:true},
+  {en:"woolly hat",cs:"vlněná čepice",emoji:"🧢",unit:"ET2 Unit 2",category:"Clothes",type:"noun",noSentence:true},
+  {en:"gloves",cs:"rukavice",emoji:"🧤",unit:"ET2 Unit 2",category:"Clothes",type:"noun",plural:true},
+  {en:"summer",cs:"léto",emoji:"🌞",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"autumn",cs:"podzim",emoji:"🍂",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"winter",cs:"zima",cs_acc:"zimu",emoji:"⛄",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  {en:"spring",cs:"jaro",emoji:"🌸",unit:"ET2 Unit 2",category:"The seasons",type:"noun"},
+  // Unit 3
+  {en:"fridge",cs:"lednice",emoji:"🧊",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"cooker",cs:"sporák",emoji:"🍳",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"TV",cs:"televize",emoji:"📺",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"sofa",cs:"pohovka",emoji:"🛋️",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"phone",cs:"telefon",emoji:"📱",unit:"ET2 Unit 3",category:"Around the house",type:"noun",noSentence:true},
+  {en:"next to",cs:"vedle",emoji:"↔️",unit:"ET2 Unit 3",category:"Around the house",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"mirror",cs:"zrcadlo",emoji:"🪞",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"radio",cs:"rádio",emoji:"📻",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"plant",cs:"rostlina",cs_acc:"rostlinu",emoji:"🪴",unit:"ET2 Unit 3",category:"My bedroom",type:"noun"},
+  {en:"bin",cs:"popelnice",cs_acc:"popelnici",emoji:"🗑️",unit:"ET2 Unit 3",category:"My bedroom",type:"noun"},
+  {en:"wardrobe",cs:"šatní skříň",emoji:"🚪",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"bookcase",cs:"knihovna",emoji:"📚",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"picture",cs:"obrázek",emoji:"🖼️",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  {en:"lamp",cs:"lampa",emoji:"💡",unit:"ET2 Unit 3",category:"My bedroom",type:"noun",noSentence:true},
+  // Unit 4
+  {en:"crocodile",cs:"krokodýl",cs_acc:"krokodýla",emoji:"🐊",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"zebra",cs:"zebra",cs_acc:"zebru",emoji:"🦓",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"parrot",cs:"papoušek",cs_acc:"papouška",emoji:"🦜",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"flamingo",cs:"plameňák",emoji:"🦩",unit:"ET2 Unit 4",category:"Wild animals",type:"noun",noSentence:true},
+  {en:"lion",cs:"lev",cs_acc:"lva",emoji:"🦁",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"python",cs:"krajta",emoji:"🐍",unit:"ET2 Unit 4",category:"Wild animals",type:"noun",noSentence:true},
+  {en:"monkey",cs:"opice",cs_acc:"opici",emoji:"🐒",unit:"ET2 Unit 4",category:"Wild animals",type:"noun"},
+  {en:"gorilla",cs:"gorila",emoji:"🦍",unit:"ET2 Unit 4",category:"Wild animals",type:"noun",noSentence:true},
+  {en:"feathers",cs:"peří",emoji:"🪶",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  {en:"hair",cs:"srst",emoji:"🐕",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",noSentence:true},
+  {en:"whiskers",cs:"vousky",emoji:"🐱",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  {en:"claws",cs:"drápy",emoji:"🐾",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  {en:"teeth",cs:"zuby",emoji:"🦷",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true},
+  {en:"scales",cs:"šupiny",emoji:"🐟",unit:"ET2 Unit 4",category:"Parts of an animal",type:"noun",plural:true,noSentence:true},
+  // Unit 5
+  {en:"breakfast",cs:"snídaně",emoji:"🥣",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"lunch",cs:"oběd",emoji:"🍱",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"dinner",cs:"večeře",emoji:"🍽️",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"rice",cs:"rýže",emoji:"🍚",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"vegetables",cs:"zelenina",emoji:"🥕",unit:"ET2 Unit 5",category:"Food, part II",type:"noun",noSentence:true},
+  {en:"ham",cs:"šunka",cs_acc:"šunku",emoji:"🍖",unit:"ET2 Unit 5",category:"Food, part II",type:"noun"},
+  {en:"salad",cs:"salát",emoji:"🥗",unit:"ET2 Unit 5",category:"Food, part I",type:"noun"},
+  {en:"toast",cs:"toast",emoji:"🍞",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",noSentence:true},
+  {en:"water",cs:"voda",emoji:"💧",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",noSentence:true},
+  {en:"jam",cs:"džem",emoji:"🍓",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",noSentence:true},
+  {en:"sandwiches",cs:"sendviče",emoji:"🥪",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",plural:true,noSentence:true},
+  {en:"pasta",cs:"těstoviny",emoji:"🍝",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",plural:true,noSentence:true},
+  {en:"eggs",cs:"vejce",emoji:"🥚",unit:"ET2 Unit 5",category:"Food, part I",type:"noun",plural:true,noSentence:true},
+  {en:"juice",cs:"džus",emoji:"🧃",unit:"ET2 Unit 5",category:"Food, part I",type:"noun"},
+  // Explore Together 3 — official Oxford Picture Dictionary
+  // Hello
+  {en:"ten",cs:"deset",emoji:"🔟",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"twenty",cs:"dvacet",emoji:"2️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number"},
+  {en:"thirty",cs:"třicet",emoji:"3️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"forty",cs:"čtyřicet",emoji:"4️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"fifty",cs:"padesát",emoji:"5️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"sixty",cs:"šedesát",emoji:"6️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"seventy",cs:"sedmdesát",emoji:"7️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"eighty",cs:"osmdesát",emoji:"8️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"ninety",cs:"devadesát",emoji:"9️⃣0️⃣",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  {en:"one hundred",cs:"sto",emoji:"💯",unit:"ET3 Hello",category:"Numbers",type:"number",noSentence:true},
+  // Unit 1
+  {en:"curly hair",cs:"kudrnaté vlasy",emoji:"🌀",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"wavy hair",cs:"vlnité vlasy",emoji:"🌊",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"straight hair",cs:"rovné vlasy",emoji:"📏",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"blond hair",cs:"blond vlasy",emoji:"👱",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"glasses",cs:"brýle",emoji:"👓",unit:"ET3 Unit 1",category:"Describing people",type:"noun",plural:true,noSentence:true},
+  {en:"ponytail",cs:"culík",emoji:"👱‍♀️",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"moustache",cs:"knír",emoji:"👨",unit:"ET3 Unit 1",category:"Describing people",type:"noun",noSentence:true},
+  {en:"beard",cs:"vousy",emoji:"🧔",unit:"ET3 Unit 1",category:"Describing people",type:"noun",plural:true,noSentence:true},
+  {en:"tall",cs:"vysoký",emoji:"🦒",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"short",cs:"krátký",emoji:"📐",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"strong",cs:"silný",emoji:"💪",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"thin",cs:"tenký",emoji:"🥢",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"old",cs:"starý",emoji:"👴",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  {en:"young",cs:"mladý",emoji:"👶",unit:"ET3 Unit 1",category:"Describing people",type:"adjective"},
+  // Unit 2
+  {en:"reading",cs:"čtení",emoji:"📖",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"eating",cs:"jídlo",emoji:"🍽️",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"watching TV",cs:"sledování televize",emoji:"📺",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"listening to music",cs:"poslouchání hudby",emoji:"🎧",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"drinking",cs:"pití",emoji:"🥤",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"washing up",cs:"mytí nádobí",emoji:"🧽",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"tidying up",cs:"uklízení",emoji:"🧹",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"talking on the phone",cs:"telefonování",emoji:"📱",unit:"ET3 Unit 2",category:"Activities",type:"verb",noSentence:true},
+  {en:"biscuits",cs:"sušenky",emoji:"🍪",unit:"ET3 Unit 2",category:"At home",type:"noun",plural:true,noSentence:true},
+  {en:"auntie",cs:"teta",emoji:"👩",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  {en:"uncle",cs:"strýc",emoji:"👨",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  {en:"cousin",cs:"bratranec nebo sestřenice",emoji:"🧒",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  {en:"comics",cs:"komiksy",emoji:"💬",unit:"ET3 Unit 2",category:"At home",type:"noun",plural:true,noSentence:true},
+  {en:"tea",cs:"čaj",emoji:"🍵",unit:"ET3 Unit 2",category:"At home",type:"noun",noSentence:true},
+  // Unit 3
+  {en:"park",cs:"park",emoji:"🌳",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"station",cs:"nádraží",emoji:"🚉",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"hospital",cs:"nemocnice",cs_acc:"nemocnici",emoji:"🏥",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"school",cs:"škola",emoji:"🏫",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"bridge",cs:"most",emoji:"🌉",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"bank",cs:"banka",cs_acc:"banku",emoji:"🏦",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"restaurant",cs:"restaurace",cs_acc:"restauraci",emoji:"🍴",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"shop",cs:"obchod",emoji:"🏪",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"stable",cs:"stáj",emoji:"🐴",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun",noSentence:true},
+  {en:"swimming pool",cs:"bazén",emoji:"🏊",unit:"ET3 Unit 3",category:"In town, part 1",type:"noun"},
+  {en:"in front of",cs:"před",emoji:"⏩",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"between",cs:"mezi",emoji:"↕️",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"opposite",cs:"naproti",emoji:"🔄",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  {en:"behind",cs:"za",emoji:"↩️",unit:"ET3 Unit 3",category:"In town, part 2",type:"adjective",noSentence:true,noEmoji:true},
+  // Unit 4
+  {en:"playing Frisbee",cs:"hraní frisbee",emoji:"🥏",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"playing board games",cs:"hraní deskových her",emoji:"🎲",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"playing golf",cs:"hraní golfu",emoji:"⛳",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"taking photos",cs:"fotografování",emoji:"📷",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"doing exercises",cs:"cvičení",emoji:"🤸",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"skipping",cs:"skákání přes švihadlo",emoji:"🪢",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"playing cards",cs:"hraní karet",emoji:"🃏",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"talking to friends",cs:"povídání s kamarády",emoji:"🗣️",unit:"ET3 Unit 4",category:"Free time",type:"verb",noSentence:true},
+  {en:"in the morning",cs:"ráno",emoji:"🌅",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  {en:"in the afternoon",cs:"odpoledne",emoji:"☀️",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  {en:"in the evening",cs:"večer",emoji:"🌆",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  {en:"at night",cs:"v noci",emoji:"🌙",unit:"ET3 Unit 4",category:"Times of day",type:"noun",noSentence:true},
+  // Unit 5
+  {en:"get up",cs:"vstát",emoji:"🛏️",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"have breakfast",cs:"snídat",emoji:"🥣",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"go to school",cs:"jít do školy",emoji:"🎒",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"have lunch",cs:"obědvat",emoji:"🍱",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"go home",cs:"jít domů",emoji:"🏠",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"have dinner",cs:"večeřet",emoji:"🍽️",unit:"ET3 Unit 5",category:"My day, part 1",type:"verb",noSentence:true},
+  {en:"brush my teeth",cs:"čistit si zuby",emoji:"🪥",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"go to bed",cs:"jít spát",emoji:"🌙",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"wake up",cs:"vzbudit se",emoji:"⏰",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"get dressed",cs:"obléknout se",emoji:"👕",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"have a shower",cs:"sprchovat se",emoji:"🚿",unit:"ET3 Unit 5",category:"My day, part 2",type:"verb",noSentence:true},
+  {en:"half past",cs:"půl",emoji:"🕧",unit:"ET3 Unit 5",category:"My day, part 2",type:"noun",noSentence:true,noEmoji:true},
+  {en:"quarter to",cs:"tři čtvrtě na",emoji:"🕘",unit:"ET3 Unit 5",category:"My day, part 2",type:"noun",noSentence:true,noEmoji:true},
+  {en:"quarter past",cs:"čtvrt na",emoji:"🕒",unit:"ET3 Unit 5",category:"My day, part 2",type:"noun",noSentence:true,noEmoji:true},
+];
+
+// Rod podstatných jmen (ma=mužský živý, mi=mužský neživý, f=ženský, n=střední, pl=množné)
+const NOUN_GENDERS = {
+  'train':'mi','plane':'n','bus':'mi','lorry':'n','motorbike':'f','taxi':'n',
+  'bathroom':'f','bedroom':'f','kitchen':'f','hall':'f','living room':'mi','garden':'f',
+  'cupboard':'f','box':'f','table':'mi','bed':'f',
+  'snake':'ma','bat':'ma','fox':'f','hedgehog':'ma','mouse':'f','frog':'f',
+  'wings':'pl','head':'f','teeth':'pl','tail':'mi','legs':'pl','arms':'pl',
+  'ears':'pl','nose':'mi','mouth':'pl','eyes':'pl',
+  'pencil case':'mi','pen':'n','bag':'f','pencil':'f','rubber':'f','book':'f',
+  'chair':'f','notebook':'mi','crayon':'f','ruler':'n',
+  'bike':'n','ball':'mi','guitar':'f','doll':'f','car':'n','scooter':'f',
+  'chicken':'f','cat':'f','cow':'f','horse':'ma','goat':'f','sheep':'f',
+  'farm':'mi','tractor':'mi','duck':'f','rabbit':'ma',
+  'mum':'f','granny':'f','dad':'ma','sister':'f','brother':'ma','grandad':'ma','aunt':'f',
+  'bananas':'pl','apples':'pl','cakes':'pl','tomatoes':'pl','sausages':'pl',
+  'pears':'pl','peaches':'pl','melons':'pl','olives':'pl','oranges':'pl',
+  'coat':'mi','trousers':'pl','skirt':'f','shirt':'f','shoes':'pl','socks':'pl',
+  'hat':'mi','jacket':'f','dress':'pl','boots':'pl','scarf':'f','gloves':'pl',
+  'elephant':'ma','giraffe':'f','tiger':'ma','lion':'ma','monkey':'f','zebra':'f',
+  'crocodile':'ma','parrot':'ma','penguin':'ma','hippo':'ma',
+  'park':'mi','hospital':'f','library':'f','cinema':'n','supermarket':'mi',
+  'restaurant':'f','swimming pool':'mi','street':'f',
+  'spring':'n','summer':'n','autumn':'mi','winter':'f',
+  'binoculars':'mi','camera':'mi','map':'f','torch':'f','watch':'pl',
+  'bird':'ma','flower':'f','tree':'mi','boat':'f','fish':'f','tent':'mi',
+  'ham':'f','juice':'mi','mushrooms':'pl','onions':'pl','peppers':'pl','pizza':'f','salad':'mi','soup':'f',
+  'stick':'mi','stone':'mi','ant':'ma','bee':'f','beetle':'ma','butterfly':'ma','grasshopper':'f','insects':'mi',
+  'jumper':'mi','shorts':'pl','t-shirt':'n','bucket':'mi','sand':'mi','sandcastle':'mi','spade':'f',
+  'village':'f','city':'n','jungle':'f','cave':'f','forest':'mi','ocean':'mi',
+  'house':'mi','sea':'n','dog':'ma','panda':'f','whale':'f','kangaroo':'ma','shark':'ma',
+  'bear':'ma','dolphin':'ma','mountain':'f','island':'mi','waterfall':'mi',
+  'lake':'n','grass':'f','picnic':'mi','leaf':'mi','plant':'f','river':'f',
+  'field':'n','blanket':'f',
+  'bank':'f','bus station':'f','sports centre':'n','market':'mi','road':'f',
+  'money':'pl','swimsuit':'pl','towel':'mi',
+  'temperature':'f',
+  'animal':'n','fruit':'n','world':'mi','food':'n','body':'n','skin':'f',
+  'countryside':'mi','time':'mi','children':'pl','bin':'f',
+};
+
+// Akuzativní tvary přídavných jmen podle rodu
+const ADJ_FORMS = {
+  'hot':         {ma:'horkého',    mi:'horký',    f:'horkou',    n:'horké',    pl:'horké'},
+  'cold':        {ma:'studeného',  mi:'studený',  f:'studenou',  n:'studené',  pl:'studené'},
+  'hungry':      {ma:'hladového',  mi:'hladový',  f:'hladovou',  n:'hladové',  pl:'hladové'},
+  'thirsty':     {ma:'žíznivého',  mi:'žíznivý',  f:'žíznivou',  n:'žíznivé',  pl:'žíznivé'},
+  'slow':        {ma:'pomalého',   mi:'pomalý',   f:'pomalou',   n:'pomalé',   pl:'pomalé'},
+  'fast':        {ma:'rychlého',   mi:'rychlý',   f:'rychlou',   n:'rychlé',   pl:'rychlé'},
+  'long':        {ma:'dlouhého',   mi:'dlouhý',   f:'dlouhou',   n:'dlouhé',   pl:'dlouhé'},
+  'short':       {ma:'krátkého',   mi:'krátký',   f:'krátkou',   n:'krátké',   pl:'krátké'},
+  'big':         {ma:'velkého',    mi:'velký',    f:'velkou',    n:'velké',     pl:'velké'},
+  'small':       {ma:'malého',     mi:'malý',     f:'malou',     n:'malé',      pl:'malé'},
+  'old':         {ma:'starého',    mi:'starý',    f:'starou',    n:'staré',     pl:'staré'},
+  'new':         {ma:'nového',     mi:'nový',     f:'novou',     n:'nové',      pl:'nové'},
+  'tired':       {ma:'unaveného',  mi:'unavený',  f:'unavenou',  n:'unavené',   pl:'unavené'},
+  'happy':       {ma:'šťastného',  mi:'šťastný',  f:'šťastnou',  n:'šťastné',   pl:'šťastné'},
+  'sad':         {ma:'smutného',   mi:'smutný',   f:'smutnou',   n:'smutné',    pl:'smutné'},
+  'angry':       {ma:'naštvaného', mi:'naštvaný', f:'naštvanou', n:'naštvanné', pl:'naštvanné'},
+  'red':         {ma:'červeného',  mi:'červený',  f:'červenou',  n:'červené',   pl:'červené'},
+  'brown':       {ma:'hnědého',    mi:'hnědý',    f:'hnědou',    n:'hnědé',     pl:'hnědé'},
+  'yellow':      {ma:'žlutého',    mi:'žlutý',    f:'žlutou',    n:'žluté',     pl:'žluté'},
+  'black':       {ma:'černého',    mi:'černý',    f:'černou',    n:'černé',     pl:'černé'},
+  'blue':        {ma:'modrého',    mi:'modrý',    f:'modrou',    n:'modré',     pl:'modré'},
+  'grey':        {ma:'šedého',     mi:'šedý',     f:'šedou',     n:'šedé',      pl:'šedé'},
+  'white':       {ma:'bílého',     mi:'bílý',     f:'bílou',     n:'bílé',      pl:'bílé'},
+  'pink':        {ma:'růžového',   mi:'růžový',   f:'růžovou',   n:'růžové',    pl:'růžové'},
+  'green':       {ma:'zeleného',   mi:'zelený',   f:'zelenou',   n:'zelené',    pl:'zelené'},
+  'orange':      {ma:'oranžového', mi:'oranžový', f:'oranžovou', n:'oranžové',  pl:'oranžové'},
+  'good':        {ma:'dobrého',    mi:'dobrý',    f:'dobrou',    n:'dobré',     pl:'dobré'},
+  'bad':         {ma:'špatného',   mi:'špatný',   f:'špatnou',   n:'špatné',    pl:'špatné'},
+  'cheap':       {ma:'levného',    mi:'levný',    f:'levnou',    n:'levné',     pl:'levné'},
+  'expensive':   {ma:'drahého',    mi:'drahý',    f:'drahou',    n:'drahé',     pl:'drahé'},
+  'young':       {ma:'mladého',    mi:'mladý',    f:'mladou',    n:'mladé',     pl:'mladé'},
+  'heavy':       {ma:'těžkého',    mi:'těžký',    f:'těžkou',    n:'těžké',     pl:'těžké'},
+  'light':       {ma:'lehkého',    mi:'lehký',    f:'lehkou',    n:'lehké',     pl:'lehké'},
+  'dark':        {ma:'tmavého',    mi:'tmavý',    f:'tmavou',    n:'tmavé',     pl:'tmavé'},
+  'beautiful':   {ma:'krásného',   mi:'krásný',   f:'krásnou',   n:'krásné',    pl:'krásné'},
+  'ugly':        {ma:'ošklivého',  mi:'ošklivý',  f:'ošklivou',  n:'ošklivé',   pl:'ošklivé'},
+  'thin':        {ma:'tenkého',    mi:'tenký',    f:'tenkou',    n:'tenké',     pl:'tenké'},
+  'weak':        {ma:'slabého',    mi:'slabý',    f:'slabou',    n:'slabé',     pl:'slabé'},
+  'quiet':       {ma:'tichého',    mi:'tichý',    f:'tichou',    n:'tiché',     pl:'tiché'},
+  'fat':         {ma:'tlustého',   mi:'tlustý',   f:'tlustou',   n:'tlusté',    pl:'tlusté'},
+  'loud':        {ma:'hlasitého',  mi:'hlasitý',  f:'hlasitou',  n:'hlasité',   pl:'hlasité'},
+  'tall':        {ma:'vysokého',   mi:'vysoký',   f:'vysokou',   n:'vysoké',    pl:'vysoké'},
+  'strong':      {ma:'silného',    mi:'silný',    f:'silnou',    n:'silné',     pl:'silné'},
+  'naughty':     {ma:'zlobivého',  mi:'zlobivý',  f:'zlobivou',  n:'zlobivé',   pl:'zlobivé'},
+  'clever':      {ma:'chytrého',   mi:'chytrý',   f:'chytrou',   n:'chytré',    pl:'chytré'},
+  'dirty':       {ma:'špinavého',  mi:'špinavý',  f:'špinavou',  n:'špinavé',   pl:'špinavé'},
+  'clean':       {ma:'čistého',    mi:'čistý',    f:'čistou',    n:'čisté',     pl:'čisté'},
+  'curly':       {ma:'kudrnatého', mi:'kudrnatý', f:'kudrnatou', n:'kudrnaté',  pl:'kudrnaté'},
+  'straight':    {ma:'rovného',    mi:'rovný',    f:'rovnou',    n:'rovné',     pl:'rovné'},
+  'lazy':        {ma:'líného',     mi:'líný',     f:'línou',     n:'líné',      pl:'líné'},
+  'friendly':    {ma:'přátelského',mi:'přátelský',f:'přátelskou',n:'přátelské', pl:'přátelské'},
+  'interesting': {ma:'zajímavého', mi:'zajímavý', f:'zajímavou', n:'zajímavé',  pl:'zajímavé'},
+  'pretty':      {ma:'hezkého',    mi:'hezký',    f:'hezkou',    n:'hezké',     pl:'hezké'},
+  'slim':        {ma:'hubeného',   mi:'hubený',   f:'hubenou',   n:'hubené',    pl:'hubené'},
+  'sick':        {ma:'nemocného',  mi:'nemocný',  f:'nemocnou',  n:'nemocné',   pl:'nemocné'},
+};
+
+const PROFILE_COLORS = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e91e63'];
+// Mapa světa: kontinenty → státy v pevném pořadí.
+// Pro přidání nového státu stačí přidat řádek do příslušného kontinentu.
+// Pro přidání nového kontinentu stačí přidat nový objekt na konec pole.
+const WORLD_MAP = [
+  {
+    name:"Pohádkové království", emoji:"🏰",
+    countries:[
+      {name:"Kouzelný hrad",   emoji:"🏰",unlockAt:0},
+      {name:"Modrý záliv",     emoji:"🌊",unlockAt:35},
+      {name:"Kouzelný les",    emoji:"🌲",unlockAt:80},
+      {name:"Dračí hora",      emoji:"🐉",unlockAt:140},
+      {name:"Podmořský palác", emoji:"🐠",unlockAt:210},
+      {name:"Oblačné město",   emoji:"☁️",unlockAt:290},
+      {name:"Zakletý zámek",   emoji:"🔮",unlockAt:380},
+    ]
+  },
+  {
+    name:"Divoká příroda", emoji:"🦁",
+    countries:[
+      {name:"Lví savana",        emoji:"🦁",unlockAt:440},
+      {name:"Staré pyramidy",    emoji:"🏛️",unlockAt:510},
+      {name:"Džungle opic",      emoji:"🐒",unlockAt:590},
+      {name:"Obří vodopád",      emoji:"💧",unlockAt:680},
+      {name:"Pirátský poklad",   emoji:"💎",unlockAt:780},
+    ]
+  },
+  {
+    name:"Tajemný východ", emoji:"🌸",
+    countries:[
+      {name:"Sakurový sad",  emoji:"🌸",unlockAt:860},
+      {name:"Velká zeď",     emoji:"🧱",unlockAt:960},
+      {name:"Sloní chrám",   emoji:"🐘",unlockAt:1080},
+      {name:"Bambusový les", emoji:"🎋",unlockAt:1220},
+      {name:"Zlatá pagoda",  emoji:"⛩️",unlockAt:1380},
+    ]
+  },
+  {
+    name:"Dobrodružný západ", emoji:"🌵",
+    countries:[
+      {name:"Divoký západ",     emoji:"🌵",unlockAt:1500},
+      {name:"Ledové fjordy",    emoji:"🧊",unlockAt:1660},
+      {name:"Aztécký chrám",    emoji:"🦅",unlockAt:1840},
+      {name:"Amazonský prales", emoji:"🌴",unlockAt:2040},
+      {name:"Konec světa",      emoji:"🌋",unlockAt:2260},
+    ]
+  },
+  {
+    name:"Oceánské dobrodružství", emoji:"🐡",
+    countries:[
+      {name:"Korálový útes", emoji:"🐡",unlockAt:2420},
+      {name:"Ostrov sopky",  emoji:"🌋",unlockAt:2620},
+      {name:"Ostrov pokladů",emoji:"🏝️",unlockAt:2840},
+    ]
+  },
+  {
+    name:"Ledová výprava", emoji:"❄️",
+    countries:[
+      {name:"Ledový palác", emoji:"❄️",unlockAt:3000},
+      {name:"Tajemný pól",  emoji:"🧭",unlockAt:3200},
+    ]
+  },
+];
+const LEVELS = [
+  {name:"Začínající průzkumník", min:0,    max:139},
+  {name:"Odvážný cestovatel",    min:140,  max:439},
+  {name:"Světový dobrodruh",     min:440,  max:859},
+  {name:"Mistr zeměpisu",        min:860,  max:1499},
+  {name:"Legendární objevitel",  min:1500, max:2419},
+  {name:"Vesmírný hrdina",       min:2420, max:Infinity},
+];
+const FALLBACK_COLORS = ["#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7","#DDA0DD","#98FB98"];
+
+// ============================================================
+// STORAGE
+// ============================================================
+const LS = {
+  get(k,def){try{const v=localStorage.getItem(k);return v===null?def:JSON.parse(v)}catch{return def}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
+  remove(k){try{localStorage.removeItem(k)}catch{}},
+};
+
+// ============================================================
+// PROFILE SYSTEM
+// ============================================================
+function getProfiles(){return LS.get('vocab_profiles',null)}
+function profileCloudKey(p){return p.cloudKey||('custom-'+p.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));}
+function saveProfiles(p){LS.set('vocab_profiles',p)}
+function getActiveProfileId(){return LS.get('vocab_active_profile',null)}
+function saveActiveProfileId(id){LS.set('vocab_active_profile',id)}
+
+function getActiveProfile(){
+  const profiles=getProfiles()||[];
+  const id=getActiveProfileId();
+  return profiles.find(p=>p.id===id)||profiles[0]||null;
+}
+
+function pk(key){
+  const id=getActiveProfileId()||'default';
+  return `vocab_${key}_${id}`;
+}
+
+function getWords(){return LS.get(pk('words'),null)}
+function saveWords(w){LS.set(pk('words'),w)}
+function getStats(){return LS.get(pk('stats'),{})}
+function saveStats(s){LS.set(pk('stats'),s)}
+function getStars(){return LS.get(pk('stars'),0)}
+function saveStars(n){LS.set(pk('stars'),n)}
+function getStreak(){return LS.get(pk('streak'),{count:0,lastDate:''})}
+function saveStreak(s){LS.set(pk('streak'),s)}
+function getSelectedSet(){return LS.get(pk('set'),'all')}
+function saveSelectedSet(s){LS.set(pk('set'),s)}
+function getMute(){return LS.get('vocab_mute',false)}
+function saveMute(v){LS.set('vocab_mute',v)}
+function getPin(){return LS.get('vocab_pin','1234')}
+function getApiKey(){return LS.get('vocab_api_key','')}
+
+function initData(){
+  let profiles = getProfiles();
+  if(!profiles){
+    // First run - create Terézka profile and migrate any existing data
+    const terezkaid = 'profile_terezka_'+Date.now();
+    profiles = [{id:terezkaid,name:'Terezka',cloudKey:'terezka',color:PROFILE_COLORS[0],createdAt:Date.now()}];
+    saveProfiles(profiles);
+    saveActiveProfileId(terezkaid);
+
+    // Migrate existing data to Terézka profile
+    const existingWords = LS.get('vocab_words',null);
+    const existingStats = LS.get('vocab_stats',null);
+    const existingStars = LS.get('vocab_stars',null);
+    const existingStreak = LS.get('vocab_streak',null);
+    const existingSet = LS.get('vocab_set',null);
+
+    if(existingWords!==null){
+      LS.set(`vocab_words_${terezkaid}`,existingWords);
+    } else {
+      const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
+      LS.set(`vocab_words_${terezkaid}`,words);
+    }
+    if(existingStats!==null) LS.set(`vocab_stats_${terezkaid}`,existingStats);
+    if(existingStars!==null) LS.set(`vocab_stars_${terezkaid}`,existingStars);
+    if(existingStreak!==null) LS.set(`vocab_streak_${terezkaid}`,existingStreak);
+    if(existingSet!==null) LS.set(`vocab_set_${terezkaid}`,existingSet);
+  } else {
+    if(!getActiveProfileId()||!profiles.find(p=>p.id===getActiveProfileId())){
+      saveActiveProfileId(profiles[0].id);
+    }
+  }
+
+  profiles=getProfiles()||[];
+  const terezka=profiles.find(p=>p.name.trim().toLowerCase()==='terezka');
+  if(terezka&&!terezka.cloudKey){terezka.cloudKey='terezka';saveProfiles(profiles);}
+
+  // Built-in Barunka profile: always available after every application update.
+  // She uses audio + picture exercises only, without reading or writing.
+  profiles = getProfiles()||[];
+  let barunka = profiles.find(p=>p.id==='profile_barunka'||p.name.trim().toLowerCase()==='barunka');
+  if(!barunka){
+    barunka={
+      id:'profile_barunka',
+      name:'Barunka',
+      cloudKey:'barunka',
+      color:PROFILE_COLORS[1],
+      createdAt:Date.now(),
+      mode:'beginner',
+      learningMode:'audio-images',
+      builtIn:true
+    };
+    profiles.push(barunka);
+    saveProfiles(profiles);
+  } else {
+    let barunkaChanged=false;
+    if(barunka.cloudKey!=='barunka'){barunka.cloudKey='barunka';barunkaChanged=true;}
+    if(barunka.mode!=='beginner'){barunka.mode='beginner';barunkaChanged=true;}
+    if(barunka.learningMode!=='audio-images'){barunka.learningMode='audio-images';barunkaChanged=true;}
+    if(!barunka.builtIn){barunka.builtIn=true;barunkaChanged=true;}
+    if(barunkaChanged) saveProfiles(profiles);
+  }
+
+  if(getWords()===null){
+    const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
+    saveWords(words);
+  }
+
+  // Remove deprecated non-LE/ET collections from already stored profiles.
+  const isDeprecatedUnit=unit=>unit==='Months'||unit==='Days'||(unit&&unit.startsWith('LL '));
+  const selectedBeforeCleanup=getSelectedSet();
+  if(selectedBeforeCleanup!=='all'&&isDeprecatedUnit(selectedBeforeCleanup)) saveSelectedSet('all');
+  profiles=getProfiles()||[];
+  let profileSettingsChanged=false;
+  profiles.forEach(p=>{if(p.units){p.units=null;profileSettingsChanged=true;}});
+  if(profileSettingsChanged) saveProfiles(profiles);
+
+  // Migration: add any missing DEFAULT_VOCAB words and sync cs_acc for all existing profiles
+  const vocabKey=w=>w.en.toLowerCase()+'|||'+w.unit;
+  const defaultByKey = {};
+  DEFAULT_VOCAB.forEach(w=>{ defaultByKey[vocabKey(w)]=w; });
+  const allProfiles = getProfiles()||[];
+  allProfiles.forEach(p=>{
+    const stored = LS.get(`vocab_words_${p.id}`,null);
+    const customUnitChanged=stored&&stored.some(w=>w.unit==='Z fotky');
+    const existing = stored&&stored.filter(w=>!isDeprecatedUnit(w.unit)).map(w=>w.unit==='Z fotky'?{...w,unit:'Vlastní'}:w);
+    if(!existing||existing.length===0){
+      const seeded=DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_seed_'+i+'_'+p.id}));
+      LS.set(`vocab_words_${p.id}`,seeded);
+      return;
+    }
+    // Sync fields from DEFAULT_VOCAB into existing stored words
+    let changed = false;
+    const updated = existing.map(w=>{
+      const def = defaultByKey[vocabKey(w)];
+      if(!def) return w;
+      let upd = w;
+      if(def.cs_acc && w.cs_acc !== def.cs_acc){ upd={...upd,cs_acc:def.cs_acc}; changed=true; }
+      if(def.plural && !w.plural){ upd={...upd,plural:true}; changed=true; }
+      if(def.cs_verb && w.cs_verb !== def.cs_verb){ upd={...upd,cs_verb:def.cs_verb}; changed=true; }
+      if(def.noSentence && !w.noSentence){ upd={...upd,noSentence:true}; changed=true; }
+      if(def.category && w.category !== def.category){ upd={...upd,category:def.category}; changed=true; }
+      if(def.type && w.type !== def.type){ upd={...upd,type:def.type}; changed=true; }
+      return upd;
+    });
+    // Add all missing DEFAULT_VOCAB words
+    const existingKeys = new Set(updated.map(vocabKey));
+    const toAdd = DEFAULT_VOCAB.filter(w=>!existingKeys.has(vocabKey(w)));
+    if(toAdd.length>0){
+      const newWords = toAdd.map((w,i)=>({...w,id:'w_new_'+i+'_'+p.id}));
+      LS.set(`vocab_words_${p.id}`,[...updated,...newWords]);
+    } else if(changed||customUnitChanged||existing.length!==(stored||[]).length){
+      LS.set(`vocab_words_${p.id}`,updated);
+    }
+  });
+
+  updateStreak();
+}
+
+function createProfile(name,units){
+  const profiles = getProfiles()||[];
+  const id = 'profile_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  const color = PROFILE_COLORS[profiles.length%PROFILE_COLORS.length];
+  profiles.push({id,name,color,createdAt:Date.now(),units:units||null});
+  saveProfiles(profiles);
+  // New profile: seed with relevant DEFAULT_VOCAB words
+  const source=units?DEFAULT_VOCAB.filter(w=>units.includes(w.unit)):DEFAULT_VOCAB;
+  const seeded=source.map((w,i)=>({...w,id:'w_seed_'+i+'_'+id}));
+  LS.set(`vocab_words_${id}`,seeded);
+  LS.set(`vocab_stats_${id}`,{});
+  LS.set(`vocab_stars_${id}`,0);
+  LS.set(`vocab_streak_${id}`,{count:0,lastDate:''});
+  return id;
+}
+
+function deleteProfile(id){
+  let profiles = getProfiles()||[];
+  if(profiles.length<=1){showToast('Nelze smazat poslední profil','error');return;}
+  profiles = profiles.filter(p=>p.id!==id);
+  saveProfiles(profiles);
+  LS.remove(`vocab_words_${id}`);
+  LS.remove(`vocab_stats_${id}`);
+  LS.remove(`vocab_stars_${id}`);
+  LS.remove(`vocab_streak_${id}`);
+  LS.remove(`vocab_set_${id}`);
+  if(getActiveProfileId()===id) saveActiveProfileId(profiles[0].id);
+}
+
+function switchProfile(id){
+  saveActiveProfileId(id);
+  updateStreak();
+}
+
+function updateStreak(){
+  const today = new Date().toISOString().slice(0,10);
+  const s = getStreak();
+  if(s.lastDate===today) return;
+  const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  if(s.lastDate===yesterday) saveStreak({count:s.count+1,lastDate:today});
+  else saveStreak({count:1,lastDate:today});
+}
+
+function recordAnswer(wordId,correct){
+  const stats=getStats();
+  if(!stats[wordId]) stats[wordId]={correct:0,incorrect:0,lastPracticed:null};
+  if(correct) stats[wordId].correct++; else stats[wordId].incorrect++;
+  stats[wordId].lastPracticed=new Date().toISOString().slice(0,10);
+  saveStats(stats);
+}
+
+function getAccuracy(wordId){
+  const s=getStats()[wordId];
+  if(!s||s.correct+s.incorrect===0) return -1;
+  return s.correct/(s.correct+s.incorrect);
+}
+
+function getArticle(word,plural){
+  if(plural) return '';
+  return ['a','e','i','o','u'].includes(word[0].toLowerCase())?'an':'a';
+}
+
+// ============================================================
+// MODE SWITCHING
+// ============================================================
+let inParent=false;
+let pinBuffer='';
+
+function toggleMode(){
+  if(inParent) lockParent();
+  else showPinScreen();
+}
+
+function showPinScreen(){
+  pinBuffer='';
+  updatePinDots();
+  document.getElementById('pinError').textContent='';
+  document.getElementById('childScreen').style.display='none';
+  document.getElementById('parentScreen').style.display='none';
+  document.getElementById('pinScreen').style.display='flex';
+  document.getElementById('modeBtn').style.display='none';
+}
+
+function cancelPin(){
+  document.getElementById('pinScreen').style.display='none';
+  document.getElementById('childScreen').style.display='block';
+  document.getElementById('modeBtn').style.display='block';
+}
+
+function pinPress(d){
+  if(pinBuffer.length>=4) return;
+  pinBuffer+=d;
+  updatePinDots();
+  if(pinBuffer.length===4) setTimeout(pinSubmit,150);
+}
+
+function pinClear(){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();}
+
+function updatePinDots(){
+  for(let i=0;i<4;i++) document.getElementById('dot'+i).classList.toggle('filled',i<pinBuffer.length);
+}
+
+function pinSubmit(){
+  if(pinBuffer===getPin()){
+    document.getElementById('pinScreen').style.display='none';
+    enterParent();
+  } else {
+    document.getElementById('pinError').textContent='Špatný PIN kód. Zkus to znovu.';
+    pinBuffer='';
+    updatePinDots();
+    setTimeout(()=>document.getElementById('pinError').textContent='',2000);
+  }
+}
+
+function enterParent(){
+  inParent=true;
+  document.getElementById('modeBtn').textContent='👧 Dítě';
+  document.getElementById('modeBtn').style.display='block';
+  document.getElementById('childScreen').style.display='none';
+  document.getElementById('parentScreen').style.display='block';
+  updateParentProfileHeader();
+  showParentTab('profiles');
+}
+
+function lockParent(){
+  inParent=false;
+  document.getElementById('modeBtn').textContent='👨‍👩‍👧 Rodič';
+  document.getElementById('parentScreen').style.display='none';
+  document.getElementById('childScreen').style.display='block';
+  renderChildUI();
+}
+
+function updateParentProfileHeader(){
+  const p=getActiveProfile();
+  if(p) document.getElementById('parentActiveProfile').textContent='Aktivní profil: '+p.name;
+}
+
+// ============================================================
+// PARENT MODE
+// ============================================================
+let wordFilterUnit='all';
+let wordFilterSearch='';
+
+function showParentTab(tab){
+  document.querySelectorAll('.parent-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  const c=document.getElementById('parentContent');
+  if(tab==='profiles') renderProfilesTab(c);
+  else if(tab==='words') renderWordsTab(c);
+  else if(tab==='progress') renderProgressTab(c);
+  else renderSettingsTab(c);
+}
+
+// PROFILES TAB
+function renderProfilesTab(c){
+  const profiles=getProfiles()||[];
+  const activeId=getActiveProfileId();
+  c.innerHTML=`
+  <div class="form-card">
+    <h3>👥 Profily dětí</h3>
+    <div class="profile-list">
+      ${profiles.map(p=>{
+        const words=(LS.get(`vocab_words_${p.id}`)||[]).length;
+        const stars=LS.get(`vocab_stars_${p.id}`)||0;
+        const isActive=p.id===activeId;
+        return `<div class="profile-card${isActive?' active-profile':''}">
+          <div class="profile-avatar" style="background:${p.color}">${p.name[0].toUpperCase()}</div>
+          <div style="flex:1">
+            <div class="profile-name">${esc(p.name)}</div>
+            <div class="profile-meta">${words} slovíček · ${stars} hvězdiček</div>
+          </div>
+          ${isActive?'<span class="profile-active-badge">✓ Aktivní</span>':''}
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <div style="font-size:12px;color:#888">${p.mode==='beginner'?'🔤 Začátečník (jen obrázky)':'📚 Standardní'}</div>
+            <div class="profile-actions">
+              <button class="btn btn-secondary btn-sm" onclick="renameProfileUI('${p.id}','${esc(p.name)}')">✏️</button>
+              <button class="btn btn-secondary btn-sm" onclick="toggleProfileMode('${p.id}')" title="Přepnout režim">${p.learningMode==='audio-images'?'🔊 Poslech + obrázky':(p.mode==='beginner'?'→ Standardní':'→ Začátečník')}</button>
+              ${!isActive?`<button class="btn btn-primary btn-sm" onclick="switchToProfile('${p.id}')">Přepnout</button>`:''}
+              ${profiles.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteProfileUI('${p.id}','${esc(p.name)}')">🗑️</button>`:''}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>➕ Přidat nový profil</h3>
+    <div class="form-row" style="max-width:400px">
+      <div class="form-group">
+        <label>Jméno dítěte</label>
+        <input type="text" id="newProfileName" placeholder="např. Matyáš" maxlength="20">
+      </div>
+    </div>
+    <button class="btn btn-success" onclick="addProfileUI()">✅ Vytvořit profil</button>
+  </div>`;
+}
+
+function toggleProfileMode(id){
+  const profiles=getProfiles()||[];
+  const p=profiles.find(x=>x.id===id);
+  if(!p) return;
+  if(p.learningMode==='audio-images'){
+    showToast('Barunka má trvale režim Poslech + obrázky','success');
+    return;
+  }
+  p.mode=p.mode==='beginner'?'standard':'beginner';
+  saveProfiles(profiles);
+  renderProfilesTab(document.getElementById('parentContent'));
+  if(id===getActiveProfileId()) renderChildUI();
+  showToast(`Režim změněn na: ${p.mode==='beginner'?'Začátečník':'Standardní'}`,'success');
+}
+
+function renameProfileUI(id,currentName){
+  const name=prompt('Nové jméno profilu:',currentName);
+  if(!name||!name.trim()) return;
+  const profiles=getProfiles()||[];
+  const p=profiles.find(x=>x.id===id);
+  if(!p) return;
+  p.name=name.trim();
+  saveProfiles(profiles);
+  updateParentProfileHeader();
+  renderProfilesTab(document.getElementById('parentContent'));
+  renderChildUI();
+  showToast('Profil přejmenován','success');
+}
+
+function switchToProfile(id){
+  switchProfile(id);
+  updateParentProfileHeader();
+  wordFilterUnit='all';
+  wordFilterSearch='';
+  renderProfilesTab(document.getElementById('parentContent'));
+  renderChildUI();
+  showToast('Profil přepnut','success');
+}
+
+function cycleProfile(){
+  const profiles=getProfiles()||[];
+  if(profiles.length<=1) return;
+  const currentId=getActiveProfileId();
+  const idx=profiles.findIndex(p=>p.id===currentId);
+  const next=profiles[(idx+1)%profiles.length];
+  switchProfile(next.id);
+  renderChildUI();
+  showToast('Profil: '+next.name,'success');
+}
+
+function deleteProfileUI(id,name){
+  if(!confirm(`Opravdu smazat profil "${name}" a všechna jeho data?`)) return;
+  deleteProfile(id);
+  updateParentProfileHeader();
+  renderProfilesTab(document.getElementById('parentContent'));
+  renderChildUI();
+  showToast(`Profil "${name}" smazán`,'success');
+}
+
+function addProfileUI(){
+  const name=document.getElementById('newProfileName').value.trim();
+  if(!name){showToast('Zadej jméno dítěte','error');return;}
+  const profiles=getProfiles()||[];
+  if(profiles.length>=4){showToast('Maximálně 4 profily','error');return;}
+  createProfile(name,null);
+  document.getElementById('newProfileName').value='';
+  renderProfilesTab(document.getElementById('parentContent'));
+  showToast(`Profil "${name}" vytvořen`,'success');
+}
+
+// WORDS TAB
+function renderWordsTab(c){
+  const words=getWords()||[];
+  const units=[...new Set(words.map(w=>w.unit))].sort();
+  const filtered=words.filter(w=>{
+    const unitOk=wordFilterUnit==='all'||w.unit===wordFilterUnit;
+    const searchOk=!wordFilterSearch||w.en.toLowerCase().includes(wordFilterSearch.toLowerCase())||w.cs.toLowerCase().includes(wordFilterSearch.toLowerCase());
+    return unitOk&&searchOk;
+  });
+  const ap=getActiveProfile();
+  const profiles=getProfiles()||[];
+  c.innerHTML=`
+  <div class="form-card" style="border-left:4px solid ${ap?ap.color:'#1a2744'}">
+    <h3>Upravuješ slovíčka pro: <strong>${ap?esc(ap.name):''}</strong></h3>
+  </div>
+
+  <div class="form-card">
+    <h3>📋 Zkopírovat slovíčka z jiného profilu</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:14px">Zkopíruje všechna slovíčka z vybraného profilu do <strong>${ap?esc(ap.name):''}</strong>. Duplikáty se přeskočí.</p>
+    <div class="form-row" style="max-width:400px;align-items:flex-end">
+      <div class="form-group">
+        <label>Zdrojový profil</label>
+        <select id="copyFromProfile">
+          ${(getProfiles()||[]).filter(p=>p.id!==ap?.id).map(p=>`<option value="${p.id}">${esc(p.name)} (${(LS.get('vocab_words_'+p.id)||[]).length} slovíček)</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="copyWordsFromProfile()">📋 Zkopírovat</button>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>➕ Přidat slovíčko ručně</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Anglicky *</label><input type="text" id="addEn" placeholder="např. elephant"></div>
+      <div class="form-group"><label>Česky *</label><input type="text" id="addCs" placeholder="např. slon"></div>
+    </div>
+    <div class="form-row three">
+      <div class="form-group"><label>Emoji</label><input type="text" id="addEmoji" placeholder="🐘" style="width:80px"></div>
+      <div class="form-group"><label>Sada</label><div style="padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;background:#f5f7fa;font-weight:700">VLASTNÍ · Ručně přidaná</div></div>
+      <div class="form-group"><label>Kategorie</label><input type="text" id="addCategory" placeholder="Animals" list="catList"></div>
+    </div>
+    <datalist id="catList">${[...new Set(words.map(w=>w.category))].map(x=>`<option value="${x}">`).join('')}</datalist>
+    <div class="form-group" style="margin-bottom:14px;max-width:200px">
+      <label>Typ slova</label>
+      <select id="addType">
+        <option value="noun">Podstatné jméno</option>
+        <option value="verb">Sloveso</option>
+        <option value="adjective">Přídavné jméno</option>
+        <option value="number">Číslovka</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin:12px 0;max-width:360px">
+      <label>Profil pro uložení na GitHub</label>
+      <select id="githubProfileKey">
+        ${profiles.map(p=>'<option value="'+profileCloudKey(p)+'"'+(p.id===ap?.id?' selected':'')+'>'+esc(p.name)+'</option>').join('')}
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="addWordManually()">✅ Přidat pouze zde</button>
+      <button class="btn btn-success" onclick="sendCustomWordToGitHub()">☁️ Přidat a uložit na GitHub</button>
+      <button class="btn btn-secondary" onclick="loadSharedCustomWords(true)">🔄 Načíst z GitHubu</button>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>📷 Nahrát fotku učebnice</h3>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('photoInput').click()">
+      <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+      <div class="upload-icon">📸</div>
+      <p>Klikni nebo přetáhni fotku stránky z učebnice</p>
+      <p style="font-size:13px;color:#aaa;margin-top:6px">AI automaticky rozpozná slovíčka a jejich překlady</p>
+    </div>
+    <div id="extractedResults"></div>
+  </div>
+
+  <div class="form-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="margin:0">📚 Slovíčka (${words.length})</h3>
+      <button class="btn btn-danger btn-sm" onclick="deleteAllWords()">Smazat vše</button>
+    </div>
+    <div class="filter-bar">
+      <input type="text" placeholder="Hledat..." value="${wordFilterSearch}" oninput="wordFilterSearch=this.value;renderWordsTab(document.getElementById('parentContent'))">
+      <select onchange="wordFilterUnit=this.value;renderWordsTab(document.getElementById('parentContent'))">
+        <option value="all"${wordFilterUnit==='all'?' selected':''}>Všechny lekce</option>
+        ${units.map(u=>`<option value="${u}"${wordFilterUnit===u?' selected':''}>${u}</option>`).join('')}
+      </select>
+    </div>
+    <div class="word-list">
+      ${filtered.length===0?`<p style="color:#999;text-align:center;padding:20px">${words.length===0?'Žádná slovíčka. Přidej první slovíčko výše.':'Žádná slovíčka nenalezena'}</p>`:
+        filtered.map(w=>renderWordItem(w)).join('')}
+    </div>
+  </div>`;
+
+  const z=document.getElementById('uploadZone');
+  z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag')});
+  z.addEventListener('dragleave',()=>z.classList.remove('drag'));
+  z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)handlePhotoFile(f)});
+}
+
+function renderWordItem(w){
+  const stats=getStats()[w.id]||{correct:0,incorrect:0,lastPracticed:null};
+  const total=stats.correct+stats.incorrect;
+  const acc=total>0?Math.round(stats.correct/total*100):null;
+  const badgeClass=acc===null?'':acc>=80?' good':acc>=50?'':' bad';
+  const accLabel=acc===null?'neprocvičeno':`${acc}% (${stats.correct}/${total})`;
+  const emojiHtml=w.emoji?`<span style="font-size:28px">${w.emoji}</span>`:`<span class="word-fallback" style="background:${FALLBACK_COLORS[w.en.charCodeAt(0)%FALLBACK_COLORS.length]}">${w.en[0].toUpperCase()}</span>`;
+  return `<div class="word-item">
+    ${emojiHtml}
+    <div class="word-info">
+      <div class="word-en">${esc(w.en)}</div>
+      <div class="word-cs">${esc(w.cs)}</div>
+      <div class="word-meta">${esc(w.unit)} · ${esc(w.category)} · ${w.type}</div>
+    </div>
+    <span class="word-stat-badge${badgeClass}">${accLabel}</span>
+    <div class="word-actions">
+      <button class="btn btn-secondary btn-sm" onclick="openEditModal('${w.id}')">✏️</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteWord('${w.id}')">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function copyWordsFromProfile(){
+  const sel=document.getElementById('copyFromProfile');
+  if(!sel) return;
+  const sourceId=sel.value;
+  if(!sourceId) return;
+  const sourceWords=LS.get(`vocab_words_${sourceId}`)||[];
+  if(sourceWords.length===0){showToast('Zdrojový profil nemá žádná slovíčka','error');return;}
+  const target=getWords()||[];
+  const existingKeys=new Set(target.map(w=>w.en.toLowerCase()));
+  const toAdd=sourceWords.filter(w=>!existingKeys.has(w.en.toLowerCase()));
+  if(toAdd.length===0){showToast('Všechna slovíčka už tu jsou, nic nepřidáno','error');return;}
+  const newWords=toAdd.map((w,i)=>({...w,id:'w_copy_'+Date.now()+'_'+i}));
+  saveWords([...target,...newWords]);
+  showToast(`Přidáno ${newWords.length} slovíček!`,'success');
+  showParentTab('words');
+}
+
+
+function readCustomWordForm(){
+  const en=document.getElementById('addEn').value.trim();
+  const cs=document.getElementById('addCs').value.trim();
+  const emoji=document.getElementById('addEmoji').value.trim()||findEmojiForWord(en);
+  const category=document.getElementById('addCategory').value.trim()||'Vlastní';
+  const type=document.getElementById('addType').value;
+  if(!en||!cs){showToast('Vyplň anglické i české slovo','error');return null;}
+  return {en,cs,emoji,category,type};
+}
+
+function sendCustomWordToGitHub(){
+  const word=readCustomWordForm();
+  if(!word) return;
+  const profileKey=document.getElementById('githubProfileKey').value;
+  const payload={profileKey,...word,unit:'Vlastní'};
+  const title='[VLASTNI] Přidat slovíčko';
+  const body='Prosím přidat vlastní slovíčko do aplikace.\n\n<!-- CUSTOM_WORD_JSON\n'+JSON.stringify(payload)+'\n-->';
+  const url='https://github.com/pavlinapohlova-hub/slovicka/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
+  window.open(url,'_blank','noopener');
+  showToast('Na GitHubu potvrď odeslání tlačítkem Submit new issue','success');
+}
+
+async function loadSharedCustomWords(showResult=false){
+  try{
+    const api='https://api.github.com/repos/pavlinapohlova-hub/slovicka/contents/custom-words.json?ref=main&t='+Date.now();
+    const response=await fetch(api,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+    if(!response.ok) throw new Error('GitHub '+response.status);
+    const file=await response.json();
+    const jsonText=new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+    const shared=JSON.parse(jsonText);
+    const profiles=getProfiles()||[];
+    profiles.forEach(profile=>{
+      const profileKey=profileCloudKey(profile);
+      const stored=LS.get('vocab_words_'+profile.id)||[];
+      const withoutOldShared=stored.filter(w=>!w.sharedFromGitHub);
+      const localKeys=new Set(withoutOldShared.map(w=>w.en.toLowerCase()+'|||'+w.unit));
+      const additions=shared.filter(w=>w.profileKey===profileKey&&!localKeys.has(w.en.toLowerCase()+'|||Vlastní')).map(w=>({
+        id:w.id,en:w.en,cs:w.cs,emoji:w.emoji||'',unit:'Vlastní',category:w.category||'Vlastní',type:w.type||'noun',custom:true,sharedFromGitHub:true
+      }));
+      LS.set('vocab_words_'+profile.id,[...withoutOldShared,...additions]);
+    });
+    if(showResult) showToast('Vlastní slovíčka načtena z GitHubu','success');
+    renderChildUI();
+    if(inParent&&document.getElementById('tab-words').classList.contains('active')) renderWordsTab(document.getElementById('parentContent'));
+  }catch(error){
+    if(showResult) showToast('Vlastní slovíčka se nepodařilo načíst','error');
+    console.warn('GitHub custom words sync:',error);
+  }
+}
+
+function addWordManually(){
+  const en=document.getElementById('addEn').value.trim();
+  const cs=document.getElementById('addCs').value.trim();
+  const emoji=document.getElementById('addEmoji').value.trim();
+  const unit='Vlastní';
+  const category=document.getElementById('addCategory').value.trim()||'Vlastní';
+  const type=document.getElementById('addType').value;
+  if(!en||!cs){showToast('Vyplň anglické i české slovo','error');return;}
+  const words=getWords()||[];
+  if(words.find(w=>w.en.toLowerCase()===en.toLowerCase())){showToast(`Slovíčko "${en}" už existuje`,'error');return;}
+  words.push({id:'w_custom_'+Date.now()+'_'+Math.random().toString(36).slice(2),en,cs,emoji:emoji||findEmojiForWord(en),unit,category,type,custom:true});
+  saveWords(words);
+  showToast(`Slovíčko "${en}" přidáno!`,'success');
+  renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
+}
+
+function findEmojiForWord(en){
+  const m=DEFAULT_VOCAB.find(w=>w.en.toLowerCase()===en.toLowerCase());
+  return m?m.emoji:'';
+}
+
+function deleteWord(id){
+  if(!confirm('Opravdu smazat toto slovíčko?')) return;
+  const words=(getWords()||[]).filter(w=>w.id!==id);
+  saveWords(words);
+  const stats=getStats();delete stats[id];saveStats(stats);
+  renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
+}
+
+function deleteAllWords(){
+  if(!confirm('Smazat všechna slovíčka tohoto profilu?')) return;
+  saveWords([]);saveStats({});
+  showToast('Slovíčka smazána','success');
+  renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
+}
+
+// EDIT MODAL
+let editingId=null;
+function openEditModal(id){
+  const w=(getWords()||[]).find(x=>x.id===id);
+  if(!w) return;
+  editingId=id;
+  document.getElementById('editEn').value=w.en;
+  document.getElementById('editCs').value=w.cs;
+  document.getElementById('editEmoji').value=w.emoji||'';
+  document.getElementById('editUnit').value=w.unit;
+  document.getElementById('editCategory').value=w.category;
+  document.getElementById('editType').value=w.type;
+  document.getElementById('editModal').classList.remove('hidden');
+}
+function closeEditModal(){document.getElementById('editModal').classList.add('hidden');editingId=null;}
+function saveEditModal(){
+  if(!editingId) return;
+  const words=getWords()||[];
+  const idx=words.findIndex(w=>w.id===editingId);
+  if(idx<0) return;
+  words[idx]={...words[idx],en:document.getElementById('editEn').value.trim(),cs:document.getElementById('editCs').value.trim(),emoji:document.getElementById('editEmoji').value.trim(),unit:document.getElementById('editUnit').value.trim(),category:document.getElementById('editCategory').value.trim(),type:document.getElementById('editType').value};
+  saveWords(words);
+  closeEditModal();
+  showToast('Uloženo','success');
+  renderWordsTab(document.getElementById('parentContent'));
+  renderChildUI();
+}
+
+// PHOTO UPLOAD
+async function handlePhotoUpload(e){const f=e.target.files[0];if(f)handlePhotoFile(f);}
+async function handlePhotoFile(file){
+  const res=document.getElementById('extractedResults');
+  res.innerHTML=`<div class="api-loading"><div class="spinner">⚙️</div><p>AI analyzuje fotku učebnice...</p></div>`;
+  try{
+    const b64=await fileToBase64(file);
+    const data=b64.split(',')[1];
+    const mtype=file.type||'image/jpeg';
+    const apiKey=getApiKey();
+    const headers={'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
+    if(apiKey) headers['x-api-key']=apiKey;
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers,body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2048,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data}},{type:'text',text:'Toto je stránka z anglické učebnice pro děti. Extrahuj všechna anglická slovíčka která vidíš, spolu s jejich českými překlady. Vrať JSON pole objektů ve formátu: [{"en":"word","cs":"překlad","type":"noun|verb|adjective|number"}]. Vrať pouze JSON, bez dalšího textu.'}]}]})});
+    if(!resp.ok) throw new Error(`API chyba: ${resp.status}`);
+    const json=await resp.json();
+    const text=json.content[0].text;
+    let extracted;
+    try{const m=text.match(/\[[\s\S]*\]/);extracted=JSON.parse(m?m[0]:text);}catch{throw new Error('Nepodařilo se zpracovat odpověď AI');}
+    renderExtractedWords(extracted,res);
+  }catch(err){
+    res.innerHTML=`<div style="color:#c62828;background:#ffebee;padding:14px;border-radius:8px;margin-top:12px">⚠️ Chyba: ${esc(err.message)}<br><small>Zkontroluj API klíč v nastavení nebo zkus znovu.</small></div>`;
+  }
+}
+function fileToBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file);});}
+function renderExtractedWords(words,container){
+  if(!words||!words.length){container.innerHTML='<p style="color:#888;margin-top:12px">Nebyla nalezena žádná slovíčka.</p>';return;}
+  let html=`<div style="margin-top:16px"><p style="font-weight:700;margin-bottom:10px">Nalezeno ${words.length} slovíček. Zaškrtni která chceš přidat:</p><div class="extracted-list">`;
+  words.forEach((w,i)=>{
+    const emoji=findEmojiForWord(w.en)||'';
+    html+=`<div class="extracted-item"><input type="checkbox" id="ext_${i}" checked><span class="ext-en">${esc(w.en)}</span><span class="ext-cs">${esc(w.cs)}</span><input class="extracted-emoji-input" id="extEmoji_${i}" value="${esc(emoji)}" title="Emoji"><select id="extType_${i}" style="padding:6px;border:1px solid #ddd;border-radius:6px;font-size:13px"><option value="noun"${w.type==='noun'?' selected':''}>podst.</option><option value="verb"${w.type==='verb'?' selected':''}>sl.</option><option value="adjective"${w.type==='adjective'?' selected':''}>příd.</option></select></div>`;
+  });
+  html+=`</div><div style="margin-top:14px;display:flex;gap:10px"><button class="btn btn-primary" onclick="confirmExtracted(${words.length})">✅ Přidat vybraná</button><button class="btn btn-secondary" onclick="document.getElementById('extractedResults').innerHTML=''">Zrušit</button></div></div>`;
+  container.innerHTML=html;
+  window._extractedWords=words;
+}
+function confirmExtracted(count){
+  const allWords=getWords()||[];
+  let added=0;
+  for(let i=0;i<count;i++){
+    const cb=document.getElementById('ext_'+i);
+    if(!cb||!cb.checked) continue;
+    const w=window._extractedWords[i];
+    if(allWords.find(x=>x.en.toLowerCase()===w.en.toLowerCase())) continue;
+    allWords.push({id:'w_photo_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2),en:w.en,cs:w.cs,emoji:document.getElementById('extEmoji_'+i).value.trim(),unit:'Vlastní',category:'Extrahováno',type:document.getElementById('extType_'+i).value,custom:true});
+    added++;
+  }
+  saveWords(allWords);
+  document.getElementById('extractedResults').innerHTML=`<p style="color:#2e7d32;font-weight:700;margin-top:12px">✅ Přidáno ${added} slovíček!</p>`;
+  setTimeout(()=>{renderWordsTab(document.getElementById('parentContent'));renderChildUI();},1500);
+}
+
+// PROGRESS TAB
+function renderProgressTab(c){
+  const words=getWords()||[];
+  const stats=getStats();
+  let mastered=0,practicing=0,untouched=0;
+  words.forEach(w=>{const s=stats[w.id];if(!s||s.correct+s.incorrect===0){untouched++;return;}const acc=s.correct/(s.correct+s.incorrect);if(acc>=0.8)mastered++;else practicing++;});
+  const ap=getActiveProfile();
+  c.innerHTML=`
+  <div class="form-card" style="border-left:4px solid ${ap?ap.color:'#1a2744'}"><h3>Pokrok: <strong>${ap?esc(ap.name):''}</strong></h3></div>
+  <div class="stats-grid">
+    <div class="stat-card green"><div class="stat-number">${mastered}</div><div class="stat-label">✅ Zvládnutých (>80%)</div></div>
+    <div class="stat-card orange"><div class="stat-number">${practicing}</div><div class="stat-label">🔄 V tréninku</div></div>
+    <div class="stat-card grey"><div class="stat-number">${untouched}</div><div class="stat-label">💤 Neprocvičených</div></div>
+  </div>
+  ${words.length===0?'<p style="text-align:center;color:#999;padding:20px">Žádná slovíčka</p>':`
+  <div class="progress-table"><table>
+    <thead><tr><th>Slovíčko</th><th>Správně</th><th>Špatně</th><th>Úspěšnost</th><th>Poslední procvičení</th></tr></thead>
+    <tbody>${words.map(w=>{const s=stats[w.id]||{correct:0,incorrect:0,lastPracticed:null};const total=s.correct+s.incorrect;const acc=total>0?Math.round(s.correct/total*100):null;const barClass=acc===null?'':acc>=80?'':acc>=50?' medium':' low';return `<tr><td><strong>${esc(w.en)}</strong><br><small style="color:#888">${esc(w.cs)}</small></td><td style="color:#2e7d32;font-weight:700">${s.correct}</td><td style="color:#c62828;font-weight:700">${s.incorrect}</td><td>${acc===null?'<span style="color:#bbb">-</span>':`<div style="display:flex;align-items:center;gap:8px"><div class="mini-bar"><div class="mini-bar-fill${barClass}" style="width:${acc}%"></div></div><span>${acc}%</span></div>`}</td><td style="color:#888;font-size:13px">${s.lastPracticed||'-'}</td></tr>`;}).join('')}</tbody>
+  </table></div>`}`;
+}
+
+// SETTINGS TAB
+function renderSettingsTab(c){
+  const apiKey=getApiKey();
+  c.innerHTML=`
+  <div class="settings-card">
+    <h3>🔐 PIN kód</h3>
+    <div class="form-row" style="max-width:360px">
+      <div class="form-group"><label>Nový PIN (4 číslice)</label><input type="password" id="newPin" maxlength="4" placeholder="****" style="letter-spacing:8px;font-size:20px"></div>
+      <div class="form-group"><label>Potvrdit PIN</label><input type="password" id="newPin2" maxlength="4" placeholder="****" style="letter-spacing:8px;font-size:20px"></div>
+    </div>
+    <button class="btn btn-primary" onclick="changePin()">Uložit PIN</button>
+  </div>
+  <div class="settings-card">
+    <h3>🤖 Anthropic API klíč</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:10px">Potřebný pro rozpoznávání slovíček z fotek učebnice. Pokud používáš proxy, nech prázdné.</p>
+    <div class="form-group" style="max-width:500px"><label>API klíč</label><input type="password" id="apiKeyInput" value="${esc(apiKey)}" placeholder="sk-ant-..."><span class="api-key-note">Klíč se ukládá pouze lokálně v prohlížeči</span></div>
+    <button class="btn btn-primary" onclick="saveApiKey()">Uložit</button>
+  </div>`;
+}
+
+function changePin(){
+  const p1=document.getElementById('newPin').value;
+  const p2=document.getElementById('newPin2').value;
+  if(!/^\d{4}$/.test(p1)){showToast('PIN musí mít přesně 4 číslice','error');return;}
+  if(p1!==p2){showToast('PINy se neshodují','error');return;}
+  LS.set('vocab_pin',p1);
+  showToast('PIN byl změněn','success');
+}
+function saveApiKey(){LS.set('vocab_api_key',document.getElementById('apiKeyInput').value.trim());showToast('API klíč uložen','success');}
+
+// ============================================================
+// CHILD MODE
+// ============================================================
+function renderChildUI(){
+  const ap=getActiveProfile();
+  const stars=getStars();
+  const streak=getStreak();
+  const screen=document.getElementById('childScreen');
+  if(ap){
+    document.getElementById('profileNameBadge').textContent=ap.name;
+    document.getElementById('profileNameBadge').style.borderColor=ap.color;
+    if(ap.mode==='beginner') screen.classList.add('beginner-mode');
+    else screen.classList.remove('beginner-mode');
+  }
+  document.getElementById('starsCount').textContent=stars;
+  document.getElementById('levelBadge').textContent=getLevelName(stars);
+  document.getElementById('streakDisplay').textContent=`🔥 ${streak.count}`;
+  updateMuteBtn();
+  renderWorldMap();
+  renderSetSelector();
+  const words=getWords()||[];
+  document.getElementById('noWordsMsg').style.display=words.length===0?'block':'none';
+  document.getElementById('startBtn').style.display=words.length<4?'none':'block';
+  showChildSection('map');
+}
+
+function getLevelName(stars){
+  for(const l of LEVELS) if(stars>=l.min&&stars<=l.max) return l.name;
+  return LEVELS[LEVELS.length-1].name;
+}
+
+function getAllCountries(){
+  // Vrátí flat pole {country, contIdx} pro všechny státy
+  const all=[];
+  WORLD_MAP.forEach((cont,ci)=>cont.countries.forEach(c=>all.push({...c,contIdx:ci})));
+  return all;
+}
+
+function isContComplete(contIdx,stars){
+  return WORLD_MAP[contIdx].countries.every(c=>stars>=c.unlockAt);
+}
+
+function getCurrentContIdx(stars){
+  // Kontinent kde je aktuálně hráč (nejvyšší dosud odemčený kontinent)
+  let idx=0;
+  WORLD_MAP.forEach((cont,ci)=>{ if(cont.countries.some(c=>stars>=c.unlockAt)) idx=ci; });
+  return idx;
+}
+
+function renderWorldMap(){
+  const stars=getStars();
+  const map=document.getElementById('worldMap');
+  const contIdx=getCurrentContIdx(stars);
+
+  let html='';
+
+  WORLD_MAP.forEach((cont,ci)=>{
+    const contDone=isContComplete(ci,stars);
+    const contStarted=cont.countries.some(c=>stars>=c.unlockAt);
+    const isCurrentCont=ci===contIdx;
+
+    // Kapitoly za aktuální - zobraz jen teaser pro tu hned další
+    if(!contStarted){
+      if(ci===contIdx+1){
+        const starsLeft=cont.countries[0].unlockAt-stars;
+        html+=`<div class="road-teaser">
+          <div class="road-teaser-label">🔒 Další kapitola: ???</div>
+          <div class="road-teaser-hint">⭐ ještě ${starsLeft} hvězdiček</div>
+        </div>`;
+      }
+      return;
+    }
+
+    // Dokončené kapitoly - kompaktní proužek
+    if(contDone&&!isCurrentCont){
+      html+=`<div class="road-chapter-done">
+        <div class="road-chapter-done-label">✅ ${cont.emoji} ${cont.name}</div>
+        <div class="done-pins">${cont.countries.map(c=>`<div class="done-pin">${c.emoji}</div>`).join('')}</div>
+      </div>`;
+      return;
+    }
+
+    // Aktuální kapitola - plná cesta s kolem
+    const N=cont.countries.length;
+    // Index aktuální zastávky (poslední odemčená)
+    let currIdx=0;
+    cont.countries.forEach((c,i)=>{ if(stars>=c.unlockAt) currIdx=i; });
+    const bikePct=(N>1?currIdx/(N-1):0)*100;
+
+    // Progres k další zastávce
+    const nextStop=cont.countries[currIdx+1];
+    const prevStop=cont.countries[currIdx];
+    let fillPct=100;
+    if(nextStop){
+      fillPct=Math.min(100,Math.round((stars-prevStop.unlockAt)/(nextStop.unlockAt-prevStop.unlockAt)*100));
+    }
+
+    html+=`<div class="road-chapter-sky">`;
+    html+=`<div class="road-chapter-label-sky">${cont.emoji} ${cont.name}</div>`;
+    html+=`<div class="stops-row">`;
+
+    cont.countries.forEach((c,idx)=>{
+      const unlocked=stars>=c.unlockAt;
+      const isDone=unlocked&&(idx<N-1?stars>=cont.countries[idx+1].unlockAt:true);
+      const isCurr=unlocked&&!isDone;
+      const pinClass=isDone?'done':isCurr?'curr':unlocked?'done':'locked';
+      const showPin=unlocked||(idx===currIdx+1);
+      if(!showPin&&idx>currIdx+1){
+        html+=`<div class="stop"><div class="stop-pin mystery"></div><div class="stop-name dim">???</div></div>`;
+        return;
+      }
+      if(!unlocked){
+        const starsLeft=c.unlockAt-stars;
+        html+=`<div class="stop"><div class="stop-pin mystery"></div><div class="stop-name dim">???</div><div class="stop-stars">⭐ ${starsLeft}</div></div>`;
+        return;
+      }
+      html+=`<div class="stop">
+        <div class="stop-pin ${pinClass}">${c.emoji}${isDone?'<div class="stop-chk">✓</div>':''}
+        </div>
+        <div class="stop-name">${c.name}</div>
+      </div>`;
+    });
+
+    html+=`</div>`;
+    html+=`<div class="road-track">
+      <div class="road-done-overlay" style="width:${bikePct}%"></div>
+      <div class="bike-wrap" style="left:calc(${bikePct}% * 0.9 + 5%)">
+        <div class="bike-emoji">🚲</div>
+        <div class="bike-shadow"></div>
+      </div>
+    </div>`;
+
+    if(nextStop){
+      html+=`<div class="chapter-stars-bar">
+        <div class="chapter-stars-label">⭐ ${stars}</div>
+        <div class="chapter-stars-track"><div class="chapter-stars-fill" style="width:${fillPct}%"></div></div>
+        <div class="chapter-stars-count">do ${nextStop.name}: ${nextStop.unlockAt-stars}</div>
+      </div>`;
+    }
+
+    html+=`</div>`;
+  });
+
+  map.innerHTML=html;
+}
+
+const BOOK_ORDER=['LE1','LE2','LE3','ET1','ET2','ET3','VLASTNÍ','OTHER'];
+const BOOK_NAMES={
+  LE1:"Let's Explore 1",
+  LE2:"Let's Explore 2",
+  LE3:"Let's Explore 3",
+  ET1:"Explore Together 1",
+  ET2:"Explore Together 2",
+  ET3:"Explore Together 3",
+  VLASTNÍ:"Vlastní slovíčka",
+  OTHER:"Ostatní"
+};
+
+function getUnitDisplayInfo(unit){
+  let m;
+  if((m=unit.match(/^L1 (.+)$/))) return {book:'LE1',chapter:m[1]};
+  if((m=unit.match(/^L3 (.+)$/))) return {book:'LE3',chapter:m[1]};
+  if((m=unit.match(/^ET([123]) (.+)$/))) return {book:'ET'+m[1],chapter:m[2]};
+  if(unit==='Hello'||/^Unit \d+$/.test(unit)) return {book:'LE2',chapter:unit};
+  if(unit==='Vlastní'||unit==='Z fotky') return {book:'VLASTNÍ',chapter:'Ručně přidaná'};
+  return {book:'OTHER',chapter:unit};
+}
+
+function chapterSortValue(chapter){
+  if(chapter==='Hello') return 0;
+  const m=chapter.match(/^Unit (\d+)$/);
+  if(m) return Number(m[1]);
+  return 1000;
+}
+
+function renderSetSelector(){
+  const words=getWords()||[];
+  const units=[...new Set(words.map(w=>w.unit))];
+  const selected=getSelectedSet();
+  const ap=getActiveProfile();
+  const beginner=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images');
+  const sel=document.getElementById('setSelector');
+  const groups={};
+  units.forEach(unit=>{
+    const info=getUnitDisplayInfo(unit);
+    (groups[info.book]||(groups[info.book]=[])).push({...info,unit,count:words.filter(w=>w.unit===unit).length});
+  });
+  let html='';
+  if(beginner){
+    html=`<div class="all-words-row"><button class="set-btn${selected==='all'?' active':''}" onclick="selectSet('all')">🌍 Všechna slovíčka (${words.length})</button></div>`;
+  }else{
+    const modes=[
+      {id:'words',icon:'🔤',name:`Všechna slovíčka (${words.length})`,desc:'Samostatná slovíčka z celé zásoby'},
+      {id:'sentences',icon:'💬',name:'Věty',desc:'Věty namíchané z celé slovní zásoby'},
+      {id:'listening',icon:'🎧',name:'Poslech',desc:'Poslech slov a výběr překladu'}
+    ];
+    html=`<div class="practice-mode-grid">
+      <div class="practice-mode-card allmix${practiceMode==='allmix'?' active':''}">
+        <div class="practice-mode-name">🎲 Mix všeho</div>
+        <div class="practice-mode-desc">Slovíčka, věty i poslech v obou směrech</div>
+        <div class="direction-row"><button class="direction-btn${practiceMode==='allmix'?' active':''}" onclick="selectPractice('allmix','mix')">VŠE DOHROMADY</button></div>
+      </div>`+modes.map(m=>`
+      <div class="practice-mode-card${practiceMode===m.id?' active':''}">
+        <div class="practice-mode-name">${m.icon} ${m.name}</div>
+        <div class="practice-mode-desc">${m.desc}</div>
+        <div class="direction-row">
+          <button class="direction-btn${practiceMode===m.id&&practiceDirection==='en-cs'?' active':''}" onclick="selectPractice('${m.id}','en-cs')">AJ → ČJ</button>
+          <button class="direction-btn${practiceMode===m.id&&practiceDirection==='cs-en'?' active':''}" onclick="selectPractice('${m.id}','cs-en')">ČJ → AJ</button>
+          <button class="direction-btn${practiceMode===m.id&&practiceDirection==='mix'?' active':''}" onclick="selectPractice('${m.id}','mix')">MIX</button>
+        </div>
+      </div>`).join('')+'</div>';
+  }
+  BOOK_ORDER.filter(book=>groups[book]).forEach(book=>{
+    const chapters=groups[book].sort((a,b)=>chapterSortValue(a.chapter)-chapterSortValue(b.chapter)||a.chapter.localeCompare(b.chapter,'cs'));
+    const bookCount=chapters.reduce((sum,ch)=>sum+ch.count,0);
+    const safeBook=book.replace(/'/g,"\\'");
+    html+=`<div class="book-section">
+      <button class="book-select-btn${practiceMode==='mixed'&&selected==='book:'+book?' active':''}" onclick="selectBook('${safeBook}')">📘 ${book} · ${esc(BOOK_NAMES[book])} — celá učebnice (${bookCount})</button>
+      <div class="book-chapters">`;
+    chapters.forEach(({unit,chapter,count})=>{
+      const safeUnit=unit.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      html+=`<div class="chapter-choice">
+        <button class="set-btn${practiceMode==='mixed'&&selected===unit?' active':''}" onclick="selectSet(this,'${safeUnit}')">${book} · ${esc(chapter)} (${count})</button>
+        <button class="chapter-words-btn${practiceMode==='chapterwords'&&selected===unit?' active':''}" onclick="selectChapterWords('${safeUnit}')">🔤 ${book} · ${esc(chapter)} · Slovíčka</button>
+      </div>`;
+    });
+    html+='</div></div>';
+  });
+  sel.innerHTML=html;
+}
+
+function selectPractice(mode,direction){
+  practiceMode=mode;
+  practiceDirection=direction;
+  saveSelectedSet('all');
+  renderSetSelector();
+}
+
+function selectSet(elOrName,name){
+  practiceMode='mixed';
+  saveSelectedSet(typeof elOrName==='string'?elOrName:name);
+  renderSetSelector();
+}
+
+function selectBook(book){
+  practiceMode='mixed';
+  saveSelectedSet('book:'+book);
+  renderSetSelector();
+}
+
+function selectChapterWords(unit){
+  practiceMode='chapterwords';
+  practiceDirection='mix';
+  saveSelectedSet(unit);
+  renderSetSelector();
+}
+
+function showChildSection(sec){
+  document.getElementById('mapScreen').style.display=sec==='map'?'block':'none';
+  document.getElementById('exerciseScreen').style.display=sec==='exercise'?'block':'none';
+  document.getElementById('resultsScreen').style.display=sec==='results'?'flex':'none';
+}
+
+function goHome(){showChildSection('map');renderChildUI();}
+
+// ============================================================
+// SESSION / EXERCISES
+// ============================================================
+let session=null;
+let practiceMode='allmix';
+let practiceDirection='mix';
+
+function buildWordPool(){
+  const all=getWords()||[];
+  const ap=getActiveProfile();
+  let eligible=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')?all.filter(w=>!w.noEmoji):all;
+  if(ap&&ap.units&&ap.units.length>0) eligible=eligible.filter(w=>ap.units.includes(w.unit));
+  const sel=getSelectedSet();
+  let pool=eligible;
+  if((practiceMode==='mixed'||practiceMode==='chapterwords')&&sel!=='all'){
+    if(sel.startsWith('book:')){
+      const wantedBook=sel.slice(5);
+      pool=eligible.filter(w=>getUnitDisplayInfo(w.unit).book===wantedBook);
+    }else{
+      pool=eligible.filter(w=>w.unit===sel);
+    }
+  }
+  if(practiceMode==='sentences') pool=pool.filter(w=>(w.type==='noun'||w.type==='verb'||w.type==='adjective')&&!w.noSentence);
+  return pool.length>=4?pool:eligible;
+}
+
+function weightedRandom(pool){
+  const weighted=[];
+  pool.forEach(w=>{const acc=getAccuracy(w.id);const weight=(acc>=0&&acc<0.6)?3:1;for(let i=0;i<weight;i++)weighted.push(w);});
+  return weighted[Math.floor(Math.random()*weighted.length)];
+}
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function pickExerciseType(word){
+  const ap=getActiveProfile();
+  if(ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')) return 6;
+  if(practiceMode==='words'||practiceMode==='chapterwords') return practiceDirection==='mix'?(Math.random()<.5?1:5):(practiceDirection==='en-cs'?1:5);
+  if(practiceMode==='sentences') return practiceDirection==='mix'?(Math.random()<.5?8:7):(practiceDirection==='en-cs'?8:7);
+  if(practiceMode==='listening') return practiceDirection==='mix'?(Math.random()<.5?3:11):(practiceDirection==='en-cs'?3:11);
+  if(practiceMode==='allmix'){
+    const sentenceOK=(word.type==='noun'||word.type==='verb'||word.type==='adjective')&&!word.noSentence;
+    const allTypes=sentenceOK?[1,5,3,11,7,8]:[1,5,3,11];
+    return allTypes[Math.floor(Math.random()*allTypes.length)];
+  }
+  const muted=getMute();
+  const adjNoun=hasAdjNounSupport(word,session.pool);
+  const types=adjNoun?[1,3,5,4,4,7,7,8,8,9,9,10,10]:[1,3,5,4,4,7,7,8,8];
+  const validTypes=types.filter(t=>{
+    if([4,7,8].includes(t)) return (word.type==='noun'||word.type==='verb'||word.type==='adjective')&&!word.noSentence;
+    if([9,10].includes(t)) return adjNoun;
+    if(t===3&&muted) return false;
+    return true;
+  });
+  if(!validTypes.length) return 1;
+  return validTypes[Math.floor(Math.random()*validTypes.length)];
+}
+
+function startSession(){
+  const pool=buildWordPool();
+  if(pool.length<4){showToast('Potřebuješ alespoň 4 slovíčka','error');return;}
+  session={pool,round:0,total:10,correct:0,starsEarned:0,consecutiveCorrect:0,currentWord:null};
+  showChildSection('exercise');
+  nextRound();
+}
+
+function nextRound(){
+  if(session.round>=session.total){finishSession();return;}
+  session.round++;
+  document.getElementById('progressFill').style.width=((session.round-1)/session.total*100)+'%';
+  document.getElementById('exerciseCounter').textContent=`${session.round} / ${session.total}`;
+  document.getElementById('sessionStreak').textContent=session.consecutiveCorrect>=2?`🔥${session.consecutiveCorrect}`:'';
+  const word=weightedRandom(session.pool);
+  session.currentWord=word;
+  renderExercise(pickExerciseType(word),word);
+}
+
+function renderExercise(type,word){
+  const c=document.getElementById('exerciseContent');
+  if(type===1) renderExType1(c,word);
+  else if(type===2) renderExType2(c,word);
+  else if(type===3) renderExType3(c,word);
+  else if(type===4) renderExType4(c,word);
+  else if(type===5) renderExType5(c,word);
+  else if(type===6) renderExType6(c,word);
+  else if(type===7) renderExType7(c,word);
+  else if(type===8) renderExType8(c,word);
+  else if(type===9) renderExType9(c,word);
+  else if(type===10) renderExType10(c,word);
+  else renderExType11(c,word);
+}
+
+function getWrongOptions(correct,pool,count=3){
+  const others=shuffle(pool.filter(w=>w.id!==correct.id));
+  const chosen=[];
+  for(const w of others){if(chosen.length>=count)break;if(!chosen.find(x=>x.cs===w.cs))chosen.push(w);}
+  while(chosen.length<count){const f=DEFAULT_VOCAB[Math.floor(Math.random()*DEFAULT_VOCAB.length)];if(!chosen.find(x=>x.cs===f.cs)&&f.cs!==correct.cs)chosen.push(f);}
+  return chosen.slice(0,count);
+}
+
+function renderExType1(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🔤 Přelož slovíčko</div><div class="exercise-word" style="margin-top:16px">${esc(word.en)}</div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType1(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
+}
+function mkFallback(word,size){const color=FALLBACK_COLORS[word.en.charCodeAt(0)%FALLBACK_COLORS.length];return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;border-radius:50%;background:${color};color:#fff;font-size:${Math.round(size*.5)}px;font-weight:700">${word.en[0].toUpperCase()}</span>`;}
+function answerType1(btn,answerId,correctId){
+  document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+  const correct=answerId===correctId;
+  btn.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
+  }
+}
+
+function renderExType2(c,word){
+  const wrongs=getWrongOptions(word,session.pool,3);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🖼️ Klikni na správný obrázek</div><div class="exercise-word" style="font-size:36px">${esc(word.en)}</div><div class="exercise-instruction">Které obrázek odpovídá tomuto slovu?</div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType2(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${o.emoji||mkFallback(o,48)}</span></div>`).join('')}</div>`;
+}
+function answerType2(el,answerId,correctId){
+  document.querySelectorAll('.emoji-choice').forEach(e=>e.onclick=null);
+  const correct=answerId===correctId;
+  el.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl,el));
+  }
+}
+
+function renderExType3(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🎧 Poslechni a přelož</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">Klikni pro přehrání</div></div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.cs)}</button>`).join('')}</div>`;
+  setTimeout(()=>speakWord(word.en),400);
+}
+function renderExType11(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  const spoken=esc(word.cs).replace(/'/g,"\\'");
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🎧 Poslechni a přelož do angličtiny</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${spoken}','cs-CZ')">🔊</button><div class="listen-hint">Klikni pro přehrání</div></div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType3(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.en)}</button>`).join('')}</div>`;
+  setTimeout(()=>speakWord(word.cs,'cs-CZ'),400);
+}
+
+function toggleMute(){
+  const muted=!getMute();
+  saveMute(muted);
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+  document.getElementById('muteBtn').style.opacity=muted?'0.5':'1';
+  showToast(muted?'Zvuk vypnut':'Zvuk zapnut');
+}
+function updateMuteBtn(){
+  const muted=getMute();
+  const btn=document.getElementById('muteBtn');
+  if(btn){btn.textContent=muted?'🔇':'🔊';btn.style.opacity=muted?'0.5':'1';}
+}
+let _preferredVoice=null;
+function _loadVoice(){
+  const voices=speechSynthesis.getVoices();
+  if(!voices.length) return;
+  const femaleNames=['Samantha','Zira','Karen','Moira','Tessa','Helena','Hazel','Susan','Victoria','Female','female'];
+  const enVoices=voices.filter(v=>/^en/i.test(v.lang));
+  _preferredVoice=enVoices.find(v=>femaleNames.some(n=>v.name.includes(n)))
+    ||enVoices.find(v=>/en-GB/i.test(v.lang))
+    ||enVoices[0]
+    ||null;
+}
+if(window.speechSynthesis){
+  speechSynthesis.onvoiceschanged=_loadVoice;
+  _loadVoice();
+}
+function speakWord(text,lang='en-US'){
+  if(getMute()||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang;u.rate=0.85;
+  if(/^en/i.test(lang)&&_preferredVoice) u.voice=_preferredVoice;
+  speechSynthesis.speak(u);
+}
+function answerType3(btn,answerId,correctId){
+  document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+  const correct=answerId===correctId;
+  btn.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
+  }
+}
+
+function csAcc(word){
+  if(word.type!=='noun') return word.cs;
+  if(word.cs_acc) return word.cs_acc;
+  return word.cs;
+}
+
+const SEASON_SENTENCES={
+  spring:{en:"It's spring.",cs:"Je jaro."},
+  summer:{en:"It's summer.",cs:"Je léto."},
+  autumn:{en:"It's autumn.",cs:"Je podzim."},
+  winter:{en:"It's winter.",cs:"Je zima."}
+};
+function isSeasonWord(word){return !!(word&&SEASON_SENTENCES[word.en]);}
+
+const SENTENCE_TEMPLATES=[
+  {tiles:(a,w)=>a?["I","can","see",`${a} ${w}.`]:["I","can","see",`${w}.`], cs:(cs)=>`Vidím ${cs}.`, acc:true},
+  {tiles:(a,w)=>a?["I","can't","see",`${a} ${w}.`]:["I","can't","see",`${w}.`], cs:(cs)=>`Nevidím ${cs}.`, acc:true},
+  {tiles:(a,w)=>a?["I've","got",`${a} ${w}.`]:["I've","got",`${w}.`], cs:(cs)=>`Mám ${cs}.`, acc:true},
+  {tiles:(a,w)=>a?["I","haven't","got",`${a} ${w}.`]:["I","haven't","got",`${w}.`], cs:(cs)=>`Nemám ${cs}.`, acc:true},
+];
+const VERB_TEMPLATES=[
+  {tiles:(w)=>["I","can",`${w}.`], cs:(cs)=>`Umím ${cs}.`},
+  {tiles:(w)=>["I","can't",`${w}.`], cs:(cs)=>`Neumím ${cs}.`},
+];
+const ADJECTIVE_TEMPLATES=[
+  {tiles:(w)=>["It's",`${w}.`],     cs:(cs)=>`Je ${cs}.`},
+  {tiles:(w)=>["It's","not",`${w}.`], cs:(cs)=>`Není ${cs}.`},
+  {tiles:(w)=>["I'm",`${w}.`],      cs:(cs)=>`Jsem ${cs}.`},
+  {tiles:(w)=>["I'm","not",`${w}.`],  cs:(cs)=>`Nejsem ${cs}.`},
+];
+const ADJECTIVE_TEMPLATES_IMPERSONAL=[
+  {tiles:(w)=>["It's",`${w}.`],     cs:(cs)=>`Je ${cs}.`},
+  {tiles:(w)=>["It's","not",`${w}.`], cs:(cs)=>`Není ${cs}.`},
+];
+function pickAdjTemplate(word){
+  const pool=word.category==='Weather'?ADJECTIVE_TEMPLATES_IMPERSONAL:ADJECTIVE_TEMPLATES;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+const ADJ_NOUN_TEMPLATES=[
+  {tiles:(art,adj,noun)=>art?["I","can","see",art,adj,`${noun}.`]:["I","can","see",adj,`${noun}.`], cs:(a,n)=>`Vidím ${a} ${n}.`},
+  {tiles:(art,adj,noun)=>art?["I","can't","see",art,adj,`${noun}.`]:["I","can't","see",adj,`${noun}.`], cs:(a,n)=>`Nevidím ${a} ${n}.`},
+  {tiles:(art,adj,noun)=>art?["I've","got",art,adj,`${noun}.`]:["I've","got",adj,`${noun}.`], cs:(a,n)=>`Mám ${a} ${n}.`},
+  {tiles:(art,adj,noun)=>art?["I","haven't","got",art,adj,`${noun}.`]:["I","haven't","got",adj,`${noun}.`], cs:(a,n)=>`Nemám ${a} ${n}.`},
+];
+
+function getNounGender(word){return NOUN_GENDERS[word.en]||'mi';}
+
+function makeAdjNounPair(noun, pool){
+  const gender=getNounGender(noun);
+  const adjs=pool.filter(w=>w.type==='adjective'&&ADJ_FORMS[w.en]&&!w.noSentence);
+  if(!adjs.length) return null;
+  const adj=adjs[Math.floor(Math.random()*adjs.length)];
+  const tpl=ADJ_NOUN_TEMPLATES[Math.floor(Math.random()*ADJ_NOUN_TEMPLATES.length)];
+  const art=getArticle(noun.en,noun.plural);
+  const adjCs=ADJ_FORMS[adj.en][gender]||adj.cs;
+  const nounCs=csAcc(noun);
+  return {adj,tiles:tpl.tiles(art,adj.en,noun.en),cs:tpl.cs(adjCs,nounCs),en:tpl.tiles(art,adj.en,noun.en).join(' ')};
+}
+
+function hasAdjNounSupport(word,pool){
+  return word.type==='noun'&&!word.noSentence&&!isSeasonWord(word)&&NOUN_GENDERS[word.en]&&pool.some(w=>w.type==='adjective'&&ADJ_FORMS[w.en]);
+}
+
+function renderExType4(c,word){
+  const isVerb=word.type==='verb';
+  const isAdj=word.type==='adjective';
+  let tpl,correctTiles,czHint;
+  if(isSeasonWord(word)){
+    const pair=SEASON_SENTENCES[word.en];
+    correctTiles=["It's",word.en+"."];
+    czHint=pair.cs;
+  } else if(isVerb){
+    tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
+    correctTiles=tpl.tiles(word.en);
+    czHint=tpl.cs(word.cs_verb||word.cs);
+  } else if(isAdj){
+    tpl=pickAdjTemplate(word);
+    correctTiles=tpl.tiles(word.en);
+    czHint=tpl.cs(word.cs);
+  } else {
+    tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
+    const article=getArticle(word.en,word.plural);
+    correctTiles=tpl.tiles(article,word.en);
+    czHint=tpl.cs(tpl.acc?csAcc(word):word.cs);
+  }
+  session.sentenceTiles={correct:correctTiles,placed:[],available:shuffle([...correctTiles])};
+  c.innerHTML=`<div class="exercise-card" style="text-align:left"><div class="exercise-type-label">🧩 Poskladej větu</div><div style="text-align:center;margin:8px 0 4px"><span style="font-size:48px">${word.emoji||word.en[0].toUpperCase()}</span></div><div style="text-align:center;background:rgba(255,215,0,0.12);border-radius:10px;padding:10px 16px;margin:8px 0 14px"><span style="color:var(--gold);font-family:'Fredoka',cursive;font-size:22px">${esc(czHint)}</span></div><p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Poskladej anglicky:</p><div class="answer-area" id="answerArea"><span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span></div><div class="tile-area" id="tileArea"></div></div><button class="check-btn" id="checkBtn" onclick="checkSentence()">Zkontrolovat ✓</button>`;
+  renderTiles();
+}
+
+function renderExType5(c,word){
+  const wrongs=getWrongOptions(word,session.pool);
+  const options=shuffle([word,...wrongs]);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🔄 Přelož do angličtiny</div><div class="exercise-word" style="margin-top:16px">${esc(word.cs)}</div></div><div class="answers">${options.map(o=>`<button class="answer-btn" onclick="answerType5(this,'${esc(o.id)}','${esc(word.id)}')">${esc(o.en)}</button>`).join('')}</div>`;
+}
+function answerType5(btn,answerId,correctId){
+  document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+  const correct=answerId===correctId;
+  btn.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.answer-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',correctEl,btn));
+  }
+}
+
+function makeSentencePair(word){
+  if(isSeasonWord(word)) return {...SEASON_SENTENCES[word.en]};
+  const isVerb=word.type==='verb';
+  const isAdj=word.type==='adjective';
+  if(isVerb){
+    const tpl=VERB_TEMPLATES[Math.floor(Math.random()*VERB_TEMPLATES.length)];
+    return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs_verb||word.cs)};
+  } else if(isAdj){
+    const tpl=pickAdjTemplate(word);
+    return {en:tpl.tiles(word.en).join(' '), cs:tpl.cs(word.cs)};
+  } else {
+    const tpl=SENTENCE_TEMPLATES[Math.floor(Math.random()*SENTENCE_TEMPLATES.length)];
+    const a=getArticle(word.en,word.plural);
+    return {en:tpl.tiles(a,word.en).join(' '), cs:tpl.cs(tpl.acc?csAcc(word):word.cs)};
+  }
+}
+
+function getWrongSentences(correctWord, pool, count=3){
+  const sameType=correctWord.type;
+  const candidates=shuffle(pool.filter(w=>w.id!==correctWord.id&&(w.type===sameType||(sameType==='noun'&&w.type==='noun')||(sameType==='verb'&&w.type==='verb')||(sameType==='adjective'&&w.type==='adjective'))));
+  const chosen=[];
+  for(const w of candidates){
+    if(chosen.length>=count) break;
+    const s=makeSentencePair(w);
+    if(!chosen.find(x=>x.en===s.en)) chosen.push(s);
+  }
+  while(chosen.length<count){
+    const fb=DEFAULT_VOCAB.filter(w=>w.type===sameType||w.type==='noun'||w.type==='verb');
+    const w=fb[Math.floor(Math.random()*fb.length)];
+    const s=makeSentencePair(w);
+    if(!chosen.find(x=>x.en===s.en)) chosen.push(s);
+  }
+  return chosen.slice(0,count);
+}
+
+function renderExType7(c,word){
+  if(word.type!=='noun'&&word.type!=='verb'&&word.type!=='adjective'){renderExType1(c,word);return;}
+  const correct=makeSentencePair(word);
+  const wrongs=getWrongSentences(word,session.pool);
+  const options=shuffle([{...correct,isCorrect:true},...wrongs.map(s=>({...s,isCorrect:false}))]);
+  const idx=options.findIndex(o=>o.isCorrect);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇬🇧 Jak to říct anglicky?</div><div style="background:rgba(255,215,0,0.12);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:var(--gold);font-family:'Fredoka',cursive;font-size:26px">${esc(correct.cs)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:16px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.en)}</button>`).join('')}</div>`;
+}
+
+function renderExType8(c,word){
+  if(word.type!=='noun'&&word.type!=='verb'&&word.type!=='adjective'){renderExType1(c,word);return;}
+  const correct=makeSentencePair(word);
+  const wrongs=getWrongSentences(word,session.pool);
+  const options=shuffle([{...correct,isCorrect:true},...wrongs.map(s=>({...s,isCorrect:false}))]);
+  const idx=options.findIndex(o=>o.isCorrect);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇨🇿 Jak to říct česky?</div><div style="background:rgba(46,74,138,0.4);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:#fff;font-family:'Fredoka',cursive;font-size:26px">${esc(correct.en)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:16px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.cs)}</button>`).join('')}</div>`;
+}
+
+// Type 9: poskladej větu s přídavným jménem (tiles)
+function renderExType9(c,word){
+  const pair=makeAdjNounPair(word,session.pool);
+  if(!pair){renderExType4(c,word);return;}
+  session.sentenceTiles={correct:pair.tiles,placed:[],available:shuffle([...pair.tiles])};
+  c.innerHTML=`<div class="exercise-card" style="text-align:left"><div class="exercise-type-label">🧩 Poskladej větu s přídavným jménem</div><div style="text-align:center;margin:8px 0 4px"><span style="font-size:48px">${word.emoji||word.en[0].toUpperCase()}</span></div><div style="text-align:center;background:rgba(255,215,0,0.12);border-radius:10px;padding:10px 16px;margin:8px 0 14px"><span style="color:var(--gold);font-family:'Fredoka',cursive;font-size:22px">${esc(pair.cs)}</span></div><p style="color:var(--text-dim);font-size:14px;margin-bottom:10px">Poskladej anglicky:</p><div class="answer-area" id="answerArea"><span class="answer-placeholder" id="answerPlaceholder">Sem klikej dílky...</span></div><div class="tile-area" id="tileArea"></div></div><button class="check-btn" id="checkBtn" onclick="checkSentence()">Zkontrolovat ✓</button>`;
+  renderTiles();
+}
+
+// Type 10: vyber správný anglický překlad věty s přídavným jménem
+function renderExType10(c,word){
+  const pair=makeAdjNounPair(word,session.pool);
+  if(!pair){renderExType7(c,word);return;}
+  // Špatné možnosti: jiné přídavné jméno se stejným podstatným jménem
+  const otherAdjs=shuffle(session.pool.filter(w=>w.type==='adjective'&&ADJ_FORMS[w.en]&&w.id!==pair.adj.id));
+  const gender=getNounGender(word);
+  const art=getArticle(word.en,word.plural);
+  const tpl=ADJ_NOUN_TEMPLATES[0];
+  const wrongs=[];
+  for(const adjW of otherAdjs){
+    if(wrongs.length>=3) break;
+    const adjCs=ADJ_FORMS[adjW.en][gender];
+    if(!adjCs) continue;
+    const wrongEn=tpl.tiles(art,adjW.en,word.en).join(' ');
+    if(wrongEn!==pair.en) wrongs.push({en:wrongEn,cs:tpl.cs(adjCs,csAcc(word)),isCorrect:false});
+  }
+  // Doplnit špatné možnosti z fallback slovíček
+  const fallbackNouns=DEFAULT_VOCAB.filter(w=>w.type==='noun'&&NOUN_GENDERS[w.en]&&w.id!==word.id);
+  for(const nounW of shuffle(fallbackNouns)){
+    if(wrongs.length>=3) break;
+    const g2=getNounGender(nounW);
+    const adjCs2=ADJ_FORMS[pair.adj.en]&&ADJ_FORMS[pair.adj.en][g2];
+    if(!adjCs2) continue;
+    const art2=getArticle(nounW.en,nounW.plural);
+    wrongs.push({en:tpl.tiles(art2,pair.adj.en,nounW.en).join(' '),cs:tpl.cs(adjCs2,csAcc(nounW)),isCorrect:false});
+  }
+  const options=shuffle([{en:pair.en,cs:pair.cs,isCorrect:true},...wrongs.slice(0,3)]);
+  const idx=options.findIndex(o=>o.isCorrect);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🇬🇧 Jak to říct anglicky?</div><div style="background:rgba(255,215,0,0.12);border-radius:12px;padding:16px 20px;margin:12px 0"><span style="color:var(--gold);font-family:'Fredoka',cursive;font-size:22px">${esc(pair.cs)}</span></div></div><div class="answers" style="grid-template-columns:1fr">${options.map((o,i)=>`<button class="answer-btn" style="font-size:15px;text-align:left" onclick="answerSentence(this,${i},${idx})">${esc(o.en)}</button>`).join('')}</div>`;
+}
+
+function answerSentence(btn,clickedIdx,correctIdx){
+  const btns=document.querySelectorAll('.answer-btn');
+  btns.forEach(b=>b.disabled=true);
+  const correct=clickedIdx===correctIdx;
+  btn.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.answer-btn',btns[correctIdx],btn));
+  }
+}
+
+function renderExType6(c,word){
+  const wrongs=getWrongOptions(word,session.pool,3);
+  const options=shuffle([word,...wrongs]);
+  const ap=getActiveProfile();
+  const big=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images');
+  const showEmoji=(o)=>o.emoji?(o.plural&&o.category!=='Parts of the body'?o.emoji+o.emoji:o.emoji):mkFallback(o,56);
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">${big?'🔊 POSLECHNI A VYBER OBRÁZEK':'🎧 Poslechni a vyber obrázek'}</div><div class="listen-area"><button class="listen-btn" onclick="speakWord('${esc(word.en).replace(/'/g,"\\'")}')">🔊</button><div class="listen-hint">${big?'KLIKNI PRO PŘEHRÁNÍ':'Klikni pro přehrání'}</div></div></div><div class="emoji-grid">${options.map(o=>`<div class="emoji-choice" onclick="answerType6(this,'${esc(o.id)}','${esc(word.id)}')"><span class="big-emoji">${showEmoji(o)}</span></div>`).join('')}</div>`;
+  setTimeout(()=>speakWord(word.en),400);
+}
+function answerType6(el,answerId,correctId){
+  document.querySelectorAll('.emoji-choice').forEach(e=>e.onclick=null);
+  const correct=answerId===correctId;
+  el.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  } else {
+    const correctEl=Array.from(document.querySelectorAll('.emoji-choice')).find(e=>e.getAttribute('onclick')&&e.getAttribute('onclick').includes(`'${correctId}','${correctId}'`));
+    handleAnswer(false,()=>nextRound(),()=>setupRetry('.emoji-choice',correctEl,el));
+  }
+}
+
+function renderTiles(){
+  const st=session.sentenceTiles;
+  const ta=document.getElementById('tileArea');
+  const aa=document.getElementById('answerArea');
+  const ph=document.getElementById('answerPlaceholder');
+  if(!ta||!aa) return;
+  ta.innerHTML='';
+  st.available.forEach((t,i)=>{
+    const el=document.createElement('button');
+    el.className='tile';el.textContent=t;
+    el.onclick=()=>{st.placed.push(t);st.available.splice(i,1);renderTiles();};
+    ta.appendChild(el);
+  });
+  if(ph) ph.style.display=st.placed.length?'none':'block';
+  [...aa.querySelectorAll('.tile')].forEach(e=>aa.removeChild(e));
+  st.placed.forEach((t,i)=>{
+    const el=document.createElement('button');
+    el.className='tile in-answer';el.textContent=t;
+    el.onclick=()=>{st.available.push(t);st.placed.splice(i,1);renderTiles();};
+    aa.appendChild(el);
+  });
+}
+
+function checkSentence(){
+  const st=session.sentenceTiles;
+  if(!st||st.placed.length===0){showToast('Nejdříve poskladej větu!','error');return;}
+  const isCorrect=st.placed.length===st.correct.length&&st.placed.every((t,i)=>t===st.correct[i]);
+  const aa=document.getElementById('answerArea');
+  document.getElementById('checkBtn').disabled=true;
+  document.querySelectorAll('#tileArea .tile').forEach(t=>t.disabled=true);
+  document.querySelectorAll('#answerArea .tile').forEach(t=>t.onclick=null);
+  aa.classList.add(isCorrect?'correct-border':'wrong-border');
+  if(!isCorrect){
+    const hint=document.createElement('span');
+    hint.style.cssText='display:block;color:rgba(255,255,255,0.6);font-size:15px;margin-top:8px;width:100%';
+    hint.textContent='Správná věta: '+st.correct.join(' ');
+    aa.appendChild(hint);
+  }
+  handleAnswer(isCorrect,()=>nextRound());
+}
+
+function setupRetry(selector,correctEl,wrongEl){
+  if(!correctEl) return;
+  function disableEl(el){el.onclick=null;if(el.tagName==='BUTTON')el.disabled=true;else el.style.pointerEvents='none';}
+  document.querySelectorAll(selector).forEach(el=>{
+    if(el===wrongEl){ disableEl(el); return; }
+    el.removeAttribute('disabled');
+    el.style.pointerEvents='';
+    el.onclick=()=>{
+      if(el===correctEl){
+        document.querySelectorAll(selector).forEach(disableEl);
+        el.classList.add('correct');
+        setTimeout(()=>nextRound(),600);
+      } else {
+        el.classList.add('wrong');
+        disableEl(el);
+      }
+    };
+  });
+}
+
+function handleAnswer(correct,next,retryFn){
+  recordAnswer(session.currentWord.id,correct);
+  if(correct){
+    session.correct++;session.consecutiveCorrect++;
+    let earned=1;
+    if(session.consecutiveCorrect>=3&&session.consecutiveCorrect%3===0) earned=3;
+    session.starsEarned+=earned;
+    const oldStars=getStars();const newStars=oldStars+earned;
+    saveStars(newStars);
+    checkLevelUp(oldStars,newStars);
+    playCorrectSound();showFeedback(true,earned>1?`+${earned} ⭐`:'✓');spawnConfetti();
+  } else {
+    session.consecutiveCorrect=0;playWrongSound();showFeedback(false,'✗');
+  }
+  document.getElementById('starsCount').textContent=getStars();
+  document.getElementById('levelBadge').textContent=getLevelName(getStars());
+  document.getElementById('sessionStreak').textContent=session.consecutiveCorrect>=2?`🔥${session.consecutiveCorrect}`:'';
+  if(correct){
+    setTimeout(()=>{hideFeedback();next();},600);
+  } else if(retryFn){
+    setTimeout(()=>{hideFeedback();retryFn();},800);
+  } else {
+    setTimeout(()=>{hideFeedback();next();},2000);
+  }
+}
+
+function checkLevelUp(oldStars,newStars){
+  const banner=document.getElementById('levelupBanner');
+  // Nově odemčené státy
+  const allC=getAllCountries();
+  const newlyUnlocked=allC.filter(c=>c.unlockAt>0&&oldStars<c.unlockAt&&newStars>=c.unlockAt);
+  if(newlyUnlocked.length>0){
+    const c=newlyUnlocked[newlyUnlocked.length-1];
+    const cont=WORLD_MAP[c.contIdx];
+    const contJustDone=isContComplete(c.contIdx,newStars)&&!isContComplete(c.contIdx,oldStars);
+    if(contJustDone){
+      banner.textContent=`🏆 Kontinent dokončen: ${cont.emoji} ${cont.name}!`;
+    } else {
+      banner.textContent=`🗺️ Nový stát odemčen: ${c.emoji} ${c.name}!`;
+    }
+    banner.classList.add('show');
+    setTimeout(()=>banner.classList.remove('show'),4000);
+    return;
+  }
+  if(getLevelName(oldStars)!==getLevelName(newStars)){
+    banner.textContent=`🎉 Nový titul: ${getLevelName(newStars)}!`;
+    banner.classList.add('show');
+    setTimeout(()=>banner.classList.remove('show'),3000);
+  }
+}
+
+function finishSession(){
+  document.getElementById('progressFill').style.width='100%';
+  showChildSection('results');
+  const stars=getStars();
+  document.getElementById('resultsStars').textContent=session.starsEarned>0?'⭐'.repeat(Math.min(session.starsEarned,10)):'😅';
+  document.getElementById('resultsEarned').textContent=`+${session.starsEarned} hvězdiček`;
+  document.getElementById('resultsTotalStars').textContent=stars;
+  document.getElementById('resultsScore').textContent=`Správně: ${session.correct} z ${session.total} otázek`;
+  renderWorldMap();
+  spawnConfetti();
+}
+
+// ============================================================
+// AUDIO
+// ============================================================
+let audioCtx=null;
+function getAudioCtx(){if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch{}return audioCtx;}
+function playTone(freq,dur,type='sine',vol=0.3){const ctx=getAudioCtx();if(!ctx)return;const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);}
+function playCorrectSound(){if(getMute())return;playTone(523.25,.1);setTimeout(()=>playTone(659.25,.1),80);setTimeout(()=>playTone(783.99,.2),160);}
+function playWrongSound(){if(getMute())return;playTone(311.13,.15,'sawtooth',.2);setTimeout(()=>playTone(233.08,.25,'sawtooth',.2),120);}
+
+// ============================================================
+// VISUAL EFFECTS
+// ============================================================
+function showFeedback(correct,text){const f=document.getElementById('feedbackFlash');const t=document.getElementById('feedbackText');t.textContent=text;t.style.color=correct?'#FFD700':'#ff6b6b';f.className='feedback-flash show '+(correct?'correct-flash':'wrong-flash');}
+function hideFeedback(){document.getElementById('feedbackFlash').className='feedback-flash';}
+function spawnConfetti(){
+  const container=document.getElementById('confettiContainer');
+  const colors=['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD'];
+  for(let i=0;i<24;i++){
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';el.style.top=Math.random()*30+'vh';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.borderRadius=Math.random()>.5?'50%':'2px';
+    el.style.width=el.style.height=(6+Math.random()*8)+'px';
+    el.style.animationDelay=Math.random()*.4+'s';el.style.animationDuration=(.8+Math.random()*.6)+'s';
+    container.appendChild(el);setTimeout(()=>el.remove(),1400);
+  }
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer=null;
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='toast',3000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+initData();
+renderChildUI();
+loadSharedCustomWords();
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('pinScreen').style.display!=='none')pinSubmit();});
+</script>
+</body>
+</html>
