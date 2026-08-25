@@ -126,9 +126,6 @@ h1,h2,h3,.game-font{font-family:'Nunito',sans-serif;font-weight:700}
 .header-right{display:flex;align-items:center;gap:12px;margin-left:auto;padding-right:120px}
 .stars-display{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);padding:8px 16px;border-radius:20px}
 .stars-count{font-family:'Nunito',cursive;font-size:22px;color:var(--gold)}
-.level-badge{background:linear-gradient(135deg,#2e4a8a,#4a3a8a);padding:8px 14px;border-radius:16px;font-size:12px;font-weight:700;color:#d4b4ff;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.streak-display{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;color:#ff7043}
-
 #mapScreen{padding:20px 24px 120px}
 .map-title{text-align:center;font-size:28px;color:var(--gold);margin-bottom:4px}
 .map-subtitle{text-align:center;color:var(--text-dim);margin-bottom:20px;font-size:14px}
@@ -215,7 +212,6 @@ h1,h2,h3,.game-font{font-family:'Nunito',sans-serif;font-weight:700}
 .exercise-progress-bar{flex:1;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden}
 .exercise-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold));border-radius:5px;transition:width .4s}
 .exercise-counter{font-weight:700;font-size:15px;color:var(--text-dim);white-space:nowrap}
-.exercise-streak{color:var(--gold);font-weight:700}
 
 .exercise-card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px;margin-bottom:20px;text-align:center}
 .exercise-type-label{font-size:13px;color:var(--text-dim);margin-bottom:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
@@ -329,12 +325,10 @@ h1,h2,h3,.game-font{font-family:'Nunito',sans-serif;font-weight:700}
     <div class="profile-name-badge" id="profileNameBadge" onclick="cycleProfile()" style="cursor:pointer" title="Klikni pro přepnutí profilu">Terézka</div>
     <div class="header-right">
       <button id="muteBtn" onclick="toggleMute()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:7px 14px;border-radius:10px;cursor:pointer;font-size:18px;transition:all .2s">🔊</button>
-      <div class="streak-display" id="streakDisplay">🔥 1</div>
       <div class="stars-display">
         <span style="font-size:20px">⭐</span>
         <span class="stars-count" id="starsCount">0</span>
       </div>
-      <div class="level-badge" id="levelBadge">Začátečník průzkumník</div>
     </div>
   </div>
 
@@ -361,7 +355,6 @@ h1,h2,h3,.game-font{font-family:'Nunito',sans-serif;font-weight:700}
         <div class="exercise-progress-fill" id="progressFill" style="width:0%"></div>
       </div>
       <div class="exercise-counter" id="exerciseCounter">1 / 10</div>
-      <div class="exercise-streak" id="sessionStreak"></div>
     </div>
     <div id="exerciseContent"></div>
   </div>
@@ -1862,7 +1855,6 @@ function saveApiKey(){LS.set('vocab_api_key',document.getElementById('apiKeyInpu
 function renderChildUI(){
   const ap=getActiveProfile();
   const stars=getStars();
-  const streak=getStreak();
   const screen=document.getElementById('childScreen');
   if(ap){
     document.getElementById('profileNameBadge').textContent=ap.name;
@@ -1871,8 +1863,6 @@ function renderChildUI(){
     else screen.classList.remove('beginner-mode');
   }
   document.getElementById('starsCount').textContent=stars;
-  document.getElementById('levelBadge').textContent=getLevelName(stars);
-  document.getElementById('streakDisplay').textContent=`🔥 ${streak.count}`;
   updateMuteBtn();
   renderWorldMap();
   renderSetSelector();
@@ -2192,7 +2182,6 @@ function nextRound(){
   session.round++;
   document.getElementById('progressFill').style.width=((session.round-1)/session.total*100)+'%';
   document.getElementById('exerciseCounter').textContent=`${session.round} / ${session.total}`;
-  document.getElementById('sessionStreak').textContent=session.consecutiveCorrect>=2?`🔥${session.consecutiveCorrect}`:'';
   const word=weightedRandom(session.pool);
   session.currentWord=word;
   renderExercise(pickExerciseType(word),word);
@@ -2628,8 +2617,6 @@ function handleAnswer(correct,next,retryFn){
     session.consecutiveCorrect=0;playWrongSound();showFeedback(false,'✗');
   }
   document.getElementById('starsCount').textContent=getStars();
-  document.getElementById('levelBadge').textContent=getLevelName(getStars());
-  document.getElementById('sessionStreak').textContent=session.consecutiveCorrect>=2?`🔥${session.consecutiveCorrect}`:'';
   if(correct){
     setTimeout(()=>{hideFeedback();next();},600);
   } else if(retryFn){
