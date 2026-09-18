@@ -1186,6 +1186,38 @@ function initData(){
     if(barunkaChanged) saveProfiles(profiles);
   }
 
+
+  // Built-in Pavlína profile: reserved for her own vocabulary and phrases.
+  // It stays separate from the two children profiles and survives application updates.
+  profiles = getProfiles()||[];
+  let pavlina = profiles.find(p=>p.id==='profile_pavlina'||p.name.trim().toLowerCase()==='pavlína'||p.name.trim().toLowerCase()==='pavlina');
+  if(!pavlina){
+    pavlina={
+      id:'profile_pavlina',
+      name:'Pavlína',
+      cloudKey:'pavlina',
+      color:PROFILE_COLORS[2],
+      createdAt:Date.now(),
+      mode:'adult',
+      learningMode:'words-phrases',
+      contentMode:'custom-only',
+      builtIn:true
+    };
+    profiles.push(pavlina);
+    saveProfiles(profiles);
+    LS.set('vocab_words_profile_pavlina',[]);
+  } else {
+    let pavlinaChanged=false;
+    if(pavlina.name!=='Pavlína'){pavlina.name='Pavlína';pavlinaChanged=true;}
+    if(pavlina.cloudKey!=='pavlina'){pavlina.cloudKey='pavlina';pavlinaChanged=true;}
+    if(pavlina.mode!=='adult'){pavlina.mode='adult';pavlinaChanged=true;}
+    if(pavlina.learningMode!=='words-phrases'){pavlina.learningMode='words-phrases';pavlinaChanged=true;}
+    if(pavlina.contentMode!=='custom-only'){pavlina.contentMode='custom-only';pavlinaChanged=true;}
+    if(!pavlina.builtIn){pavlina.builtIn=true;pavlinaChanged=true;}
+    if(pavlinaChanged) saveProfiles(profiles);
+    if(LS.get('vocab_words_profile_pavlina',null)===null) LS.set('vocab_words_profile_pavlina',[]);
+  }
+
   if(getWords()===null){
     const words = DEFAULT_VOCAB.map((w,i)=>({...w,id:'w_'+i+'_'+Date.now()}));
     saveWords(words);
@@ -1207,6 +1239,11 @@ function initData(){
   const allProfiles = getProfiles()||[];
   allProfiles.forEach(p=>{
     const stored = LS.get(`vocab_words_${p.id}`,null);
+    // Pavlína receives only vocabulary and phrases explicitly imported for her.
+    if(p.id==='profile_pavlina'||p.contentMode==='custom-only'){
+      if(stored===null) LS.set(`vocab_words_${p.id}`,[]);
+      return;
+    }
     const customUnitChanged=stored&&stored.some(w=>w.unit==='Z fotky');
     const existing = stored&&stored.filter(w=>!isDeprecatedUnit(w.unit)).map(w=>w.unit==='Z fotky'?{...w,unit:'Vlastní'}:w);
     if(!existing||existing.length===0){
