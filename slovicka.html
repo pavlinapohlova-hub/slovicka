@@ -176,9 +176,23 @@ h1,h2,h3,.game-font{font-family:'Nunito',sans-serif;font-weight:700}
 .practice-mode-card.allmix .direction-btn{min-width:170px;padding:11px 14px}
 .practice-mode-name{font-weight:800;color:#fff;margin-bottom:3px}
 .practice-mode-desc{font-size:11px;color:var(--text-dim);min-height:32px;margin-bottom:9px}
-.direction-row{display:flex;gap:6px}
+.direction-row{display:flex;gap:6px;flex-wrap:wrap}
 .direction-btn{flex:1;padding:8px 5px;border-radius:9px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--text-light);font:700 12px 'Nunito',sans-serif;cursor:pointer}
 .direction-btn:hover,.direction-btn.active{background:var(--blue-light);border-color:var(--gold);color:var(--gold)}
+.spelling-mode-btn{flex:1 1 45%;min-width:135px}
+.spelling-answer{min-height:68px;background:rgba(0,0,0,.2);border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.spelling-answer.correct-border{border-color:#4CAF50}
+.spelling-answer.wrong-border{border-color:#e74c3c;animation:shake .4s}
+.letter-slot{width:34px;height:44px;border:none;border-bottom:3px solid rgba(255,255,255,.45);background:transparent;display:flex;align-items:center;justify-content:center;font:800 25px 'Nunito',sans-serif;color:#fff;text-transform:uppercase;cursor:pointer}
+.letter-gap{width:18px;height:44px}
+.letter-bank{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:18px}
+.letter-tile{min-width:43px;height:47px;padding:0 11px;border-radius:10px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font:800 22px 'Nunito',sans-serif;cursor:pointer;text-transform:uppercase}
+.letter-tile:hover:not(:disabled){background:rgba(255,255,255,.2);transform:translateY(-2px)}
+.letter-tile:disabled{opacity:.25;cursor:default}
+.spelling-input{display:block;width:100%;max-width:520px;margin:0 auto 16px;padding:15px 18px;border-radius:12px;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.2);color:#fff;text-align:center;font:800 24px 'Nunito',sans-serif;outline:none}
+.spelling-input:focus{border-color:var(--gold)}
+.spelling-input.correct{border-color:#4CAF50;background:rgba(76,175,80,.15)}
+.spelling-input.wrong{border-color:#e74c3c;background:rgba(231,76,60,.15);animation:shake .4s}
 @media(max-width:920px){.practice-mode-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){
   .practice-mode-grid{grid-template-columns:1fr}
@@ -2085,6 +2099,7 @@ function renderSetSelector(){
   const selected=getSelectedSet();
   const ap=getActiveProfile();
   const beginner=ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images');
+  const terezka=isTerezkaProfile(ap);
   const sel=document.getElementById('setSelector');
   const groups={};
   units.forEach(unit=>{
@@ -2103,16 +2118,17 @@ function renderSetSelector(){
     html=`<div class="practice-mode-grid">
       <div class="practice-mode-card allmix${practiceMode==='allmix'?' active':''}">
         <div class="practice-mode-name">🎲 Mix všeho</div>
-        <div class="practice-mode-desc">Slovíčka, věty i poslech v obou směrech</div>
+        <div class="practice-mode-desc">${terezka?'Slovíčka, věty, poslech i psaní':'Slovíčka, věty i poslech v obou směrech'}</div>
         <div class="direction-row"><button class="direction-btn${practiceMode==='allmix'?' active':''}" onclick="selectPractice('allmix','mix')">VŠE DOHROMADY</button></div>
       </div>`+modes.map(m=>`
-      <div class="practice-mode-card${practiceMode===m.id?' active':''}">
+      <div class="practice-mode-card${practiceMode===m.id||(m.id==='words'&&(practiceMode==='spelling-tiles'||practiceMode==='spelling-type'))?' active':''}">
         <div class="practice-mode-name">${m.icon} ${m.name}</div>
         <div class="practice-mode-desc">${m.desc}</div>
         <div class="direction-row">
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='en-cs'?' active':''}" onclick="selectPractice('${m.id}','en-cs')">AJ → ČJ</button>
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='cs-en'?' active':''}" onclick="selectPractice('${m.id}','cs-en')">ČJ → AJ</button>
           <button class="direction-btn${practiceMode===m.id&&practiceDirection==='mix'?' active':''}" onclick="selectPractice('${m.id}','mix')">MIX</button>
+          ${m.id==='words'&&terezka?`<button class="direction-btn spelling-mode-btn${practiceMode==='spelling-tiles'?' active':''}" onclick="selectPractice('spelling-tiles','cs-en')">🧩 SKLÁDAT PÍSMENA</button><button class="direction-btn spelling-mode-btn${practiceMode==='spelling-type'?' active':''}" onclick="selectPractice('spelling-type','cs-en')">⌨️ NAPSAT</button>`:''}
         </div>
       </div>`).join('')+'</div>';
   }
@@ -2128,6 +2144,7 @@ function renderSetSelector(){
       html+=`<div class="chapter-choice">
         <button class="set-btn${practiceMode==='mixed'&&selected===unit?' active':''}" onclick="selectSet(this,'${safeUnit}')">${book} · ${esc(chapter)} (${count})</button>
         <button class="chapter-words-btn${practiceMode==='chapterwords'&&selected===unit?' active':''}" onclick="selectChapterWords('${safeUnit}')">🔤 ${book} · ${esc(chapter)} · Slovíčka</button>
+        ${terezka?`<button class="chapter-words-btn${practiceMode==='spelling-tiles'&&selected===unit?' active':''}" onclick="selectChapterSpelling('${safeUnit}','spelling-tiles')">🧩 ${book} · ${esc(chapter)} · Skládat písmena</button><button class="chapter-words-btn${practiceMode==='spelling-type'&&selected===unit?' active':''}" onclick="selectChapterSpelling('${safeUnit}','spelling-type')">⌨️ ${book} · ${esc(chapter)} · Napsat</button>`:''}
       </div>`;
     });
     html+='</div></div>';
@@ -2161,6 +2178,13 @@ function selectChapterWords(unit){
   renderSetSelector();
 }
 
+function selectChapterSpelling(unit,mode){
+  practiceMode=mode;
+  practiceDirection='cs-en';
+  saveSelectedSet(unit);
+  renderSetSelector();
+}
+
 function showChildSection(sec){
   document.getElementById('mapScreen').style.display=sec==='map'?'block':'none';
   document.getElementById('exerciseScreen').style.display=sec==='exercise'?'block':'none';
@@ -2176,6 +2200,11 @@ let session=null;
 let practiceMode='allmix';
 let practiceDirection='mix';
 
+function isTerezkaProfile(profile){
+  if(!profile) return false;
+  return profile.cloudKey==='terezka'||profile.name.trim().toLowerCase()==='terezka';
+}
+
 function buildWordPool(){
   const all=getWords()||[];
   const ap=getActiveProfile();
@@ -2183,7 +2212,7 @@ function buildWordPool(){
   if(ap&&ap.units&&ap.units.length>0) eligible=eligible.filter(w=>ap.units.includes(w.unit));
   const sel=getSelectedSet();
   let pool=eligible;
-  if((practiceMode==='mixed'||practiceMode==='chapterwords')&&sel!=='all'){
+  if((practiceMode==='mixed'||practiceMode==='chapterwords'||practiceMode==='spelling-tiles'||practiceMode==='spelling-type')&&sel!=='all'){
     if(sel.startsWith('book:')){
       const wantedBook=sel.slice(5);
       pool=eligible.filter(w=>getUnitDisplayInfo(w.unit).book===wantedBook);
@@ -2206,12 +2235,15 @@ function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Mat
 function pickExerciseType(word){
   const ap=getActiveProfile();
   if(ap&&(ap.mode==='beginner'||ap.learningMode==='audio-images')) return 6;
+  if(isTerezkaProfile(ap)&&practiceMode==='spelling-tiles') return 12;
+  if(isTerezkaProfile(ap)&&practiceMode==='spelling-type') return 13;
   if(practiceMode==='words'||practiceMode==='chapterwords') return practiceDirection==='mix'?(Math.random()<.5?1:5):(practiceDirection==='en-cs'?1:5);
   if(practiceMode==='sentences') return practiceDirection==='mix'?(Math.random()<.5?8:7):(practiceDirection==='en-cs'?8:7);
   if(practiceMode==='listening') return practiceDirection==='mix'?(Math.random()<.5?3:11):(practiceDirection==='en-cs'?3:11);
   if(practiceMode==='allmix'){
     const sentenceOK=(word.type==='noun'||word.type==='verb'||word.type==='adjective')&&!word.noSentence;
     const allTypes=sentenceOK?[1,5,3,11,7,8]:[1,5,3,11];
+    if(isTerezkaProfile(ap)) allTypes.push(12,13);
     return allTypes[Math.floor(Math.random()*allTypes.length)];
   }
   const muted=getMute();
@@ -2257,7 +2289,9 @@ function renderExercise(type,word){
   else if(type===8) renderExType8(c,word);
   else if(type===9) renderExType9(c,word);
   else if(type===10) renderExType10(c,word);
-  else renderExType11(c,word);
+  else if(type===11) renderExType11(c,word);
+  else if(type===12) renderSpellingTiles(c,word);
+  else renderSpellingInput(c,word);
 }
 
 function getWrongOptions(correct,pool,count=3){
@@ -2599,6 +2633,103 @@ function answerType6(el,answerId,correctId){
   }
 }
 
+function normalizeSpelling(value){
+  return String(value||'').trim().toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g,' ');
+}
+
+function renderSpellingTiles(c,word){
+  const target=normalizeSpelling(word.en);
+  const letters=[...target].filter(ch=>ch!==' ');
+  session.spelling={target,letters,placed:[],available:shuffle(letters.map((letter,index)=>({letter,index})))};
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">🧩 Poskládej anglické slovo</div><div class="exercise-word" style="font-size:34px;margin-top:12px">${esc(word.cs)}</div><div class="exercise-instruction">Klikni na písmena ve správném pořadí.</div></div><div class="spelling-answer" id="spellingAnswer"></div><div class="letter-bank" id="letterBank"></div><button class="check-btn" id="checkBtn" onclick="checkSpellingTiles()">Zkontrolovat ✓</button>`;
+  renderSpellingLetters();
+}
+
+function renderSpellingLetters(){
+  const st=session.spelling;
+  const answer=document.getElementById('spellingAnswer');
+  const bank=document.getElementById('letterBank');
+  if(!st||!answer||!bank) return;
+  let placedIndex=0;
+  answer.innerHTML=[...st.target].map(ch=>{
+    if(ch===' ') return '<span class="letter-gap"></span>';
+    const index=placedIndex++;
+    return `<button class="letter-slot" onclick="removeSpellingLetter(${index})">${st.placed[index]?esc(st.placed[index].letter):''}</button>`;
+  }).join('');
+  bank.innerHTML=st.available.map((item,index)=>`<button class="letter-tile" onclick="addSpellingLetter(${index})">${esc(item.letter)}</button>`).join('');
+}
+
+function addSpellingLetter(index){
+  const st=session.spelling;
+  if(!st||index<0||index>=st.available.length) return;
+  st.placed.push(st.available.splice(index,1)[0]);
+  renderSpellingLetters();
+}
+
+function removeSpellingLetter(index){
+  const st=session.spelling;
+  if(!st||!st.placed[index]) return;
+  st.available.push(st.placed.splice(index,1)[0]);
+  renderSpellingLetters();
+}
+
+function checkSpellingTiles(){
+  const st=session.spelling;
+  if(!st||st.placed.length!==st.letters.length){showToast('Použij všechna písmena','error');return;}
+  const answer=st.placed.map(item=>item.letter).join('');
+  const expected=st.letters.join('');
+  const area=document.getElementById('spellingAnswer');
+  const btn=document.getElementById('checkBtn');
+  btn.disabled=true;
+  document.querySelectorAll('.letter-tile,.letter-slot').forEach(el=>el.disabled=true);
+  const correct=answer===expected;
+  area.classList.add(correct?'correct-border':'wrong-border');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  }else{
+    const hint=document.createElement('div');
+    hint.style.cssText='width:100%;text-align:center;color:#ffb3b3;font-weight:700';
+    hint.textContent='Správně: '+session.currentWord.en;
+    area.appendChild(hint);
+    handleAnswer(false,()=>nextRound(),()=>{
+      st.placed=[];
+      st.available=shuffle(st.letters.map((letter,index)=>({letter,index})));
+      renderSpellingLetters();
+      area.className='spelling-answer';
+      btn.disabled=false;
+      showToast('Zkus to ještě jednou');
+    });
+  }
+}
+
+function renderSpellingInput(c,word){
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">⌨️ Napiš anglicky</div><div class="exercise-word" style="font-size:34px;margin-top:12px">${esc(word.cs)}</div><div class="exercise-instruction">Napiš celé anglické slovo nebo výraz.</div></div><input class="spelling-input" id="spellingInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" onkeydown="if(event.key==='Enter')checkSpellingInput()" aria-label="Anglická odpověď"><button class="check-btn" id="checkBtn" onclick="checkSpellingInput()">Zkontrolovat ✓</button>`;
+  setTimeout(()=>document.getElementById('spellingInput')?.focus(),50);
+}
+
+function checkSpellingInput(){
+  const input=document.getElementById('spellingInput');
+  const btn=document.getElementById('checkBtn');
+  if(!input||!normalizeSpelling(input.value)){showToast('Nejdříve napiš odpověď','error');return;}
+  const correct=normalizeSpelling(input.value)===normalizeSpelling(session.currentWord.en);
+  input.disabled=true;
+  btn.disabled=true;
+  input.classList.add(correct?'correct':'wrong');
+  if(correct){
+    handleAnswer(true,()=>nextRound());
+  }else{
+    showToast('Správně: '+session.currentWord.en,'error');
+    handleAnswer(false,()=>nextRound(),()=>{
+      input.disabled=false;
+      btn.disabled=false;
+      input.value='';
+      input.className='spelling-input';
+      input.focus();
+      showToast('Zkus to ještě jednou');
+    });
+  }
+}
+
 function renderTiles(){
   const st=session.sentenceTiles;
   const ta=document.getElementById('tileArea');
@@ -2768,3 +2899,5 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementB
 </script>
 </body>
 </html>
+
+
