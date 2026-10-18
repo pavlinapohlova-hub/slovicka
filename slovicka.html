@@ -2709,12 +2709,12 @@ function checkSpellingTiles(){
       area.className='spelling-answer';
       btn.disabled=false;
       showToast('Zkus to ještě jednou');
-    });
+    },5000);
   }
 }
 
 function renderSpellingInput(c,word){
-  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">⌨️ Napiš anglicky</div><div class="exercise-word" style="font-size:34px;margin-top:12px">${esc(word.cs)}</div><div class="exercise-instruction">Napiš celé anglické slovo nebo výraz.</div></div><input class="spelling-input" id="spellingInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" onkeydown="if(event.key==='Enter')checkSpellingInput()" aria-label="Anglická odpověď"><button class="check-btn" id="checkBtn" onclick="checkSpellingInput()">Zkontrolovat ✓</button>`;
+  c.innerHTML=`<div class="exercise-card"><div class="exercise-type-label">⌨️ Napiš anglicky</div><div class="exercise-word" style="font-size:34px;margin-top:12px">${esc(word.cs)}</div><div class="exercise-instruction">Napiš celé anglické slovo nebo výraz.</div></div><input class="spelling-input" id="spellingInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" onkeydown="if(event.key==='Enter')checkSpellingInput()" aria-label="Anglická odpověď"><div id="spellingCorrectHint" style="display:none;text-align:center;color:#ffcf70;font-size:22px;font-weight:800;margin:-4px 0 16px"></div><button class="check-btn" id="checkBtn" onclick="checkSpellingInput()">Zkontrolovat ✓</button>`;
   setTimeout(()=>document.getElementById('spellingInput')?.focus(),50);
 }
 
@@ -2729,15 +2729,18 @@ function checkSpellingInput(){
   if(correct){
     handleAnswer(true,()=>nextRound());
   }else{
-    showToast('Správně: '+session.currentWord.en,'error');
+    const hint=document.getElementById('spellingCorrectHint');
+    hint.textContent='Správně: '+session.currentWord.en;
+    hint.style.display='block';
     handleAnswer(false,()=>nextRound(),()=>{
+      hint.style.display='none';
       input.disabled=false;
       btn.disabled=false;
       input.value='';
       input.className='spelling-input';
       input.focus();
       showToast('Zkus to ještě jednou');
-    });
+    },5000);
   }
 }
 
@@ -2802,7 +2805,7 @@ function setupRetry(selector,correctEl,wrongEl){
   });
 }
 
-function handleAnswer(correct,next,retryFn){
+function handleAnswer(correct,next,retryFn,retryDelay=800){
   recordAnswer(session.currentWord.id,correct);
   if(correct){
     session.correct++;session.consecutiveCorrect++;
@@ -2820,7 +2823,8 @@ function handleAnswer(correct,next,retryFn){
   if(correct){
     setTimeout(()=>{hideFeedback();next();},600);
   } else if(retryFn){
-    setTimeout(()=>{hideFeedback();retryFn();},800);
+    setTimeout(()=>hideFeedback(),800);
+    setTimeout(()=>retryFn(),retryDelay);
   } else {
     setTimeout(()=>{hideFeedback();next();},2000);
   }
